@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.goodday.proj.api.member.repository.MemberMapper">
+
+    <insert id="createMember">
+        insert All
+        into member
+        values (1, #{memberId}, #{pwd}, #{name}, sysdate, #{nickname}, #{email}, #{phone}, default, default)
+        <foreach collection="address" item="item" separator=",">
+            INTO address
+            VALUES (1, 1, #{item.address}, 'Y')
+        </foreach>
+        SELECT * FROM DUAL
+    </insert>
+
+<!--    <select id="findById" resultMap="memberResultSet">-->
+
+<!--    </select>-->
+
+<!--    <resultMap id="memberResultSet" type="com.goodday.proj.api.member.model.Member">-->
+<!--        <id property="" column=""/>-->
+<!--        <result property="" column=""/>-->
+<!--        <collection property="" column="" javaType="java.util.ArrayList" ofType="com.goodday.proj.api.member.model.Address"/>-->
+<!--        <collection property="roles" column="id" javaType="java.util.ArrayList" ofType="com.goodday.proj.models.Role" select="selectRoles"/>-->
+<!--    </resultMap>-->
+
+</mapper>
