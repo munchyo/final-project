@@ -13,15 +13,37 @@
         SELECT * FROM DUAL
     </insert>
 
-<!--    <select id="findById" resultMap="memberResultSet">-->
+    <select id="findById" resultMap="memberResultSet">
+        SELECT *
+        FROM member
+                 LEFT JOIN address ON member.MEMBER_NO = address.MEMBER_NO
+        WHERE email = #{id}
+    </select>
 
-<!--    </select>-->
-
-<!--    <resultMap id="memberResultSet" type="com.goodday.proj.api.member.model.Member">-->
-<!--        <id property="" column=""/>-->
-<!--        <result property="" column=""/>-->
-<!--        <collection property="" column="" javaType="java.util.ArrayList" ofType="com.goodday.proj.api.member.model.Address"/>-->
+    <resultMap id="memberResultSet" type="com.goodday.proj.api.member.model.Member">
+        <id property="memberNo" column="MEMBER_NO"/>
+        <result property="memberId" column="MEMBER_ID"/>
+        <result property="pwd" column="PWD"/>
+        <result property="name" column="NAME"/>
+        <result property="enrollDate" column="ENROLL_DATE"/>
+        <result property="nickname" column="NICKNAME"/>
+        <result property="email" column="EMAIL"/>
+        <result property="phone" column="PHONE"/>
+        <result property="admin" column="ADMIN"/>
+        <result property="memberStatus" column="MEMBER_STATUS"/>
+        <collection property="address" ofType="com.goodday.proj.api.member.model.Address">
+            <result property="addressNo" column="ADDRESS_NO"/>
+            <result property="address" column="ADDRESS"/>
+            <result property="isMain" column="IS_MAIN"/>
+        </collection>
 <!--        <collection property="roles" column="id" javaType="java.util.ArrayList" ofType="com.goodday.proj.models.Role" select="selectRoles"/>-->
-<!--    </resultMap>-->
+    </resultMap>
+
+    <select id="findByEmail" resultMap="memberResultSet">
+        SELECT *
+        FROM member
+                 LEFT JOIN address ON member.MEMBER_NO = address.MEMBER_NO
+        WHERE email = #{email}
+    </select>
 
 </mapper>

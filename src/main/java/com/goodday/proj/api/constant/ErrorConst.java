@@ -5,4 +5,6 @@ public abstract class ErrorConst {
 
     public static final String registerError = "회원가입에 실패 하였습니다.";
 
+    public static final String mailError = "유효한 이메일이 아닙니다.";
+
 }

@@ -15,21 +15,21 @@ public class ApiExControllerAdvice {
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler
     public ErrorResult illegalExHandle(IllegalArgumentException e) {
-        log.error("[exceptionHandle] ex", e);
+        log.error("[ExceptionHandler] ex", e);
         return new ErrorResult("BAD", e.getMessage());
     }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler
     public ErrorResult userExHandle(RuntimeException e) {
-        log.error("[exceptionHandle] ex", e);
+        log.error("[ExceptionHandler] ex", e);
         return new ErrorResult("USER-EX", e.getMessage());
     }
 
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     @ExceptionHandler
     public ErrorResult exHandle(Exception e) {
-        log.error("[exceptionHandle] ex", e);
+        log.error("[ExceptionHandler] ex", e);
         return new ErrorResult("EX", "내부 오류");
     }
 }
