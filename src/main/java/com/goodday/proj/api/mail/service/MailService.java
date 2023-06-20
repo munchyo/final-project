@@ -41,13 +41,24 @@ public class MailService {
 
     public String registerAuthentication(String email) throws MessagingException {
         int authNumber = makeRandomNumber();
-        log.info("authNumber {}", authNumber);
         String setTo = email;
-        String title = "GoodDay에 오신것을 환영합니다!"; // 이메일 제목
+        String title = "GoodDay에 오신것을 환영합니다!";
         String content =
                         "인증 번호는 " + authNumber + "입니다." +
                         "<br>" +
-                        "인증번호를 확인란에 기입해주세요."; //이메일 내용 삽입
+                        "인증번호를 확인란에 기입해주세요.";
+        sendMail(setFrom, setTo, title, content);
+        return Integer.toString(authNumber);
+    }
+
+    public String findAuthentication(String email, String find) throws MessagingException {
+        int authNumber = makeRandomNumber();
+        String setTo = email;
+        String title = "GoodDay " + find + " 찾기 인증메일 입니다.";
+        String content =
+                "인증 번호는 " + authNumber + "입니다." +
+                        "<br>" +
+                        "인증번호를 확인란에 기입해주세요.";
         sendMail(setFrom, setTo, title, content);
         return Integer.toString(authNumber);
     }

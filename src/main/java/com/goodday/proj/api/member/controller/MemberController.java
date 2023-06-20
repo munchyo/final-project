@@ -14,6 +14,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.swing.text.html.parser.Entity;
+import java.util.Optional;
 
 @Slf4j
 @RestController
@@ -48,7 +49,8 @@ public class MemberController {
     @PostMapping("/register")
     public String register(@Valid @RequestBody RegisterFormDto registerUser, BindingResult bindingResult) {
 
-        if (bindingResult.hasErrors()) {
+        if (bindingResult.hasErrors() || !registerUser.getEmail().contains("@")) {
+            log.info("bindingResult [{}], {}", bindingResult.getFieldError().getField(), bindingResult.getFieldError().getDefaultMessage());
             throw new IllegalArgumentException(ErrorConst.registerError);
         }
 
@@ -65,4 +67,39 @@ public class MemberController {
 
         return "fail";
     }
+
+    @PostMapping("/find/id")
+    public String findId(@RequestParam String email) {
+        if (!email.contains("@")) {
+            throw new IllegalArgumentException(ErrorConst.mailError);
+        }
+
+        log.info("email [{}]", email);
+
+        Optional<Member> member = memberRepository.findByEmail(email);
+
+        log.info("member [{}]", member);
+
+        if (member.isEmpty()) {
+            throw new IllegalArgumentException(ErrorConst.findError);
+        }
+
+        return member.get().getMemberId();
+    }
+
+    @PostMapping("/find/password")
+    public String findPwd(@RequestParam String email) {
+        if (!email.contains("@")) {
+            throw new IllegalArgumentException(ErrorConst.mailError);
+        }
+
+        Optional<Member> member = memberRepository.findByEmail(email);
+
+        if (member.isEmpty()) {
+            throw new IllegalArgumentException(ErrorConst.findError);
+        }
+
+        return member.get().getPwd();
+    }
+
 }

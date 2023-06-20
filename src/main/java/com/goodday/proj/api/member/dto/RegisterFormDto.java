@@ -34,7 +34,6 @@ public class RegisterFormDto {
     String addr2;
 
     @NotBlank
-    @Email
     String email;
 
     @NotBlank

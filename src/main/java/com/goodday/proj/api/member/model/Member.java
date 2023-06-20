@@ -27,6 +27,5 @@ public class Member {
     String phone;
     List<Address> address;
     String admin;
-    String memberStatus;
 
 }

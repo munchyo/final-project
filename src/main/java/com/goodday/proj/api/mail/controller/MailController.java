@@ -24,15 +24,31 @@ public class MailController {
 
     @GetMapping("/register")
     public String registerAuthentication(@RequestParam String email) throws MessagingException {
-        log.info("email {}", email);
         if (!email.contains("@")) {
             throw new IllegalArgumentException(ErrorConst.mailError);
         }
 
         if (memberRepository.findByEmail(email).isPresent()) {
-            throw new IllegalArgumentException(ErrorConst.mailError);
+            throw new IllegalArgumentException("중복된 이메일입니다.");
         }
 
         return mailService.registerAuthentication(email);
     }
+
+    @GetMapping("/find/id")
+    public String findIdAuthentication(@RequestParam String email) throws MessagingException {
+        if (!email.contains("@")) {
+            throw new IllegalArgumentException(ErrorConst.mailError);
+        }
+        return mailService.findAuthentication(email, "아이디");
+    }
+
+    @GetMapping("/find/password")
+    public String findPwdAuthentication(@RequestParam String email) throws MessagingException {
+        if (!email.contains("@")) {
+            throw new IllegalArgumentException(ErrorConst.mailError);
+        }
+        return mailService.findAuthentication(email, "비밀번호");
+    }
+
 }

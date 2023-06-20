@@ -7,4 +7,6 @@ public abstract class ErrorConst {
 
     public static final String mailError = "유효한 이메일이 아닙니다.";
 
+    public static final String findError = "일치하는 정보가 없습니다.";
+
 }
