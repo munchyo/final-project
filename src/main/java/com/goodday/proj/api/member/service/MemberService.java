@@ -1,5 +1,6 @@
 package com.goodday.proj.api.member.service;
 
+import com.goodday.proj.api.member.dto.EditPwdDto;
 import com.goodday.proj.api.member.dto.LoginFormDto;
 import com.goodday.proj.api.member.dto.RegisterFormDto;
 import com.goodday.proj.api.member.dto.MemberSessionInfo;
@@ -11,4 +12,5 @@ public interface MemberService {
 
     int register(RegisterFormDto registerUser);
 
+    int editPwd(Long memberNo, EditPwdDto pwdDto);
 }

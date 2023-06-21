@@ -3,6 +3,7 @@ package com.goodday.proj.api.member.repository;
 import com.goodday.proj.api.member.model.Member;
 import com.goodday.proj.api.member.dto.MemberSessionInfo;
 
+import java.util.Map;
 import java.util.Optional;
 
 public interface MemberRepository {
@@ -18,4 +19,6 @@ public interface MemberRepository {
     String findPwdById(String id);
 
     Optional<Member> findMemberByNo(Long memberNo);
+
+    int updatePwd(Map edit);
 }

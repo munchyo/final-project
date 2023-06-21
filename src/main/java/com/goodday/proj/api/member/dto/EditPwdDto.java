@@ -12,8 +12,11 @@ import lombok.experimental.FieldDefaults;
 public class EditPwdDto {
 
     @NotBlank
+    String currentPwd;
+
+    @NotBlank
     @Size(min = 8)
     @Pattern(regexp = "[a-zA-Z0-9!@#$%^&*()]+")
-    String pwd;
+    String newPwd;
 
 }

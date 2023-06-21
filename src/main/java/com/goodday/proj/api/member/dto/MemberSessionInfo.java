@@ -13,5 +13,6 @@ public class MemberSessionInfo {
 
     Long memberNo;
     String memberId;
+    String nickname;
     String admin;
 }

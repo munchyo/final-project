@@ -11,6 +11,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
 
 @Slf4j
@@ -22,15 +24,6 @@ public class MemberController {
     private final MemberService memberService;
     private final MemberRepository memberRepository;
 
-    @GetMapping
-    public String test() {
-        return "ok";
-    }
-
-    /**
-     * 아이디로 회원정보 모두 조회 후 비밀번호 일치하면 return Member
-     * 불일치 시 400error
-     */
     @PostMapping("/login")
     public MemberSessionInfo login(@Valid @RequestBody LoginFormDto login, BindingResult bindingResult) {
 
@@ -88,30 +81,37 @@ public class MemberController {
     }
 
     @PostMapping("/edit/{memberNo}")
-    public Member viewInfo(@PathVariable Long memberNo, @RequestParam String pwd) throws Exception {
+    public Member viewInfo(@PathVariable Long memberNo) throws Exception {
         log.debug("memberNo {}", memberNo);
         Optional<Member> member = memberRepository.findMemberByNo(memberNo);
         log.debug("member [{}]", member.get());
         return member.filter(presentMember -> member.isPresent()).orElseThrow(Exception::new);
     }
 
-    @PutMapping("/edit/password/{memberNo}")
-    public String editPwd(@PathVariable Long memberNo, EditPwdDto pwd) {
+    // TODO password 변경 검증
+    @PutMapping("/edit/{memberNo}/password")
+    public String editPwd(@PathVariable Long memberNo, @Valid EditPwdDto pwdDto, BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            throw new IllegalArgumentException(bindingResult.getFieldError().getDefaultMessage());
+        }
+
+        int result = memberService.editPwd(memberNo, pwdDto);
+
         return null;
     }
 
-    @PutMapping("/edit/nickname/{memberNo}")
-    public String editNickname(@PathVariable Long memberNo, EditNicknameDto nickname) {
+    @PutMapping("/edit/{memberNo}/nickname")
+    public String editNickname(@PathVariable Long memberNo, EditNicknameDto nicknameDto) {
         return null;
     }
 
-    @PutMapping("/edit/name/{memberNo}")
-    public String editName(@PathVariable Long memberNo, EditNameDto name) {
+    @PutMapping("/edit/{memberNo}/name")
+    public String editName(@PathVariable Long memberNo, EditNameDto nameDto) {
         return null;
     }
 
-    @PutMapping("/edit/phone/{memberNo}")
-    public String editPhone(@PathVariable Long memberNo, EditPhoneDto phone) {
+    @PutMapping("/edit/{memberNo}/phone")
+    public String editPhone(@PathVariable Long memberNo, EditPhoneDto phoneDto) {
         return null;
     }
 }

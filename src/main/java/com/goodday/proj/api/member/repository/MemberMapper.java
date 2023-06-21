@@ -4,6 +4,7 @@ import com.goodday.proj.api.member.model.Member;
 import com.goodday.proj.api.member.dto.MemberSessionInfo;
 import org.apache.ibatis.annotations.Mapper;
 
+import java.util.Map;
 import java.util.Optional;
 
 @Mapper
@@ -26,4 +27,7 @@ public interface MemberMapper extends MemberRepository {
 
     @Override
     Optional<Member> findMemberByNo(Long memberNo);
+
+    @Override
+    int updatePwd(Map edit);
 }

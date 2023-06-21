@@ -35,7 +35,7 @@
 <!--    </select>-->
 
     <select id="findById" resultType="com.goodday.proj.api.member.dto.MemberSessionInfo">
-        select member_no, member_id, admin
+        select member_no, member_id, nickname, admin
         from member
         where member_id = #{id} and member_status = 'Y'
     </select>
@@ -45,7 +45,7 @@
     </select>
 
     <select id="findByEmail" resultType="com.goodday.proj.api.member.dto.MemberSessionInfo">
-        select member_no, member_id, admin
+        select member_no, member_id, nickname, admin
         from member
         where email = #{email} and member_status = 'Y'
     </select>
@@ -83,5 +83,11 @@
                  LEFT JOIN address ON member.MEMBER_NO = address.MEMBER_NO
         WHERE member.member_no = #{memberNo} and member_status = 'Y' and is_main = 'Y'
     </select>
+
+    <update id="updatePwd" parameterType="Map">
+        update member
+        set PWD = #{pwd}
+        where member_no = #{memberNo}
+    </update>
 
 </mapper>

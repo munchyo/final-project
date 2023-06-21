@@ -1,6 +1,7 @@
 package com.goodday.proj.api.member.service;
 
 import com.goodday.proj.api.constant.ErrorConst;
+import com.goodday.proj.api.member.dto.EditPwdDto;
 import com.goodday.proj.api.member.dto.LoginFormDto;
 import com.goodday.proj.api.member.dto.RegisterFormDto;
 import com.goodday.proj.api.member.model.Address;
@@ -61,6 +62,19 @@ public class MemberServiceImpl implements MemberService {
         member.setPhone(registerUser.getPhone());
 
         return memberRepository.save(member);
+    }
+
+    @Override
+    public int editPwd(Long memberNo, EditPwdDto pwdDto) {
+        if (!bcrypt.matches(pwdDto.getNewPwd(), memberRepository.findMemberByNo(memberNo).get().getPwd())) {
+            throw new RuntimeException(ErrorConst.findError);
+        }
+
+        Map edit = new HashMap();
+        edit.put("memberNo", memberNo);
+        edit.put("pwd", bcrypt.encode(pwdDto.getNewPwd()));
+
+        return memberRepository.updatePwd(edit);
     }
 
 //    private void insertAddress(RegisterFormDto registerUser, Member member, boolean isMain) {
