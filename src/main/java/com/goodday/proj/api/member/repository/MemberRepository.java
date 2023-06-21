@@ -1,20 +1,21 @@
 package com.goodday.proj.api.member.repository;
 
-import com.goodday.proj.api.member.model.Address;
 import com.goodday.proj.api.member.model.Member;
+import com.goodday.proj.api.member.dto.MemberSessionInfo;
 
-import java.util.List;
 import java.util.Optional;
 
 public interface MemberRepository {
 
-    int createMember(Member member);
+    int save(Member member);
 
-    Optional<Member> findById(String id);
+    Optional<MemberSessionInfo> findById(String id);
 
     String pwdFindByEmail(String email);
 
-    Optional<Member> findByEmail(String email);
+    Optional<MemberSessionInfo> findByEmail(String email);
 
-    int createAddress(List<Address> address, Long memberNo);
+    String findPwdById(String id);
+
+    Optional<Member> findMemberByNo(Long memberNo);
 }

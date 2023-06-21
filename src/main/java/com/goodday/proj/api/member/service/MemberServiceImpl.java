@@ -5,6 +5,7 @@ import com.goodday.proj.api.member.dto.LoginFormDto;
 import com.goodday.proj.api.member.dto.RegisterFormDto;
 import com.goodday.proj.api.member.model.Address;
 import com.goodday.proj.api.member.model.Member;
+import com.goodday.proj.api.member.dto.MemberSessionInfo;
 import com.goodday.proj.api.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -22,15 +23,15 @@ public class MemberServiceImpl implements MemberService {
     private final PasswordEncoder bcrypt;
 
     @Override
-    public Member login(LoginFormDto login) {
-
-        Optional<Member> member = memberRepository.findById(login.getId());
-
+    public MemberSessionInfo login(LoginFormDto login) {
+        log.debug("login [{}]", login);
+        Optional<MemberSessionInfo> member = memberRepository.findById(login.getId());
+        log.debug("session [{}]", member);
         if(member.isEmpty()){
             throw new RuntimeException(ErrorConst.loginError);
         }
 
-        if (!bcrypt.matches(login.getPwd(), member.get().getPwd())) {
+        if (!bcrypt.matches(login.getPwd(), memberRepository.findPwdById(login.getId()))) {
             throw new RuntimeException(ErrorConst.loginError);
         }
 
@@ -42,7 +43,7 @@ public class MemberServiceImpl implements MemberService {
         Member member = new Member();
 
         if (!(registerUser.getAddr1()+registerUser.getAddr2()).isEmpty()) {
-            String newAddress = registerUser.getAddr1() + "/" + registerUser.getAddr2();
+            String newAddress = registerUser.getAddr1() + "/" + registerUser.getAddr2() + "/" + registerUser.getAddr3() + "/" + registerUser.getAddr4();
 
             Address address = new Address();
             address.setAddress(newAddress);
@@ -59,7 +60,7 @@ public class MemberServiceImpl implements MemberService {
         member.setEmail(registerUser.getEmail());
         member.setPhone(registerUser.getPhone());
 
-        return memberRepository.createMember(member);
+        return memberRepository.save(member);
     }
 
 //    private void insertAddress(RegisterFormDto registerUser, Member member, boolean isMain) {
@@ -77,4 +78,6 @@ public class MemberServiceImpl implements MemberService {
 //        member.setAddress(addressList);
 //
 //    }
+
+
 }

@@ -17,6 +17,7 @@ public class RegisterFormDto {
     @NotBlank
     @Size(min = 8)
     @Pattern(regexp = "[a-zA-Z0-9!@#$%^&*()]+")
+//    @Pattern(regexp = "[a-zA-Z0-9!@#$%^&*(),.?\\\":{}|<>]+")
     String pwd;
 
     @NotBlank
@@ -32,6 +33,10 @@ public class RegisterFormDto {
 
     @NotEmpty
     String addr2;
+
+    String addr3;
+
+    String addr4;
 
     @NotBlank
     String email;
