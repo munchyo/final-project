@@ -11,12 +11,12 @@ import lombok.experimental.FieldDefaults;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class EditPwdDto {
 
-    @NotBlank
+    @NotBlank(message = "비밀번호 공백이 있습니다.")
     String currentPwd;
 
-    @NotBlank
-    @Size(min = 8)
-    @Pattern(regexp = "[a-zA-Z0-9!@#$%^&*()]+")
+    @NotBlank(message = "비밀번호 공백이 있습니다.")
+    @Size(min = 8, message = "비밀번호는 최소 8자 이상 입력 해주세요.")
+    @Pattern(regexp = "[a-zA-Z0-9!@#$%^&*()]+", message = "비밀번호는 영어 대소문자, 숫자, 특수문자만 가능합니다.")
     String newPwd;
 
 }

@@ -1,12 +1,9 @@
 package com.goodday.proj.api.member.service;
 
 import com.goodday.proj.api.constant.ErrorConst;
-import com.goodday.proj.api.member.dto.EditPwdDto;
-import com.goodday.proj.api.member.dto.LoginFormDto;
-import com.goodday.proj.api.member.dto.RegisterFormDto;
+import com.goodday.proj.api.member.dto.*;
 import com.goodday.proj.api.member.model.Address;
 import com.goodday.proj.api.member.model.Member;
-import com.goodday.proj.api.member.dto.MemberSessionInfo;
 import com.goodday.proj.api.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -66,7 +63,7 @@ public class MemberServiceImpl implements MemberService {
 
     @Override
     public int editPwd(Long memberNo, EditPwdDto pwdDto) {
-        if (!bcrypt.matches(pwdDto.getNewPwd(), memberRepository.findMemberByNo(memberNo).get().getPwd())) {
+        if (!bcrypt.matches(pwdDto.getCurrentPwd(), memberRepository.findMemberByNo(memberNo).get().getPwd())) {
             throw new RuntimeException(ErrorConst.findError);
         }
 
@@ -75,6 +72,15 @@ public class MemberServiceImpl implements MemberService {
         edit.put("pwd", bcrypt.encode(pwdDto.getNewPwd()));
 
         return memberRepository.updatePwd(edit);
+    }
+
+    @Override
+    public void addAddress(String memberNo, AddressDto addressDto) {
+        String address = addressDto.getAddr1() + "/" + addressDto.getAddr2() + "/" + addressDto.getAddr3() + "/" + addressDto.getAddr4();
+        Map saveAddress = new HashMap();
+        saveAddress.put("memberNo", memberNo);
+        saveAddress.put("address", address);
+        memberRepository.saveAddress(saveAddress);
     }
 
 //    private void insertAddress(RegisterFormDto registerUser, Member member, boolean isMain) {

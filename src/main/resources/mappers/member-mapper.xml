@@ -90,4 +90,51 @@
         where member_no = #{memberNo}
     </update>
 
+    <update id="updateNickname" parameterType="Map">
+        update member
+        set nickname = #{nickname}
+        where member_no = #{memberNo}
+    </update>
+
+    <update id="updatePhone" parameterType="Map">
+        update member
+        set phone = #{phone}
+        where member_no = #{memberNo}
+    </update>
+
+    <insert id="saveAddress" parameterType="Map">
+        insert into address
+        values (addr_seq.NEXTVAL, #{memberNo}, #{address}, default)
+    </insert>
+
+    <update id="updateMainAddress1" parameterType="string">
+        update address
+        set is_main = 'N'
+        where member_no = #{memberNo}
+    </update>
+    <update id="updateMainAddress2" parameterType="Map">
+        update address
+        set is_main = 'Y'
+        where member_no = #{memberNo} and address_no = #{addressNo}
+    </update>
+
+    <delete id="deleteAddress" parameterType="Map">
+        delete
+        from address
+        where member_no = #{memberNo}
+          and address_no = #{addressNo}
+    </delete>
+
+    <select id="readAddress" resultType="com.goodday.proj.api.member.model.Address" parameterType="Map">
+        select address_no, is_main, address
+        from address
+        where member_no = #{memberNo} and address_no = #{addressNo}
+    </select>
+
+    <update id="deleteMember" parameterType="String">
+        update member
+        set member_status = 'N'
+        where member_no = #{memberNo}
+    </update>
+
 </mapper>

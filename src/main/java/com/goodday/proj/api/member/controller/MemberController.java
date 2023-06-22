@@ -80,38 +80,8 @@ public class MemberController {
         return memberRepository.findPwdById(m.getMemberId());
     }
 
-    @PostMapping("/edit/{memberNo}")
-    public Member viewInfo(@PathVariable Long memberNo) throws Exception {
-        log.debug("memberNo {}", memberNo);
-        Optional<Member> member = memberRepository.findMemberByNo(memberNo);
-        log.debug("member [{}]", member.get());
-        return member.filter(presentMember -> member.isPresent()).orElseThrow(Exception::new);
-    }
-
-    // TODO password 변경 검증
-    @PutMapping("/edit/{memberNo}/password")
-    public String editPwd(@PathVariable Long memberNo, @Valid EditPwdDto pwdDto, BindingResult bindingResult) {
-        if (bindingResult.hasErrors()) {
-            throw new IllegalArgumentException(bindingResult.getFieldError().getDefaultMessage());
-        }
-
-        int result = memberService.editPwd(memberNo, pwdDto);
-
-        return null;
-    }
-
-    @PutMapping("/edit/{memberNo}/nickname")
-    public String editNickname(@PathVariable Long memberNo, EditNicknameDto nicknameDto) {
-        return null;
-    }
-
-    @PutMapping("/edit/{memberNo}/name")
-    public String editName(@PathVariable Long memberNo, EditNameDto nameDto) {
-        return null;
-    }
-
-    @PutMapping("/edit/{memberNo}/phone")
-    public String editPhone(@PathVariable Long memberNo, EditPhoneDto phoneDto) {
-        return null;
+    @DeleteMapping("/{memberNo}")
+    public void withdrawalMember(@PathVariable String memberNo) {
+        memberRepository.deleteMember(memberNo);
     }
 }

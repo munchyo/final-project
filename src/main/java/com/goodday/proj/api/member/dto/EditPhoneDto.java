@@ -13,7 +13,7 @@ public class EditPhoneDto {
 
     @NotBlank
     @Size(max = 11)
-    @Pattern(regexp = "[0-9]+")
+    @Pattern(regexp = "[0-9]+", message = "전화번호 형식이 잘못되었습니다.")
     String phone;
 
 }
