@@ -1,9 +1,11 @@
 package com.goodday.proj.api.shop.model;
 
+import com.goodday.proj.api.file.model.UploadFile;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
 import java.util.Date;
+import java.util.List;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -19,6 +21,7 @@ public class Product {
     int proPrice;
     int proInventory;
     Date proCreateDate;
-    String thumbnail;
+    UploadFile thumbnail;
+    List<UploadFile> images;
 
 }

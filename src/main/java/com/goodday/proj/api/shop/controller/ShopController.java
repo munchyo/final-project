@@ -1,7 +1,10 @@
 package com.goodday.proj.api.shop.controller;
 
+import com.goodday.proj.api.file.FileStore;
+import com.goodday.proj.api.file.model.UploadFile;
 import com.goodday.proj.api.pagination.PageInfo;
 import com.goodday.proj.api.pagination.Pagination;
+import com.goodday.proj.api.shop.dto.ProductFormDto;
 import com.goodday.proj.api.shop.model.Product;
 import com.goodday.proj.api.shop.repository.ShopRepository;
 import com.goodday.proj.api.shop.service.ShopService;
@@ -25,11 +28,7 @@ public class ShopController {
 
     private final ShopService shopService;
     private final ShopRepository shopRepository;
-
-    @Value("${file.dir}")
-    private String fileDir;
-
-    private final String wallPaperDir = System.getProperty("user.home");
+    private final FileStore fileStore;
 
     @GetMapping
     public Map<String, Object> product(@RequestParam(required = false) Integer currentPage) {
@@ -44,21 +43,9 @@ public class ShopController {
      * productNo는 내가직접만들어야될듯 sequence 사용 X
     */
      @PostMapping("/write")
-    public void writeProduct(@RequestParam String proName, @RequestParam String proContent, @RequestParam int proPrice,
-                             @RequestParam int proInventory, @RequestParam MultipartFile thumbNail,
-                             @RequestParam List<MultipartFile> images) throws IOException {
-        images.stream().filter(file -> images.isEmpty());
-        if (!thumbNail.isEmpty()) {
-            String fullPath = wallPaperDir + fileDir + thumbNail.getOriginalFilename();
-            thumbNail.transferTo(new File(fullPath));
-        }
-
-        if (!images.isEmpty()) {
-            for (MultipartFile image : images) {
-                String fullPath = wallPaperDir + fileDir + thumbNail.getOriginalFilename();
-                thumbNail.transferTo(new File(fullPath));
-            }
-        }
-
-    }
+    public void writeProduct(@RequestBody ProductFormDto form) throws IOException {
+         UploadFile thumbnail = fileStore.storeFile(form.getThumbnail());
+         List<UploadFile> images = fileStore.storeFiles(form.getImages());
+         shopService.writeProduct(thumbnail, images, form);
+     }
 }
