@@ -11,4 +11,6 @@ public interface ShopRepository {
     int countProductList();
 
     ArrayList<Product> selectProductList(RowBounds rowBounds);
+
+    int save(Product product);
 }

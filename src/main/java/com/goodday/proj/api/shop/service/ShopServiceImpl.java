@@ -52,7 +52,7 @@ public class ShopServiceImpl implements ShopService {
         product.setProInventory(form.getProInventory());
         product.setThumbnail(thumbnail);
         product.setImages(images);
-        return 0;
+        return shopRepository.save(product);
     }
 
     private Long createProductNo() {

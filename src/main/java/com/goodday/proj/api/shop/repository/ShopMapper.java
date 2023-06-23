@@ -14,4 +14,7 @@ public interface ShopMapper extends ShopRepository {
 
     @Override
     ArrayList<Product> selectProductList(RowBounds rowBounds);
+
+    @Override
+    int save(Product product);
 }
