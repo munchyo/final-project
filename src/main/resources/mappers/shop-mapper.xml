@@ -9,17 +9,21 @@
         select * from product
         order by pro_create_date desc
     </select>
-
+<!--TODO proNo seq 만들기-->
     <insert id="save">
         insert All
         into product
-        values (#{proNo}, #{proName}, #{proContent}, #{proPrice}, #{proInventory}, sysdate)
+        values (pro_seq.NEXTVAL, #{proName}, #{proContent}, #{proPrice}, #{proInventory}, sysdate)
         into FILESTORE
-        values (file_seq.NEXTVAL, #{thumbnail.uploadFileName}, #{thumbnail.storeFileName}, #{proNo}, 1)
+        values (file_seq.NEXTVAL, #{thumbnail.uploadFileName}, #{thumbnail.storeFileName}, pro_seq.CURRVAL, 1)
         <foreach collection="images" item="item" separator=",">
             INTO filestore
-            VALUES (file_seq.NEXTVAL, #{item.uploadFileName}, #{item.storeFileName}, #{proNo}, 2)
+            VALUES (file_seq.NEXTVAL, #{item.uploadFileName}, #{item.storeFileName}, pro_seq.CURRVAL, 2)
         </foreach>
         SELECT * FROM DUAL
     </insert>
+
+    <select id="findByNo">
+
+    </select>
 </mapper>

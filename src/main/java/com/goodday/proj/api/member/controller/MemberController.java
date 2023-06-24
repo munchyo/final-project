@@ -84,4 +84,13 @@ public class MemberController {
     public void withdrawalMember(@PathVariable String memberNo) {
         memberRepository.deleteMember(memberNo);
     }
+
+    @GetMapping("/check/id")
+    public String checkId(@RequestBody Map<String,String> id) {
+        Optional<MemberSessionInfo> checkId = memberRepository.findById(id.get("id"));
+        if (checkId.isPresent()) {
+            return "fail";
+        }
+        return "ok";
+    }
 }

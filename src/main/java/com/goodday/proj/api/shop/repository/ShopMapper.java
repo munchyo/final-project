@@ -5,6 +5,7 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.session.RowBounds;
 
 import java.util.ArrayList;
+import java.util.Optional;
 
 @Mapper
 public interface ShopMapper extends ShopRepository {
@@ -17,4 +18,7 @@ public interface ShopMapper extends ShopRepository {
 
     @Override
     int save(Product product);
+
+    @Override
+    Optional<Product> findByNo(Long proNo);
 }

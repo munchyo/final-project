@@ -45,7 +45,6 @@ public class ShopServiceImpl implements ShopService {
     @Override
     public int writeProduct(UploadFile thumbnail, List<UploadFile> images, ProductFormDto form) {
         Product product = new Product();
-        product.setProNo(createProductNo());
         product.setProName(form.getProName());
         product.setProContent(form.getProContent());
         product.setProPrice(form.getProPrice());
@@ -55,9 +54,9 @@ public class ShopServiceImpl implements ShopService {
         return shopRepository.save(product);
     }
 
-    private Long createProductNo() {
-        LocalDate currentDate = LocalDate.now();
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMddHHmmssSSSSSS");
-        return Long.parseLong(currentDate.format(formatter));
-    }
+//    private Long createProductNo() {
+//        LocalDate currentDate = LocalDate.now();
+//        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMddHHmmssSSSSSS");
+//        return Long.parseLong(currentDate.format(formatter));
+//    }
 }
