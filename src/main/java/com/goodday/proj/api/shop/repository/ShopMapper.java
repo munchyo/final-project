@@ -1,11 +1,12 @@
 package com.goodday.proj.api.shop.repository;
 
+import com.goodday.proj.api.file.model.UploadFile;
 import com.goodday.proj.api.shop.model.Product;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.session.RowBounds;
 
 import java.util.ArrayList;
-import java.util.Optional;
+import java.util.Map;
 
 @Mapper
 public interface ShopMapper extends ShopRepository {
@@ -20,5 +21,8 @@ public interface ShopMapper extends ShopRepository {
     int save(Product product);
 
     @Override
-    Optional<Product> findByNo(Long proNo);
+    int saveImages(Map images);
+
+    @Override
+    Product findByNo(Long proNo);
 }

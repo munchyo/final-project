@@ -1,10 +1,11 @@
 package com.goodday.proj.api.shop.repository;
 
+import com.goodday.proj.api.file.model.UploadFile;
 import com.goodday.proj.api.shop.model.Product;
 import org.apache.ibatis.session.RowBounds;
 
 import java.util.ArrayList;
-import java.util.Optional;
+import java.util.Map;
 
 public interface ShopRepository {
 
@@ -14,5 +15,8 @@ public interface ShopRepository {
 
     int save(Product product);
 
-    Optional<Product> findByNo(Long proNo);
+    Product findByNo(Long proNo);
+
+    int saveImages(Map images);
+
 }

@@ -25,6 +25,11 @@ public class ShopController {
     private final ShopRepository shopRepository;
     private final FileStore fileStore;
 
+    /**
+     * 상품목록, 페이지네이션
+     * @param currentPage
+     * @return
+     */
     @GetMapping
     public Map<String, Object> product(@RequestParam(required = false) Integer currentPage) {
         if (currentPage == null || currentPage < 0) {
@@ -33,6 +38,11 @@ public class ShopController {
         return shopService.pageAndProductList(currentPage);
     }
 
+    /**
+     * 상품 등록
+     * @param form
+     * @throws IOException
+     */
     @PostMapping("/write")
     public void writeProduct(@ModelAttribute ProductFormDto form) throws IOException {
         UploadFile thumbnail = fileStore.storeFile(form.getThumbnail());
@@ -41,12 +51,15 @@ public class ShopController {
         shopService.writeProduct(thumbnail, images, form);
     }
 
-    // TODO 상세보기 - 이미지 경로
+    /**
+     * 상품 상세보기
+     * @param proNo
+     * @return Product
+     */
     @GetMapping("/{proNo}")
     public Product viewProduct(@PathVariable Long proNo) {
-        Optional<Product> product = shopRepository.findByNo(proNo);
-
-        return null;
+        Product product = shopRepository.findByNo(proNo);
+        return product;
     }
 
 }

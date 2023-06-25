@@ -11,7 +11,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.session.RowBounds;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -41,22 +43,29 @@ public class ShopServiceImpl implements ShopService {
         return pageAndProductList;
     }
 
-    // TODO DB에 Product 저장하자
     @Override
     public int writeProduct(UploadFile thumbnail, List<UploadFile> images, ProductFormDto form) {
         Product product = new Product();
+        Long productNo = createProductNo();
+        product.setProNo(productNo);
         product.setProName(form.getProName());
         product.setProContent(form.getProContent());
         product.setProPrice(form.getProPrice());
         product.setProInventory(form.getProInventory());
         product.setThumbnail(thumbnail);
-        product.setImages(images);
-        return shopRepository.save(product);
+        int save = shopRepository.save(product);
+
+        Map map = new HashMap();
+        map.put("images", images);
+        map.put("proNo", productNo);
+        int saveImages = shopRepository.saveImages(map);
+        log.debug("save, saveImages : {}, {}",saveImages,save);
+        return save;
     }
 
-//    private Long createProductNo() {
-//        LocalDate currentDate = LocalDate.now();
-//        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMddHHmmssSSSSSS");
-//        return Long.parseLong(currentDate.format(formatter));
-//    }
+    private Long createProductNo() {
+        LocalDateTime currentDateTime = LocalDateTime.now();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyMMddHHmmssSSS");
+        return Long.parseLong(currentDateTime.format(formatter));
+    }
 }
