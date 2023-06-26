@@ -39,4 +39,6 @@ public interface MemberRepository {
     Address readAddress(Map edit);
 
     int deleteMember(String memberNo);
+
+    int saveKakaoMember(Map<String, Object> kakaoMemberInfo);
 }

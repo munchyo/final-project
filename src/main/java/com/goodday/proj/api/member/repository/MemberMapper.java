@@ -55,4 +55,7 @@ public interface MemberMapper extends MemberRepository {
 
     @Override
     int deleteMember(String memberNo);
+
+    @Override
+    int saveKakaoMember(Map<String, Object> kakaoMemberInfo);
 }

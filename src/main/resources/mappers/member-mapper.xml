@@ -137,4 +137,9 @@
         where member_no = #{memberNo}
     </update>
 
+    <insert id="saveKakaoMember" parameterType="Map">
+        insert into member
+        values (mem_seq.NEXTVAL, #{id}, null, null, sysdate, #{nickname}, #{email}, null, default, default)
+    </insert>
+
 </mapper>

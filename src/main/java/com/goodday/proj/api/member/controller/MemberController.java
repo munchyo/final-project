@@ -2,8 +2,8 @@ package com.goodday.proj.api.member.controller;
 
 import com.goodday.proj.api.constant.ErrorConst;
 import com.goodday.proj.api.member.dto.*;
-import com.goodday.proj.api.member.model.Member;
 import com.goodday.proj.api.member.repository.MemberRepository;
+import com.goodday.proj.api.member.service.KakaoLoginService;
 import com.goodday.proj.api.member.service.MemberService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -11,7 +11,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HashMap;
+import java.io.IOException;
 import java.util.Map;
 import java.util.Optional;
 
@@ -23,6 +23,7 @@ public class MemberController {
 
     private final MemberService memberService;
     private final MemberRepository memberRepository;
+    private final KakaoLoginService kakaoLoginService;
 
     @PostMapping("/login")
     public MemberSessionInfo login(@Valid @RequestBody LoginFormDto login, BindingResult bindingResult) {
@@ -86,11 +87,24 @@ public class MemberController {
     }
 
     @GetMapping("/check/id")
-    public String checkId(@RequestBody Map<String,String> id) {
+    public String checkId(@RequestBody Map<String, String> id) {
         Optional<MemberSessionInfo> checkId = memberRepository.findById(id.get("id"));
         if (checkId.isPresent()) {
             return "fail";
         }
         return "ok";
     }
+
+    @GetMapping("/kakao")
+    public MemberSessionInfo  kakaoCallback(@RequestParam("code") String code) throws IOException {
+        String kakaoAccessToken = kakaoLoginService.getKakaoAccessToken(code);
+        var kakaoMemberInfo = kakaoLoginService.getKakaoMemberInfo(kakaoAccessToken);
+
+        if (memberRepository.findById(kakaoMemberInfo.get("id").toString()).isEmpty()) {
+            memberRepository.saveKakaoMember(kakaoMemberInfo);
+        }
+
+        return memberRepository.findById(kakaoMemberInfo.get("id").toString()).get();
+    }
+
 }
