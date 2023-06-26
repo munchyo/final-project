@@ -59,7 +59,6 @@ public class ShopServiceImpl implements ShopService {
         map.put("images", images);
         map.put("proNo", productNo);
         int saveImages = shopRepository.saveImages(map);
-        log.debug("save, saveImages : {}, {}",saveImages,save);
         return save;
     }
 

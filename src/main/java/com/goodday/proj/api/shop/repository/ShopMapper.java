@@ -25,4 +25,10 @@ public interface ShopMapper extends ShopRepository {
 
     @Override
     Product findByNo(Long proNo);
+
+    @Override
+    int deleteProductByNo(Long proNo);
+
+    @Override
+    int deleteFileByNo(Long proNo);
 }

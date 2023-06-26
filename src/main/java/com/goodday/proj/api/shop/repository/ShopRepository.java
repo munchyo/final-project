@@ -1,6 +1,5 @@
 package com.goodday.proj.api.shop.repository;
 
-import com.goodday.proj.api.file.model.UploadFile;
 import com.goodday.proj.api.shop.model.Product;
 import org.apache.ibatis.session.RowBounds;
 
@@ -19,4 +18,7 @@ public interface ShopRepository {
 
     int saveImages(Map images);
 
+    int deleteProductByNo(Long proNo);
+
+    int deleteFileByNo(Long proNo);
 }

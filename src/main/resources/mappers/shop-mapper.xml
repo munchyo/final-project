@@ -54,4 +54,14 @@
                  LEFT JOIN filestore f2 ON p.PRO_NO = f2.BOARD_NO AND f2.FILE_LEVEL = 2
         WHERE p.PRO_NO = #{proNo}
     </select>
+    
+    <delete id="deleteProductByNo">
+        delete
+        from product
+        where pro_no = #{proNo}
+    </delete>
+
+    <delete id="deleteFileByNo">
+        delete from filestore where board_no = #{proNo}
+    </delete>
 </mapper>

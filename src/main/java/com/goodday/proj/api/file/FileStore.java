@@ -22,9 +22,7 @@ public class FileStore {
     private final String wallpaperDir = System.getProperty("user.home");
 
     public String getFullPath(String filename) {
-        String fullPath = wallpaperDir + fileDir + filename;
-        log.debug("fullPath : {}", fullPath);
-        return fullPath;
+        return wallpaperDir + fileDir + filename;
     }
 
     public List<UploadFile> storeFiles(List<MultipartFile> multipartFiles) throws IOException {
@@ -56,6 +54,13 @@ public class FileStore {
     private String extractExt(String originalFilename) {
         int pos = originalFilename.lastIndexOf(".");
         return originalFilename.substring(pos + 1);
+    }
+
+    public void deleteFile(String filename) {
+        File file = new File(getFullPath(filename));
+        if(file.exists()) {
+            file.delete();
+        }
     }
 
 }

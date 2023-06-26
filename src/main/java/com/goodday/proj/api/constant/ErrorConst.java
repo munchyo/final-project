@@ -9,4 +9,6 @@ public abstract class ErrorConst {
 
     public static final String findError = "일치하는 정보가 없습니다.";
 
+    public static final String nullError = "값이 비어있습니다.";
+
 }

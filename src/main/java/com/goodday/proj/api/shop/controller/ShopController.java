@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.*;
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
 @Slf4j
 @RestController
@@ -58,8 +57,44 @@ public class ShopController {
      */
     @GetMapping("/{proNo}")
     public Product viewProduct(@PathVariable Long proNo) {
-        Product product = shopRepository.findByNo(proNo);
-        return product;
+        return shopRepository.findByNo(proNo);
     }
 
+    /**
+     * 상품 수정 view
+     * @param proNo
+     * @return Product
+     */
+    @GetMapping("/edit/{proNo}")
+    public Product editProduct(@PathVariable Long proNo) {
+        return shopRepository.findByNo(proNo);
+    }
+
+    /**
+     * 상품 수정
+     * @param proNo
+     * @param form
+     * @throws IOException
+     */
+    @PatchMapping("/{proNo}")
+    public void updateProduct(@PathVariable Long proNo, @ModelAttribute ProductFormDto form) throws IOException {
+        UploadFile thumbnail = fileStore.storeFile(form.getThumbnail());
+        List<UploadFile> images = fileStore.storeFiles(form.getImages());
+
+        shopService.writeProduct(thumbnail, images, form);
+    }
+
+    /**
+     * 상품 삭제
+     * @param proNo
+     */
+    @DeleteMapping("/{proNo}")
+    public void deleteProduct(@PathVariable Long proNo) {
+        Product product = shopRepository.findByNo(proNo);
+        fileStore.deleteFile(product.getThumbnail().getStoreFileName());
+        product.getImages().stream().forEach(uploadFile -> fileStore.deleteFile(uploadFile.getStoreFileName()));
+
+        shopRepository.deleteProductByNo(proNo);
+        shopRepository.deleteFileByNo(proNo);
+    }
 }

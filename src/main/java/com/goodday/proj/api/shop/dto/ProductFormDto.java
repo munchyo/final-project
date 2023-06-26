@@ -11,12 +11,10 @@ import java.util.List;
 @Data
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class ProductFormDto {
-
     String proName;
     String proContent;
     Integer proPrice;
     Integer proInventory;
     MultipartFile thumbnail;
     List<MultipartFile> images;
-
 }
