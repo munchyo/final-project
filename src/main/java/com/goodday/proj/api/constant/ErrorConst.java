@@ -13,4 +13,6 @@ public abstract class ErrorConst {
 
     public static final String nullError = "값이 비어있습니다.";
 
+    public static final String bindingError = "값이 유효하지 않습니다.";
+
 }

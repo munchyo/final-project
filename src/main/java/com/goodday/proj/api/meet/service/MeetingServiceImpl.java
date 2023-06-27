@@ -24,7 +24,7 @@ public class MeetingServiceImpl implements MeetingService {
     @Override
     public Map<String, Object> pageAndMeetingList(Integer currentPage) {
         int listCount = meetingRepository.countMeetingList();
-        PageInfo pageInfo = Pagination.getPageInfo(currentPage, listCount, 20);
+        PageInfo pageInfo = Pagination.getPageInfo(currentPage, listCount, 10);
 
         int offset = (pageInfo.getCurrentPage() - 1) * pageInfo.getBoardLimit();
         RowBounds rowBounds = new RowBounds(offset, pageInfo.getBoardLimit());

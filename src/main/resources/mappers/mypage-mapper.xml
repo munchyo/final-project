@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.goodday.proj.api.mypage.repository.MyPageMapper">
+    <select id="countMyBoardListByMemberNo" resultType="int" parameterType="Long">
+        select count(*) from board where MEMBER_NO = #{memberNo} AND BO_STATUS = 'Y'
+    </select>
+
+    <select id="findMyBoardListByMemberNo" resultType="com.goodday.proj.api.free.model.FreeBoard" parameterType="Long">
+        select * from BOARD
+        where MEMBER_NO = #{memberNo} AND BO_STATUS = 'Y'
+        order by bo_create_date desc
+    </select>
+
+    <select id="findMyTodoListByMemberNo" parameterType="Long" resultType="com.goodday.proj.api.mypage.model.TodoList">
+        select * from CALENDAR
+        where MEMBER_NO = #{memberNo}
+        order by CAL_DATE
+    </select>
+    
+    <insert id="addTodoList" parameterType="com.goodday.proj.api.mypage.model.TodoList">
+        insert into CALENDAR
+        VALUES (cal_seq.nextval, #{calDate}, #{period}, #{goal}, #{memberNo}, 1)
+    </insert>
+
+    <update id="updateTodoListStatus" parameterType="Map">
+        update CALENDAR
+        set cal_status = #{calStatus}
+        where member_no = #{memberNo} and cal_no = #{calNo}
+    </update>
+
+    <delete id="deleteTodoList" parameterType="Map">
+        delete from CALENDAR
+        where member_no = #{memberNo} and cal_no = #{calNo}
+    </delete>
+</mapper>
