@@ -6,8 +6,9 @@
     </select>
 
     <select id="selectProductList" resultType="com.goodday.proj.api.meet.model.Meeting">
-        select * from meeting
-                 where meet_status = 'Y'
+        select MEET_NO, MEET_TITLE, MEET_CONTENT, MEET_ADDRESS, MEET_TOTAL, OPENKAKAO, MEET_CREATE_DATE, MEMBER_NO, MEET_STATUS, UPLOAD_FILE_NAME, STORE_FILE_NAME
+               from meeting left join filestore on (meet_no = board_no)
+                 where meet_status = 'Y' AND BOARD_TYPE = 'MEET'
         order by meet_create_date desc
     </select>
 </mapper>

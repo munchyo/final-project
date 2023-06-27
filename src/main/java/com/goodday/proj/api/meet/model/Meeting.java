@@ -1,5 +1,6 @@
 package com.goodday.proj.api.meet.model;
 
+import com.goodday.proj.api.file.model.UploadFile;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
@@ -21,4 +22,5 @@ public class Meeting {
     Date meetCreateDate;
     String memberNo;
     String meetStatus;
+    UploadFile thumbnail;
 }
