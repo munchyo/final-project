@@ -10,8 +10,6 @@ import lombok.experimental.FieldDefaults;
 @ToString
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class UploadFile {
-
     String uploadFileName;
     String storeFileName;
-
 }

@@ -13,14 +13,13 @@ import java.util.Date;
 @ToString
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class Meeting {
-    Long meetNo;
+    long meetNo;
     String meetTitle;
     String meetContent;
     String meetAddress;
-    String meetTotal;
+    int meetTotal;
     String openKakao;
     Date meetCreateDate;
     String memberNo;
-    String meetStatus;
     UploadFile thumbnail;
 }
