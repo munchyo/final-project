@@ -4,11 +4,93 @@
     <select id="countProductList" resultType="int">
         select count(*) from meeting where meet_status = 'Y'
     </select>
+    
+    <resultMap id="meetingResultSet" type="com.goodday.proj.api.meet.model.Meeting">
+        <id property="meetNo" column="MEET_NO"/>
+        <result property="meetTitle" column="MEET_TITLE"/>
+        <result property="meetContent" column="MEET_CONTENT"/>
+        <result property="meetAddress" column="MEET_ADDRESS"/>
+        <result property="meetTotal" column="MEET_TOTAL"/>
+        <result property="openKakao" column="OPENKAKAO"/>
+        <result property="meetCreateDate" column="MEET_CREATE_DATE"/>
+        <result property="memberNo" column="MEMBER_NO"/>
+        <association property="thumbnail" javaType="com.goodday.proj.api.file.model.UploadFile">
+            <result property="uploadFileName" column="UPLOAD_FILE_NAME"/>
+            <result property="storeFileName" column="STORE_FILE_NAME"/>
+        </association>
+    </resultMap>
 
-    <select id="selectProductList" resultType="com.goodday.proj.api.meet.model.Meeting">
-        select MEET_NO, MEET_TITLE, MEET_CONTENT, MEET_ADDRESS, MEET_TOTAL, OPENKAKAO, MEET_CREATE_DATE, MEMBER_NO, MEET_STATUS, UPLOAD_FILE_NAME, STORE_FILE_NAME
+    <select id="selectProductList" resultMap="meetingResultSet">
+        select *
                from meeting left join filestore on (meet_no = board_no)
-                 where meet_status = 'Y' AND BOARD_TYPE = 'MEET'
+                 where meet_status = 'Y' AND BOARD_TYPE = 'MEETING'
         order by meet_create_date desc
     </select>
+
+    <insert id="saveMeeting">
+        insert all
+	        into MEETING values (meet_seq.NEXTVAL, #{meetTitle}, #{meetContent}, #{meetTotal}, #{openKakao}, sysdate, #{memberNo}, default, #{meetAddress})
+	        into FILESTORE values (file_seq.NEXTVAL, #{thumbnail.uploadFileName}, #{thumbnail.storeFileName}, meet_seq.CURRVAL, 1, 'MEETING')
+	        into EN_MEETING values (meet_seq.CURRVAL, #{memberNo})
+            select * from dual
+    </insert>
+
+<!--        select *-->
+<!--        from meeting left join filestore on (meet_no = board_no)-->
+<!--        where meet_status = 'Y' and board_no = #{meetNo} AND BOARD_TYPE = 'MEETING' and meet_no = #{meetNo}-->
+<!--        order by meet_create_date desc-->
+    <select id="findByMeetNo" resultMap="meetingResultSet">
+        SELECT meeting.MEET_NO, MEET_TITLE, MEET_CONTENT, MEET_ADDRESS, MEET_TOTAL, OPENKAKAO, MEET_CREATE_DATE, meeting.MEMBER_NO, UPLOAD_FILE_NAME,
+            STORE_FILE_NAME, COUNT(en_meeting.meet_no)
+        FROM
+            meeting
+                LEFT JOIN
+            filestore ON (meeting.meet_no = filestore.board_no)
+                LEFT JOIN
+            en_meeting ON (meeting.meet_no = en_meeting.meet_no)
+        WHERE
+            meet_status = 'Y' AND meeting.MEET_NO = #{meetNo} AND BOARD_TYPE = 'MEETING'
+        GROUP BY
+            meeting.MEET_NO,
+            MEET_TITLE,
+            MEET_CONTENT,
+            MEET_ADDRESS,
+            MEET_TOTAL,
+            OPENKAKAO,
+            MEET_CREATE_DATE,
+            meeting.MEMBER_NO,
+            UPLOAD_FILE_NAME,
+            STORE_FILE_NAME
+        ORDER BY
+            MEET_CREATE_DATE DESC
+    </select>
+<!--    TODO 쿼리 완성-->
+    <delete id="deleteFileByStoreFileName">
+        DELETE FROM FILESTORE WHERE STORE_FILE_NAME = #{storeFileName}
+    </delete>
+
+    <delete id="deleteApplicationByMeetNo">
+        delete from en_meeting where meet_no = #{meetNo}
+    </delete>
+
+    <delete id="deleteByMeetNo">
+        delete from meeting where meet_no = #{meetNo}
+    </delete>
+
+    <update id="updateFileByStoreFileName" parameterType="Map">
+        update FILESTORE
+        set store_file_name = #{storeFileName},
+            upload_file_name = #{uploadFileName}
+        where store_file_name = #{afterStoreFileName}
+    </update>
+
+    <update id="updateMeeting" parameterType="Map">
+        update MEETING
+        set meet_title = #{meetTitle},
+            meet_content = #{meetContent},
+            meet_Address = #{meetAddress},
+            meet_total = #{meetTotal},
+            openkakao = #{openKakao}
+        where meet_no = #{meetNo} and member_no = #{memberNo}
+    </update>
 </mapper>

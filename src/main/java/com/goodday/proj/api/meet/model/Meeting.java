@@ -17,9 +17,20 @@ public class Meeting {
     String meetTitle;
     String meetContent;
     String meetAddress;
+    int application;
     int meetTotal;
     String openKakao;
     Date meetCreateDate;
-    String memberNo;
+    long memberNo;
     UploadFile thumbnail;
+
+    public Meeting(String meetTitle, String meetContent, String meetAddress, int meetTotal, String openKakao, long memberNo, UploadFile thumbnail) {
+        this.meetTitle = meetTitle;
+        this.meetContent = meetContent;
+        this.meetAddress = meetAddress;
+        this.meetTotal = meetTotal;
+        this.openKakao = openKakao;
+        this.memberNo = memberNo;
+        this.thumbnail = thumbnail;
+    }
 }
