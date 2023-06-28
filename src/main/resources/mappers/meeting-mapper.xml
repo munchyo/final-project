@@ -11,6 +11,7 @@
         <result property="meetContent" column="MEET_CONTENT"/>
         <result property="meetAddress" column="MEET_ADDRESS"/>
         <result property="meetTotal" column="MEET_TOTAL"/>
+        <result property="application" column="COUNT(EN_MEETING.MEET_NO)"/>
         <result property="openKakao" column="OPENKAKAO"/>
         <result property="meetCreateDate" column="MEET_CREATE_DATE"/>
         <result property="memberNo" column="MEMBER_NO"/>
