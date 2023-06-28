@@ -126,8 +126,12 @@ public class MeetingController {
      */
     @PostMapping("/{meetNo}/join")
     public void meetingJoin(@PathVariable Long meetNo, @RequestParam Long memberNo) {
-        if (meetingRepository.findByMeetNo(meetNo).getMemberNo() == memberNo) {
+        Meeting meeting = meetingRepository.findByMeetNo(meetNo);
+        if (meeting.getMemberNo() == memberNo) {
             throw new RuntimeException(ErrorConst.authError);
+        }
+        if (meeting.getMeetTotal() == meeting.getApplication()) {
+            throw new RuntimeException("정원이 가득 찼습니다.");
         }
 
         Map<String, Long> join = new HashMap<>();
@@ -156,6 +160,12 @@ public class MeetingController {
         }
     }
 
+    /**
+     * 모임 참가자 리스트
+     * @param meetNo
+     * @param memberNo
+     * @return
+     */
     @PostMapping("/{meetNo}/application/{memberNo}")
     public List<MemberSessionInfo> meetingApplicationList(@PathVariable Long meetNo, @PathVariable Long memberNo) {
         if (meetingRepository.findByMeetNo(meetNo).getMemberNo() != memberNo) {
@@ -164,6 +174,11 @@ public class MeetingController {
         return meetingRepository.findApplicationListByMeetNo(meetNo);
     }
 
+    /**
+     * 모임 참가자 추방
+     * @param meetNo
+     * @param memberNo
+     */
     @DeleteMapping("/{meetNo}/application/{memberNo}")
     public void removeMeetingApplication(@PathVariable Long meetNo, @PathVariable Long memberNo) {
         if (meetingRepository.findByMeetNo(meetNo).getMemberNo() != memberNo) {
