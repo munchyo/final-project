@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.goodday.proj.api.meet.repository.MeetingMapper">
-    <select id="countProductList" resultType="int">
+    <select id="countMeetingList" resultType="int">
         select count(*) from meeting where meet_status = 'Y'
     </select>
     
@@ -21,16 +21,39 @@
         </association>
     </resultMap>
 
-    <select id="selectProductList" resultMap="meetingResultSet">
-        select *
-               from meeting left join filestore on (meet_no = board_no)
-                 where meet_status = 'Y' AND BOARD_TYPE = 'MEETING'
-        order by meet_create_date desc
+<!--        select *-->
+<!--               from meeting left join filestore on (meet_no = board_no)-->
+<!--                 where meet_status = 'Y' AND BOARD_TYPE = 'MEETING'-->
+<!--        order by meet_create_date desc-->
+    <select id="selectMeetingList" resultMap="meetingResultSet">
+        SELECT meeting.MEET_NO, MEET_TITLE, MEET_CONTENT, MEET_ADDRESS, MEET_TOTAL, OPENKAKAO, MEET_CREATE_DATE, meeting.MEMBER_NO, UPLOAD_FILE_NAME,
+               STORE_FILE_NAME, COUNT(en_meeting.meet_no)
+        FROM
+            meeting
+                LEFT JOIN
+            filestore ON (meeting.meet_no = filestore.board_no)
+                LEFT JOIN
+            en_meeting ON (meeting.meet_no = en_meeting.meet_no)
+        WHERE
+            meet_status = 'Y' AND BOARD_TYPE = 'MEETING'
+        GROUP BY
+            meeting.MEET_NO,
+            MEET_TITLE,
+            MEET_CONTENT,
+            MEET_ADDRESS,
+            MEET_TOTAL,
+            OPENKAKAO,
+            MEET_CREATE_DATE,
+            meeting.MEMBER_NO,
+            UPLOAD_FILE_NAME,
+            STORE_FILE_NAME
+        ORDER BY
+            MEET_CREATE_DATE DESC
     </select>
 
     <insert id="saveMeeting">
         insert all
-	        into MEETING values (meet_seq.NEXTVAL, #{meetTitle}, #{meetContent}, #{meetTotal}, #{openKakao}, sysdate, #{memberNo}, default, #{meetAddress})
+	        into MEETING values (meet_seq.NEXTVAL, #{meetTitle}, #{meetContent}, #{meetTotal}, #{meetAddress}, #{openKakao}, sysdate, #{memberNo}, default)
 	        into FILESTORE values (file_seq.NEXTVAL, #{thumbnail.uploadFileName}, #{thumbnail.storeFileName}, meet_seq.CURRVAL, 1, 'MEETING')
 	        into EN_MEETING values (meet_seq.CURRVAL, #{memberNo})
             select * from dual
@@ -65,7 +88,7 @@
         ORDER BY
             MEET_CREATE_DATE DESC
     </select>
-<!--    TODO 쿼리 완성-->
+
     <delete id="deleteFileByStoreFileName">
         DELETE FROM FILESTORE WHERE STORE_FILE_NAME = #{storeFileName}
     </delete>
@@ -94,4 +117,20 @@
             openkakao = #{openKakao}
         where meet_no = #{meetNo} and member_no = #{memberNo}
     </update>
+
+    <insert id="addMeetingJoin" parameterType="Map">
+        insert into en_meeting
+        values (#{meetNo}, #{memberNo})
+    </insert>
+
+    <delete id="deleteMeetingJoin" parameterType="Map">
+        DELETE FROM en_meeting
+        WHERE meet_no = #{meetNo} and member_no = #{memberNo}
+    </delete>
+
+    <select id="findApplicationListByMeetNo" resultType="com.goodday.proj.api.member.dto.MemberSessionInfo">
+        select member_no, member_id, nickname, admin
+        from en_meeting left join member using(member_no)
+        where meet_no = #{meetNo}
+    </select>
 </mapper>

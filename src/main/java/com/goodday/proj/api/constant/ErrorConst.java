@@ -15,4 +15,12 @@ public abstract class ErrorConst {
 
     public static final String bindingError = "값이 유효하지 않습니다.";
 
+    public static final String updateError = "업데이트 실패하였습니다.";
+
+    public static final String insertError = "추가 실패하였습니다.";
+
+    public static final String deleteError = "삭제 실패하였습니다.";
+
+    public static final String authError = "권한이 없습니다.";
+
 }
