@@ -21,11 +21,7 @@
         </association>
     </resultMap>
 
-<!--        select *-->
-<!--               from meeting left join filestore on (meet_no = board_no)-->
-<!--                 where meet_status = 'Y' AND BOARD_TYPE = 'MEETING'-->
-<!--        order by meet_create_date desc-->
-    <select id="selectMeetingList" resultMap="meetingResultSet">
+    <select id="findMeetingList" resultMap="meetingResultSet">
         SELECT meeting.MEET_NO, MEET_TITLE, MEET_CONTENT, MEET_ADDRESS, MEET_TOTAL, OPENKAKAO, MEET_CREATE_DATE, meeting.MEMBER_NO, UPLOAD_FILE_NAME,
                STORE_FILE_NAME, COUNT(en_meeting.meet_no)
         FROM
@@ -59,10 +55,6 @@
             select * from dual
     </insert>
 
-<!--        select *-->
-<!--        from meeting left join filestore on (meet_no = board_no)-->
-<!--        where meet_status = 'Y' and board_no = #{meetNo} AND BOARD_TYPE = 'MEETING' and meet_no = #{meetNo}-->
-<!--        order by meet_create_date desc-->
     <select id="findByMeetNo" resultMap="meetingResultSet">
         SELECT meeting.MEET_NO, MEET_TITLE, MEET_CONTENT, MEET_ADDRESS, MEET_TOTAL, OPENKAKAO, MEET_CREATE_DATE, meeting.MEMBER_NO, UPLOAD_FILE_NAME,
             STORE_FILE_NAME, COUNT(en_meeting.meet_no)
@@ -132,5 +124,35 @@
         select member_no, member_id, nickname, admin
         from en_meeting left join member using(member_no)
         where meet_no = #{meetNo}
+    </select>
+
+    <select id="countMyMeetingListByMemberNo" resultType="int">
+        select count(*) from meeting where meet_status = 'Y' and member_no = #{memberNo}
+    </select>
+
+    <select id="findMeetingListByMemberNo" resultMap="meetingResultSet">
+        SELECT meeting.MEET_NO, MEET_TITLE, MEET_CONTENT, MEET_ADDRESS, MEET_TOTAL, OPENKAKAO, MEET_CREATE_DATE, meeting.MEMBER_NO, UPLOAD_FILE_NAME,
+               STORE_FILE_NAME, COUNT(en_meeting.meet_no)
+        FROM
+            meeting
+                LEFT JOIN
+            filestore ON (meeting.meet_no = filestore.board_no)
+                LEFT JOIN
+            en_meeting ON (meeting.meet_no = en_meeting.meet_no)
+        WHERE
+            meet_status = 'Y' AND BOARD_TYPE = 'MEETING' and meeting.MEMBER_NO = #{memberNo}
+        GROUP BY
+            meeting.MEET_NO,
+            MEET_TITLE,
+            MEET_CONTENT,
+            MEET_ADDRESS,
+            MEET_TOTAL,
+            OPENKAKAO,
+            MEET_CREATE_DATE,
+            meeting.MEMBER_NO,
+            UPLOAD_FILE_NAME,
+            STORE_FILE_NAME
+        ORDER BY
+            MEET_CREATE_DATE DESC
     </select>
 </mapper>

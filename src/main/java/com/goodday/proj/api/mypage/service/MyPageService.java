@@ -4,4 +4,6 @@ import java.util.Map;
 
 public interface MyPageService {
     Map<String, Object> myBoardListPaging(Long memberNo, Integer currentPage);
+
+    Map<String, Object> myMeetingList(Integer currentPage, Long memberNo);
 }

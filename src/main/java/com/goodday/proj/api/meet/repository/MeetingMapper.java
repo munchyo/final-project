@@ -16,7 +16,7 @@ public interface MeetingMapper extends MeetingRepository{
     int countMeetingList();
 
     @Override
-    ArrayList<Meeting> selectMeetingList(RowBounds rowBounds);
+    ArrayList<Meeting> findMeetingList(RowBounds rowBounds);
 
     @Override
     int saveMeeting(Meeting meeting);
@@ -47,4 +47,10 @@ public interface MeetingMapper extends MeetingRepository{
 
     @Override
     List<MemberSessionInfo> findApplicationListByMeetNo(Long meetNo);
+
+    @Override
+    ArrayList<Meeting> findMeetingListByMemberNo(Long memberNo, RowBounds rowBounds);
+
+    @Override
+    int countMyMeetingListByMemberNo(Long memberNo);
 }

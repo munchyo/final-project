@@ -1,6 +1,7 @@
 package com.goodday.proj.api.mypage.controller;
 
 import com.goodday.proj.api.constant.ErrorConst;
+import com.goodday.proj.api.meet.repository.MeetingRepository;
 import com.goodday.proj.api.mypage.dto.TodoListDto;
 import com.goodday.proj.api.mypage.model.TodoList;
 import com.goodday.proj.api.mypage.repository.MyPageRepository;
@@ -80,5 +81,13 @@ public class MyPageController {
         myPageRepository.deleteTodoList(deleteTodoList);
     }
 
-    // TODO 주문내역, 내모임, 내댓글
+    @GetMapping("/meet/{memberNo}")
+    public Map<String, Object> myMeeting(@PathVariable Long memberNo, @RequestParam(required = false) Integer currentPage) {
+        if (currentPage == null || currentPage < 0) {
+            currentPage = 1;
+        }
+        return myPageService.myMeetingList(currentPage, memberNo);
+    }
+
+    // TODO 주문내역, 내댓글
 }

@@ -7,14 +7,7 @@ import com.goodday.proj.api.meet.model.Meeting;
 import com.goodday.proj.api.meet.repository.MeetingRepository;
 import com.goodday.proj.api.pagination.PageInfo;
 import com.goodday.proj.api.pagination.Pagination;
-import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Data;
 import lombok.RequiredArgsConstructor;
-import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.session.RowBounds;
 import org.springframework.stereotype.Service;
@@ -40,7 +33,7 @@ public class MeetingServiceImpl implements MeetingService {
 
         int offset = (pageInfo.getCurrentPage() - 1) * pageInfo.getBoardLimit();
         RowBounds rowBounds = new RowBounds(offset, pageInfo.getBoardLimit());
-        ArrayList<Meeting> meetings = meetingRepository.selectMeetingList(rowBounds);
+        ArrayList<Meeting> meetings = meetingRepository.findMeetingList(rowBounds);
 
         Map<String, Object> pageAndMeetingList = new HashMap<>();
         pageAndMeetingList.put("pageInfo", pageInfo);

@@ -11,7 +11,7 @@ import java.util.Map;
 public interface MeetingRepository {
     int countMeetingList();
 
-    ArrayList<Meeting> selectMeetingList(RowBounds rowBounds);
+    ArrayList<Meeting> findMeetingList(RowBounds rowBounds);
 
     int saveMeeting(Meeting meeting);
 
@@ -32,4 +32,8 @@ public interface MeetingRepository {
     int deleteMeetingJoin(Map<String, Long> cancel);
 
     List<MemberSessionInfo> findApplicationListByMeetNo(Long meetNo);
+
+    ArrayList<Meeting> findMeetingListByMemberNo(Long memberNo, RowBounds rowBounds);
+
+    int countMyMeetingListByMemberNo(Long memberNo);
 }
