@@ -13,28 +13,7 @@
         SELECT * FROM DUAL
     </insert>
 
-<!--    <resultMap id="memberIdResultSet" type="com.goodday.proj.api.member.model.Member">-->
-<!--        <id property="memberNo" column="MEMBER_NO"/>-->
-<!--        <result property="memberId" column="MEMBER_ID"/>-->
-<!--        <result property="pwd" column="PWD"/>-->
-<!--        <result property="name" column="NAME"/>-->
-<!--        <result property="enrollDate" column="ENROLL_DATE"/>-->
-<!--        <result property="nickname" column="NICKNAME"/>-->
-<!--        <result property="email" column="EMAIL"/>-->
-<!--        <result property="phone" column="PHONE"/>-->
-<!--        <result property="admin" column="ADMIN"/>-->
-<!--        <result property="memberStatus" column="MEMBER_STATUS"/>-->
-<!--        <collection column="id" property="address" ofType="com.goodday.proj.api.member.model.Address" javaType="List" select="addressList"/>-->
-<!--    </resultMap>-->
-
-<!--    <select id="findById" resultMap="memberIdResultSet">-->
-<!--        SELECT distinct member.MEMBER_NO, MEMBER_ID, PWD, NAME, ENROLL_DATE, NICKNAME, email, PHONE, ADMIN, address-->
-<!--        FROM member-->
-<!--                 LEFT JOIN address ON member.MEMBER_NO = address.MEMBER_NO-->
-<!--        WHERE member_id = #{id} and member_status = 'Y' and is_main = 'Y'-->
-<!--    </select>-->
-
-    <select id="findById" resultType="com.goodday.proj.api.member.dto.MemberSessionInfo">
+    <select id="findSessionMemberById" resultType="com.goodday.proj.api.member.dto.MemberSessionInfo">
         select member_no, member_id, nickname, admin
         from member
         where member_id = #{id} and member_status = 'Y'
@@ -44,7 +23,7 @@
         select pwd from member where member_id = #{id} and member_status = 'Y'
     </select>
 
-    <select id="findByEmail" resultType="com.goodday.proj.api.member.dto.MemberSessionInfo">
+    <select id="findSessionMemberByEmail" resultType="com.goodday.proj.api.member.dto.MemberSessionInfo">
         select member_no, member_id, nickname, admin
         from member
         where email = #{email} and member_status = 'Y'
@@ -77,7 +56,13 @@
         <collection column="email" property="address" ofType="com.goodday.proj.api.member.model.Address" javaType="List" select="addressList"/>
     </resultMap>
 
-    <select id="findMemberByNo" resultMap="memberResultSet">
+    <select id="findSessionMemberByNo" resultType="com.goodday.proj.api.member.dto.MemberSessionInfo">
+        select member_no, member_id, nickname, admin
+        from member
+        where member_no = #{memberNo} and member_status = 'Y'
+    </select>
+
+    <select id="findMemberAndAddressByNo" resultMap="memberResultSet">
         SELECT distinct member.MEMBER_NO, MEMBER_ID, PWD, NAME, ENROLL_DATE, NICKNAME, email, PHONE, ADMIN, address
         FROM member
                  LEFT JOIN address ON member.MEMBER_NO = address.MEMBER_NO

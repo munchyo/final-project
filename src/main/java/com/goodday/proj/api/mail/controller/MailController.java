@@ -2,17 +2,11 @@ package com.goodday.proj.api.mail.controller;
 
 import com.goodday.proj.api.constant.ErrorConst;
 import com.goodday.proj.api.mail.service.MailService;
-import com.goodday.proj.api.member.dto.MemberSessionInfo;
 import com.goodday.proj.api.member.repository.MemberRepository;
 import jakarta.mail.MessagingException;
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.Map;
-import java.util.Optional;
 
 @Slf4j
 @RestController
@@ -29,7 +23,7 @@ public class MailController {
             throw new IllegalArgumentException(ErrorConst.mailError);
         }
 
-        if (memberRepository.findByEmail(email).isPresent()) {
+        if (memberRepository.findSessionMemberByEmail(email).isPresent()) {
             throw new IllegalArgumentException("중복된 이메일입니다.");
         }
 

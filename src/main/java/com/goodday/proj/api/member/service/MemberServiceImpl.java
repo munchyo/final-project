@@ -23,7 +23,7 @@ public class MemberServiceImpl implements MemberService {
     @Override
     public MemberSessionInfo login(LoginFormDto login) {
         log.debug("login [{}]", login);
-        Optional<MemberSessionInfo> member = memberRepository.findById(login.getId());
+        Optional<MemberSessionInfo> member = memberRepository.findSessionMemberById(login.getId());
         log.debug("session [{}]", member);
         if(member.isEmpty()){
             throw new RuntimeException(ErrorConst.loginError);
@@ -63,7 +63,7 @@ public class MemberServiceImpl implements MemberService {
 
     @Override
     public int editPwd(Long memberNo, EditPwdDto pwdDto) {
-        if (!bcrypt.matches(pwdDto.getCurrentPwd(), memberRepository.findMemberByNo(memberNo).get().getPwd())) {
+        if (!bcrypt.matches(pwdDto.getCurrentPwd(), memberRepository.findMemberAndAddressByNo(memberNo).get().getPwd())) {
             throw new RuntimeException(ErrorConst.findError);
         }
 

@@ -1,12 +1,15 @@
 package com.goodday.proj.api.file.controller;
 
+import com.goodday.proj.api.constant.ErrorConst;
 import com.goodday.proj.api.file.FileStore;
+import com.goodday.proj.api.file.repository.FileRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
@@ -21,16 +24,27 @@ import java.nio.charset.StandardCharsets;
 public class FileController {
 
     private final FileStore fileStore;
+    private final FileRepository fileRepository;
 
     /**
      * 이미지 보기 /api/images/{storeFileName}
+     *
      * @param filename
      * @return 이미지 경로
      * @throws MalformedURLException
      */
-    @GetMapping("/images/{filename}")
+    @GetMapping("/image/{filename}")
     public Resource downloadImage(@PathVariable String filename) throws MalformedURLException {
         return new UrlResource("file : " + fileStore.getFullPath(filename));
+    }
+
+    @DeleteMapping("/file/{filename}")
+    public void deleteFile(@PathVariable String filename) {
+        fileStore.deleteFile(filename);
+        int result = fileRepository.deleteFile(filename);
+        if (result == 0) {
+            throw new RuntimeException(ErrorConst.deleteError);
+        }
     }
 
     // TODO filename을 받아와서 나중에 storeFileName = filename 으로 쿼리에서 찾아서 뿌리자

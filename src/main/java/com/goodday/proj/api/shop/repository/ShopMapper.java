@@ -31,4 +31,10 @@ public interface ShopMapper extends ShopRepository {
 
     @Override
     int deleteFileByNo(Long proNo);
+
+    @Override
+    int updateFileByStoreFileName(Map<String, String> updateFile);
+
+    @Override
+    int updateProduct(Product editProduct);
 }

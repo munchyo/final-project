@@ -1,35 +1,25 @@
-package com.goodday.proj.api.shop.dto;
+package com.goodday.proj.api.notice.dto;
 
-import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.experimental.FieldDefaults;
-import org.springframework.boot.context.properties.bind.DefaultValue;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
 @Data
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class ProductFormDto {
+public class NoticeForm {
+    @NotNull
     Long memberNo;
 
     @NotEmpty
-    String proName;
+    String noticeTitle;
 
     @NotEmpty
-    String proContent;
+    String noticeContent;
 
-    @Min(value = 0)
-    @NotNull
-    Integer proPrice;
-
-    @Min(value = 0)
-    @NotNull
-    Integer proInventory;
-
-    MultipartFile thumbnail;
     List<MultipartFile> images;
 }

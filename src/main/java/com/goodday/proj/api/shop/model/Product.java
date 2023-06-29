@@ -24,4 +24,11 @@ public class Product {
     UploadFile thumbnail;
     List<UploadFile> images;
 
+    public Product(long proNo, String proName, String proContent, int proPrice, int proInventory) {
+        this.proNo = proNo;
+        this.proName = proName;
+        this.proContent = proContent;
+        this.proPrice = proPrice;
+        this.proInventory = proInventory;
+    }
 }

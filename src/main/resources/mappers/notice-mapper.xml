@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.goodday.proj.api.notice.repository.NoticeMapper">
+    <select id="countNoticeList" resultType="_int">
+        select count(*) from notice
+    </select>
+
+    <select id="findNoticeList" resultMap="noticeResultSet">
+        SELECT notice_no, notice_title, notice_content, notice_create_date, member_no, notice_status, UPLOAD_FILE_NAME, STORE_FILE_NAME
+        FROM notice LEFT JOIN filestore ON (notice_no = board_no)
+        WHERE notice_status = 'Y' AND BOARD_TYPE = 'NOTICE' AND FILE_LEVEL = 2
+        ORDER BY notice_create_date DESC
+    </select>
+
+    <resultMap id="noticeResultSet" type="com.goodday.proj.api.notice.model.Notice">
+        <id property="noticeNo" column="NOTICE_NO"/>
+        <result property="noticeTitle" column="NOTICE_TITLE"/>
+        <result property="noticeContent" column="NOTICE_CONTENT"/>
+        <result property="noticeCreateDate" column="NOTICE_CREATE_DATE"/>
+        <result property="memberNo" column="MEMBER_NO"/>
+        <result property="noticeStatus" column="NOTICE_STATUS"/>
+        <collection property="images" ofType="com.goodday.proj.api.file.model.UploadFile">
+            <result property="uploadFileName" column="UPLOAD_FILE_NAME"/>
+            <result property="storeFileName" column="STORE_FILE_NAME"/>
+        </collection>
+    </resultMap>
+
+    <insert id="saveNotice" parameterType="com.goodday.proj.api.notice.model.Notice">
+        insert all
+        into notice values (notice_seq.NEXTVAL, #{noticeTitle}, #{noticeContent}, sysdate, #{memberNo}, default)
+        <foreach collection="images" item="image">
+            into filestore values (get_next_file_seq, #{image.uploadFileName}, #{image.storeFileName}, notice_seq.CURRVAL, 2, 'NOTICE')
+        </foreach>
+        select * from dual
+    </insert>
+
+    <select id="findByNoticeNo" resultMap="noticeResultSet">
+        SELECT notice_no, notice_title, notice_content, notice_create_date, member_no, notice_status, UPLOAD_FILE_NAME, STORE_FILE_NAME
+        FROM notice LEFT JOIN filestore ON (notice_no = board_no)
+        WHERE notice_status = 'Y' AND BOARD_TYPE = 'NOTICE' AND FILE_LEVEL = 2
+    </select>
+
+</mapper>

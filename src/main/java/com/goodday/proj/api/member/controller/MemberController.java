@@ -59,7 +59,7 @@ public class MemberController {
             throw new IllegalArgumentException(ErrorConst.mailError);
         }
 
-        Optional<MemberSessionInfo> member = memberRepository.findByEmail(email);
+        Optional<MemberSessionInfo> member = memberRepository.findSessionMemberByEmail(email);
 
         MemberSessionInfo m = member.filter(presentMember -> member.isPresent())
                 .orElseThrow(() -> new IllegalArgumentException(ErrorConst.findError));
@@ -73,7 +73,7 @@ public class MemberController {
             throw new IllegalArgumentException(ErrorConst.mailError);
         }
 
-        Optional<MemberSessionInfo> member = memberRepository.findByEmail(email);
+        Optional<MemberSessionInfo> member = memberRepository.findSessionMemberByEmail(email);
 
         MemberSessionInfo m = member.filter(presentMember -> member.isPresent())
                 .orElseThrow(() -> new IllegalArgumentException(ErrorConst.findError));
@@ -88,7 +88,7 @@ public class MemberController {
 
     @GetMapping("/check/id")
     public String checkId(@RequestBody Map<String, String> id) {
-        Optional<MemberSessionInfo> checkId = memberRepository.findById(id.get("id"));
+        Optional<MemberSessionInfo> checkId = memberRepository.findSessionMemberById(id.get("id"));
         if (checkId.isPresent()) {
             return "fail";
         }
@@ -100,11 +100,11 @@ public class MemberController {
         String kakaoAccessToken = kakaoLoginService.getKakaoAccessToken(code);
         var kakaoMemberInfo = kakaoLoginService.getKakaoMemberInfo(kakaoAccessToken);
 
-        if (memberRepository.findById(kakaoMemberInfo.get("id").toString()).isEmpty()) {
+        if (memberRepository.findSessionMemberById(kakaoMemberInfo.get("id").toString()).isEmpty()) {
             memberRepository.saveKakaoMember(kakaoMemberInfo);
         }
 
-        return memberRepository.findById(kakaoMemberInfo.get("id").toString()).get();
+        return memberRepository.findSessionMemberById(kakaoMemberInfo.get("id").toString()).get();
     }
 
 }

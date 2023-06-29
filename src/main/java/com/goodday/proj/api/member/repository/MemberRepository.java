@@ -4,7 +4,6 @@ import com.goodday.proj.api.member.model.Address;
 import com.goodday.proj.api.member.model.Member;
 import com.goodday.proj.api.member.dto.MemberSessionInfo;
 
-import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -12,15 +11,17 @@ public interface MemberRepository {
 
     int save(Member member);
 
-    Optional<MemberSessionInfo> findById(String id);
+    Optional<MemberSessionInfo> findSessionMemberById(String id);
 
     String pwdFindByEmail(String email);
 
-    Optional<MemberSessionInfo> findByEmail(String email);
+    Optional<MemberSessionInfo> findSessionMemberByEmail(String email);
 
     String findPwdById(String id);
 
-    Optional<Member> findMemberByNo(Long memberNo);
+    Optional<MemberSessionInfo> findSessionMemberByNo(Long memberNo);
+
+    Optional<Member> findMemberAndAddressByNo(Long memberNo);
 
     int updatePwd(Map edit);
 

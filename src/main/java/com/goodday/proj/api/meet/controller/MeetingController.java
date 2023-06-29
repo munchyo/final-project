@@ -34,7 +34,7 @@ public class MeetingController {
      */
     @GetMapping
     public Map<String, Object> meetingList(@RequestParam(required = false) Integer currentPage) {
-        if (currentPage == null || currentPage < 0) {
+        if (currentPage == null || currentPage < 1) {
             currentPage = 1;
         }
         return meetingService.pageAndMeetingList(currentPage);

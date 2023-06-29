@@ -4,7 +4,7 @@ import com.goodday.proj.api.free.model.FreeBoard;
 import com.goodday.proj.api.meet.model.Meeting;
 import com.goodday.proj.api.meet.repository.MeetingRepository;
 import com.goodday.proj.api.mypage.repository.MyPageRepository;
-import com.goodday.proj.api.pagination.PageInfo;
+import com.goodday.proj.api.pagination.model.PageInfo;
 import com.goodday.proj.api.pagination.Pagination;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

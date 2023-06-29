@@ -1,5 +1,7 @@
 package com.goodday.proj.api.pagination;
 
+import com.goodday.proj.api.pagination.model.PageInfo;
+
 public class Pagination {
     public static PageInfo getPageInfo(int currentPage, int listCount, int boardLimit) {
         int pageLimit = 10;

@@ -15,10 +15,10 @@ public interface MemberMapper extends MemberRepository {
     int save(Member member);
 
     @Override
-    Optional<MemberSessionInfo> findById(String id);
+    Optional<MemberSessionInfo> findSessionMemberById(String id);
 
     @Override
-    Optional<MemberSessionInfo> findByEmail(String email);
+    Optional<MemberSessionInfo> findSessionMemberByEmail(String email);
 
     @Override
     String pwdFindByEmail(String email);
@@ -27,7 +27,10 @@ public interface MemberMapper extends MemberRepository {
     String findPwdById(String id);
 
     @Override
-    Optional<Member> findMemberByNo(Long memberNo);
+    Optional<MemberSessionInfo> findSessionMemberByNo(Long memberNo);
+
+    @Override
+    Optional<Member> findMemberAndAddressByNo(Long memberNo);
 
     @Override
     int updatePwd(Map edit);

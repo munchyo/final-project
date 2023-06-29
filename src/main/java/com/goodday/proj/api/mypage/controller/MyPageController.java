@@ -25,7 +25,13 @@ public class MyPageController {
     private final MyPageService myPageService;
     private final MyPageRepository myPageRepository;
 
-    @GetMapping("/board/{memberNo}")
+    /**
+     * 내 게시글 보기
+     * @param memberNo
+     * @param currentPage
+     * @return
+     */
+    @PostMapping("/board/{memberNo}")
     public Map<String, Object> myBoardList(@PathVariable Long memberNo, @RequestParam(value = "page", required = false) Integer currentPage) {
         if (currentPage == null || currentPage < 0) {
             currentPage = 1;
@@ -34,11 +40,22 @@ public class MyPageController {
         return myPageService.myBoardListPaging(memberNo, currentPage);
     }
 
+    /**
+     * 내 투두보기
+     * @param memberNo
+     * @return
+     */
     @GetMapping("/todo/{memberNo}")
     public List<TodoList> myTodoList(@PathVariable Long memberNo) {
         return myPageRepository.findMyTodoListByMemberNo(memberNo);
     }
 
+    /**
+     * 투두 추가
+     * @param memberNo
+     * @param todoListDtoList
+     * @param bindingResult
+     */
     @PostMapping("/todo/{memberNo}")
     public void addTodoList(@PathVariable Long memberNo, @Valid @RequestBody List<TodoListDto> todoListDtoList, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
@@ -52,6 +69,12 @@ public class MyPageController {
         }
     }
 
+    /**
+     * 투두상태수정
+     * @param memberNo
+     * @param calNo
+     * @param calStatus
+     */
     @PatchMapping("/todo/{memberNo}")
     public void editTodoListStatus(@PathVariable Long memberNo, @RequestParam Long calNo, @RequestParam Integer calStatus) {
         if (calNo == null || calStatus == null) {
@@ -68,6 +91,11 @@ public class MyPageController {
         myPageRepository.updateTodoListStatus(editTodoList);
     }
 
+    /**
+     * 투두삭제
+     * @param memberNo
+     * @param calNo
+     */
     @DeleteMapping("/todo/{memberNo}")
     public void deleteTodoList(@PathVariable Long memberNo, @RequestParam Long calNo) {
         if (calNo == null) {
@@ -81,7 +109,13 @@ public class MyPageController {
         myPageRepository.deleteTodoList(deleteTodoList);
     }
 
-    @GetMapping("/meet/{memberNo}")
+    /**
+     * 내 모임목록보기
+     * @param memberNo
+     * @param currentPage
+     * @return
+     */
+    @PostMapping("/meet/{memberNo}")
     public Map<String, Object> myMeeting(@PathVariable Long memberNo, @RequestParam(required = false) Integer currentPage) {
         if (currentPage == null || currentPage < 0) {
             currentPage = 1;

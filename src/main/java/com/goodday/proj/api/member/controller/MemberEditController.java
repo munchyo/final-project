@@ -25,7 +25,7 @@ public class MemberEditController {
 
     @PostMapping("/{memberNo}")
     public Member viewInfo(@PathVariable Long memberNo) throws Exception {
-        Optional<Member> member = memberRepository.findMemberByNo(memberNo);
+        Optional<Member> member = memberRepository.findMemberAndAddressByNo(memberNo);
         return member.filter(presentMember -> member.isPresent()).orElseThrow(Exception::new);
     }
 

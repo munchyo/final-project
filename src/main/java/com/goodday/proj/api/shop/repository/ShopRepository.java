@@ -21,4 +21,8 @@ public interface ShopRepository {
     int deleteProductByNo(Long proNo);
 
     int deleteFileByNo(Long proNo);
+
+    int updateFileByStoreFileName(Map<String, String> updateFile);
+
+    int updateProduct(Product editProduct);
 }
