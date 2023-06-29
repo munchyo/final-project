@@ -50,4 +50,23 @@ public class NoticeServiceImpl implements NoticeService {
         return noticeRepository.saveNotice(notice);
     }
 
+    @Override
+    public int editNotice(Long noticeNo, NoticeForm form) throws IOException {
+        int result = 0;
+        if (form.getImages().stream()
+                .filter(file -> !file.getOriginalFilename().equals("")).findAny().isPresent()) {
+
+            List<UploadFile> images = fileStore.storeFiles(form.getImages());
+            Map imageMap = new HashMap();
+            imageMap.put("images", images);
+            imageMap.put("noticeNo", noticeNo);
+            result += noticeRepository.saveImages(imageMap);
+        }
+
+        Notice notice = new Notice(noticeNo, form.getNoticeTitle(), form.getNoticeContent());
+        result += noticeRepository.updateNotice(notice);
+
+        return result;
+    }
+
 }

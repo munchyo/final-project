@@ -5,6 +5,7 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.session.RowBounds;
 
 import java.util.ArrayList;
+import java.util.Map;
 
 @Mapper
 public interface NoticeMapper extends NoticeRepository {
@@ -19,4 +20,16 @@ public interface NoticeMapper extends NoticeRepository {
 
     @Override
     Notice findByNoticeNo(Long noticeNo);
+
+    @Override
+    int saveImages(Map imageMap);
+
+    @Override
+    int updateNotice(Notice notice);
+
+    @Override
+    int deleteNoticeByNoticeNo(Long noticeNo);
+
+    @Override
+    int deleteFileByNoticeNo(Long noticeNo);
 }

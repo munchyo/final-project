@@ -22,6 +22,12 @@ public class Notice {
     String noticeStatus;
     List<UploadFile> images;
 
+    public Notice(long noticeNo, String noticeTitle, String noticeContent) {
+        this.noticeNo = noticeNo;
+        this.noticeTitle = noticeTitle;
+        this.noticeContent = noticeContent;
+    }
+
     public Notice(String noticeTitle, String noticeContent, long memberNo, List<UploadFile> images) {
         this.noticeTitle = noticeTitle;
         this.noticeContent = noticeContent;

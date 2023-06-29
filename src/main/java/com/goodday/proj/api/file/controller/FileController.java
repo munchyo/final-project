@@ -38,6 +38,10 @@ public class FileController {
         return new UrlResource("file : " + fileStore.getFullPath(filename));
     }
 
+    /**
+     * 파일 삭제
+     * @param filename
+     */
     @DeleteMapping("/file/{filename}")
     public void deleteFile(@PathVariable String filename) {
         fileStore.deleteFile(filename);

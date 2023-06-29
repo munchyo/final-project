@@ -9,4 +9,6 @@ public interface NoticeService {
     Map<String, Object> noticeListAndPagination(Integer currentPage);
 
     int writeNotice(NoticeForm form) throws IOException;
+
+    int editNotice(Long noticeNo, NoticeForm form) throws IOException;
 }

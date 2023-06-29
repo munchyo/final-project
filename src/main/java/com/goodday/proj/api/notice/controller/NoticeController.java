@@ -1,6 +1,7 @@
 package com.goodday.proj.api.notice.controller;
 
 import com.goodday.proj.api.constant.ErrorConst;
+import com.goodday.proj.api.file.FileStore;
 import com.goodday.proj.api.member.repository.MemberRepository;
 import com.goodday.proj.api.notice.dto.NoticeForm;
 import com.goodday.proj.api.notice.model.Notice;
@@ -24,6 +25,7 @@ public class NoticeController {
     private final NoticeService noticeService;
     private final NoticeRepository noticeRepository;
     private final MemberRepository memberRepository;
+    private final FileStore fileStore;
 
     /**
      * 공지사항 목록
@@ -74,11 +76,46 @@ public class NoticeController {
 
     /**
      * 공지사항 수정창
+     *
      * @param noticeNo
      * @return
      */
     @GetMapping("/{noticeNo}/edit")
     public Notice editNoticeView(@PathVariable Long noticeNo) {
         return noticeRepository.findByNoticeNo(noticeNo);
+    }
+
+    /**
+     * 공지사항 수정
+     *
+     * @param noticeNo
+     * @param form
+     * @param bindingResult
+     */
+    @PostMapping("/{noticeNo}/edit")
+    public void editNotice(@PathVariable Long noticeNo, @Valid @ModelAttribute NoticeForm form, BindingResult bindingResult) throws IOException {
+        if (memberRepository.findSessionMemberByNo(form.getMemberNo()).get().getAdmin().equals("N")) {
+            throw new RuntimeException(ErrorConst.authError);
+        }
+        if (bindingResult.hasErrors()) {
+            throw new IllegalArgumentException(ErrorConst.bindingError);
+        }
+
+        int result = noticeService.editNotice(noticeNo, form);
+        if (result == 0) {
+            throw new RuntimeException(ErrorConst.updateError);
+        }
+    }
+
+    @DeleteMapping("/{noticeNo}")
+    public void deleteNotice(@PathVariable Long noticeNo, @RequestParam Long memberNo) {
+        if (memberRepository.findSessionMemberByNo(memberNo).get().getAdmin().equals("N")) {
+            throw new RuntimeException(ErrorConst.authError);
+        }
+        Notice notice = noticeRepository.findByNoticeNo(noticeNo);
+        notice.getImages().stream().forEach(uploadFile -> fileStore.deleteFile(uploadFile.getStoreFileName()));
+
+        noticeRepository.deleteNoticeByNoticeNo(noticeNo);
+        noticeRepository.deleteFileByNoticeNo(noticeNo);
     }
 }
