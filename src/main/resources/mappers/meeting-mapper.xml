@@ -15,6 +15,7 @@
         <result property="openKakao" column="OPENKAKAO"/>
         <result property="meetCreateDate" column="MEET_CREATE_DATE"/>
         <result property="memberNo" column="MEMBER_NO"/>
+        <result property="nickname" column="NICKNAME"/>
         <association property="thumbnail" javaType="com.goodday.proj.api.file.model.UploadFile">
             <result property="uploadFileName" column="UPLOAD_FILE_NAME"/>
             <result property="storeFileName" column="STORE_FILE_NAME"/>
@@ -22,7 +23,7 @@
     </resultMap>
 
     <select id="findMeetingList" resultMap="meetingResultSet">
-        SELECT meeting.MEET_NO, MEET_TITLE, MEET_CONTENT, MEET_ADDRESS, MEET_TOTAL, OPENKAKAO, MEET_CREATE_DATE, meeting.MEMBER_NO, UPLOAD_FILE_NAME,
+        SELECT meeting.MEET_NO, MEET_TITLE, MEET_CONTENT, MEET_ADDRESS, MEET_TOTAL, OPENKAKAO, MEET_CREATE_DATE, en_meeting.MEMBER_NO, nickname, UPLOAD_FILE_NAME,
                STORE_FILE_NAME, COUNT(en_meeting.meet_no)
         FROM
             meeting
@@ -30,6 +31,8 @@
             filestore ON (meeting.meet_no = filestore.board_no)
                 LEFT JOIN
             en_meeting ON (meeting.meet_no = en_meeting.meet_no)
+                LEFT JOIN
+            member using (member_no)
         WHERE
             meet_status = 'Y' AND BOARD_TYPE = 'MEETING'
         GROUP BY
@@ -40,7 +43,8 @@
             MEET_TOTAL,
             OPENKAKAO,
             MEET_CREATE_DATE,
-            meeting.MEMBER_NO,
+            en_meeting.MEMBER_NO,
+            nickname,
             UPLOAD_FILE_NAME,
             STORE_FILE_NAME
         ORDER BY
@@ -56,7 +60,7 @@
     </insert>
 
     <select id="findByMeetNo" resultMap="meetingResultSet">
-        SELECT meeting.MEET_NO, MEET_TITLE, MEET_CONTENT, MEET_ADDRESS, MEET_TOTAL, OPENKAKAO, MEET_CREATE_DATE, meeting.MEMBER_NO, UPLOAD_FILE_NAME,
+        SELECT meeting.MEET_NO, MEET_TITLE, MEET_CONTENT, MEET_ADDRESS, MEET_TOTAL, OPENKAKAO, MEET_CREATE_DATE, en_meeting.MEMBER_NO, nickname, UPLOAD_FILE_NAME,
             STORE_FILE_NAME, COUNT(en_meeting.meet_no)
         FROM
             meeting
@@ -64,6 +68,8 @@
             filestore ON (meeting.meet_no = filestore.board_no)
                 LEFT JOIN
             en_meeting ON (meeting.meet_no = en_meeting.meet_no)
+                LEFT JOIN
+            member using (member_no)
         WHERE
             meet_status = 'Y' AND meeting.MEET_NO = #{meetNo} AND BOARD_TYPE = 'MEETING'
         GROUP BY
@@ -74,7 +80,8 @@
             MEET_TOTAL,
             OPENKAKAO,
             MEET_CREATE_DATE,
-            meeting.MEMBER_NO,
+            en_meeting.MEMBER_NO,
+            nickname,
             UPLOAD_FILE_NAME,
             STORE_FILE_NAME
         ORDER BY
@@ -131,7 +138,7 @@
     </select>
 
     <select id="findMeetingListByMemberNo" resultMap="meetingResultSet">
-        SELECT meeting.MEET_NO, MEET_TITLE, MEET_CONTENT, MEET_ADDRESS, MEET_TOTAL, OPENKAKAO, MEET_CREATE_DATE, meeting.MEMBER_NO, UPLOAD_FILE_NAME,
+        SELECT meeting.MEET_NO, MEET_TITLE, MEET_CONTENT, MEET_ADDRESS, MEET_TOTAL, OPENKAKAO, MEET_CREATE_DATE, en_meeting.MEMBER_NO, nickname, UPLOAD_FILE_NAME,
                STORE_FILE_NAME, COUNT(en_meeting.meet_no)
         FROM
             meeting
@@ -139,6 +146,8 @@
             filestore ON (meeting.meet_no = filestore.board_no)
                 LEFT JOIN
             en_meeting ON (meeting.meet_no = en_meeting.meet_no)
+                LEFT JOIN
+            member using (member_no)
         WHERE
             meet_status = 'Y' AND BOARD_TYPE = 'MEETING' and meeting.MEMBER_NO = #{memberNo}
         GROUP BY
@@ -149,7 +158,8 @@
             MEET_TOTAL,
             OPENKAKAO,
             MEET_CREATE_DATE,
-            meeting.MEMBER_NO,
+            en_meeting.MEMBER_NO,
+            nickname,
             UPLOAD_FILE_NAME,
             STORE_FILE_NAME
         ORDER BY

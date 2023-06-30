@@ -107,6 +107,11 @@ public class NoticeController {
         }
     }
 
+    /**
+     * 공지사항 삭제
+     * @param noticeNo
+     * @param memberNo
+     */
     @DeleteMapping("/{noticeNo}")
     public void deleteNotice(@PathVariable Long noticeNo, @RequestParam Long memberNo) {
         if (memberRepository.findSessionMemberByNo(memberNo).get().getAdmin().equals("N")) {

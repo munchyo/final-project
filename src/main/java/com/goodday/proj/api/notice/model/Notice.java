@@ -19,6 +19,7 @@ public class Notice {
     String noticeContent;
     Date noticeCreateDate;
     long memberNo;
+    String nickname;
     String noticeStatus;
     List<UploadFile> images;
 

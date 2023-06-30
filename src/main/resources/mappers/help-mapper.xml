@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.goodday.proj.api.help.repository.HelpMapper">
+    <select id="countMyHelpListByMemberNo">
+        select count(*) from help where member_no = #{memberNo}
+    </select>
+
+    <select id="findHelpListByMemberNo" resultMap="helpResultSet">
+        select HELP_NO, HELP_TYPE, HELP_TITLE, HELP_CONTENT, HELP_CREATE_DATE, MEMBER_NO, nickname, UPLOAD_FILE_NAME, STORE_FILE_NAME
+        from help left join filestore on (help_no = board_no) left join member using(member_no)
+        where help_no = #{helpNo} and board_type = 'HELP' AND FILE_LEVEL = 2
+        order by HELP_CREATE_DATE desc
+    </select>
+
+    <insert id="saveHelpAndImages" parameterType="com.goodday.proj.api.help.model.Help">
+        insert all
+        into help values (help_seq.NEXTVAL, #{helpType}, #{helpTitle}, #{helpContent}, sysdate, #{memberNo})
+        <foreach collection="images" item="image">
+            into filestore values (get_next_file_seq, #{image.uploadFileName}, #{image.storeFileName}, help_seq.CURRVAL, 2, 'HELP')
+        </foreach>
+        select * from dual
+    </insert>
+
+    <insert id="saveHelp" parameterType="com.goodday.proj.api.help.model.Help">
+        insert into help values (help_seq.NEXTVAL, #{helpType}, #{helpTitle}, #{helpContent}, sysdate, #{memberNo})
+    </insert>
+
+    <resultMap id="helpResultSet" type="com.goodday.proj.api.help.model.Help">
+        <id property="helpNo" column="HELP_NO"/>
+        <result property="helpType" column="HELP_TYPE"/>
+        <result property="helpTitle" column="HELP_TITLE"/>
+        <result property="helpContent" column="HELP_CONTENT"/>
+        <result property="helpCreateDate" column="HELP_CREATE_DATE"/>
+        <result property="memberNo" column="MEMBER_NO"/>
+        <result property="nickname" column="nickname"/>
+        <collection property="images" ofType="com.goodday.proj.api.file.model.UploadFile">
+            <result property="uploadFileName" column="UPLOAD_FILE_NAME"/>
+            <result property="storeFileName" column="STORE_FILE_NAME"/>
+        </collection>
+    </resultMap>
+
+    <select id="findHelpByHelpNo" resultMap="helpResultSet">
+        select HELP_NO, HELP_TYPE, HELP_TITLE, HELP_CONTENT, HELP_CREATE_DATE, MEMBER_NO, nickname, UPLOAD_FILE_NAME, STORE_FILE_NAME
+        from help left join filestore on (help_no = board_no) left join member using(member_no)
+        where help_no = #{helpNo} and board_type = 'HELP'
+    </select>
+    
+    <delete id="deleteFileByHelpNo">
+        delete from filestore
+        where board_no = #{helpNo} and board_type = 'HELP'
+    </delete>
+
+    <delete id="deleteHelpByHelpNo">
+        delete from help
+        where help_no = #{helpNo}
+    </delete>
+
+    <select id="findHelpReplyListByMemberNo" resultType="com.goodday.proj.api.help.model.HelpReply">
+        select help_re_no, help_re_content, help_re_create_date, member_no, nickname, help_no
+        from help_reply left join member using(member_no)
+        where member_no = #{memberNo}
+        order by HELP_RE_CREATE_DATE desc
+    </select>
+
+    <delete id="deleteHelpReplyByHelpNo">
+        delete from help_reply
+        where help_no = #{helpNo}
+    </delete>
+</mapper>

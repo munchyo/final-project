@@ -1,11 +1,14 @@
 package com.goodday.proj.api.mypage.service;
 
 import com.goodday.proj.api.free.model.FreeBoard;
+import com.goodday.proj.api.help.model.Help;
+import com.goodday.proj.api.help.model.HelpReply;
+import com.goodday.proj.api.help.repository.HelpRepository;
 import com.goodday.proj.api.meet.model.Meeting;
 import com.goodday.proj.api.meet.repository.MeetingRepository;
 import com.goodday.proj.api.mypage.repository.MyPageRepository;
-import com.goodday.proj.api.pagination.model.PageInfo;
 import com.goodday.proj.api.pagination.Pagination;
+import com.goodday.proj.api.pagination.model.PageInfo;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.session.RowBounds;
@@ -13,6 +16,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Slf4j
@@ -22,6 +26,7 @@ public class MyPageServiceImpl implements MyPageService {
 
     private final MyPageRepository myPageRepository;
     private final MeetingRepository meetingRepository;
+    private final HelpRepository helpRepository;
 
     @Override
     public Map<String, Object> myBoardListPaging(Long memberNo, Integer currentPage) {
@@ -52,6 +57,31 @@ public class MyPageServiceImpl implements MyPageService {
         pageAndMeetingList.put("meetings", meetings);
 
         return pageAndMeetingList;
+    }
+
+    @Override
+    public Map<String, Object> myHelpListPaging(Integer currentPage, Long memberNo) {
+        int listCount = helpRepository.countMyHelpListByMemberNo(memberNo);
+        PageInfo pageInfo = Pagination.getPageInfo(currentPage, listCount, 10);
+
+        int offset = (pageInfo.getCurrentPage() - 1) * pageInfo.getBoardLimit();
+        RowBounds rowBounds = new RowBounds(offset, pageInfo.getBoardLimit());
+        List<Help> helpList = helpRepository.findHelpListByMemberNo(memberNo, rowBounds);
+        List<HelpReply> helpReplyList = helpRepository.findHelpReplyListByMemberNo(memberNo);
+
+        for (Help help : helpList) {
+            helpReplyList.stream().forEach(helpReply -> {
+                if (help.getHelpNo() == helpReply.getHelpNo()) {
+                    help.setReply(helpReply);
+                }
+            });
+        }
+
+        Map<String, Object> pageAndHelpList = new HashMap<>();
+        pageAndHelpList.put("pageInfo", pageInfo);
+        pageAndHelpList.put("helpList", helpList);
+
+        return pageAndHelpList;
     }
 
 }

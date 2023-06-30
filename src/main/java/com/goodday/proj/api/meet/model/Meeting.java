@@ -22,6 +22,7 @@ public class Meeting {
     String openKakao;
     Date meetCreateDate;
     long memberNo;
+    String nickname;
     UploadFile thumbnail;
 
     public Meeting(String meetTitle, String meetContent, String meetAddress, int meetTotal, String openKakao, long memberNo, UploadFile thumbnail) {

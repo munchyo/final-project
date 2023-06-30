@@ -1,7 +1,6 @@
 package com.goodday.proj.api.mypage.controller;
 
 import com.goodday.proj.api.constant.ErrorConst;
-import com.goodday.proj.api.meet.repository.MeetingRepository;
 import com.goodday.proj.api.mypage.dto.TodoListDto;
 import com.goodday.proj.api.mypage.model.TodoList;
 import com.goodday.proj.api.mypage.repository.MyPageRepository;
@@ -27,13 +26,14 @@ public class MyPageController {
 
     /**
      * 내 게시글 보기
+     *
      * @param memberNo
      * @param currentPage
      * @return
      */
     @PostMapping("/board/{memberNo}")
     public Map<String, Object> myBoardList(@PathVariable Long memberNo, @RequestParam(value = "page", required = false) Integer currentPage) {
-        if (currentPage == null || currentPage < 0) {
+        if (currentPage == null || currentPage < 1) {
             currentPage = 1;
         }
 
@@ -42,6 +42,7 @@ public class MyPageController {
 
     /**
      * 내 투두보기
+     *
      * @param memberNo
      * @return
      */
@@ -52,6 +53,7 @@ public class MyPageController {
 
     /**
      * 투두 추가
+     *
      * @param memberNo
      * @param todoListDtoList
      * @param bindingResult
@@ -71,6 +73,7 @@ public class MyPageController {
 
     /**
      * 투두상태수정
+     *
      * @param memberNo
      * @param calNo
      * @param calStatus
@@ -93,6 +96,7 @@ public class MyPageController {
 
     /**
      * 투두삭제
+     *
      * @param memberNo
      * @param calNo
      */
@@ -111,16 +115,31 @@ public class MyPageController {
 
     /**
      * 내 모임목록보기
+     *
      * @param memberNo
      * @param currentPage
      * @return
      */
-    @PostMapping("/meet/{memberNo}")
-    public Map<String, Object> myMeeting(@PathVariable Long memberNo, @RequestParam(required = false) Integer currentPage) {
-        if (currentPage == null || currentPage < 0) {
+    @GetMapping("/meet/{memberNo}")
+    public Map<String, Object> myMeeting(@PathVariable Long memberNo, @RequestParam(value = "page", required = false) Integer currentPage) {
+        if (currentPage == null || currentPage < 1) {
             currentPage = 1;
         }
         return myPageService.myMeetingList(currentPage, memberNo);
+    }
+
+    /**
+     * 내 1:1문의 목록
+     * @param memberNo
+     * @param currentPage
+     * @return Map
+     */
+    @GetMapping("/help/{memberNo}")
+    public Map<String, Object> myHelp(@PathVariable Long memberNo, @RequestParam(value = "page", required = false) Integer currentPage) {
+        if (currentPage == null || currentPage < 1) {
+            currentPage = 1;
+        }
+        return myPageService.myHelpListPaging(currentPage, memberNo);
     }
 
     // TODO 주문내역, 내댓글

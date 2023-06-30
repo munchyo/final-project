@@ -17,6 +17,7 @@ public class TodoList {
     Integer period;
     String goal;
     Long memberNo;
+    String nickname;
     Integer calStatus;
 
     public TodoList(Date calDate, Integer period, String goal, Long memberNo) {
