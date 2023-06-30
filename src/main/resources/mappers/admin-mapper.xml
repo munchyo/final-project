@@ -10,6 +10,10 @@
         select count(*) from help
     </select>
 
+    <select id="countHelpListByType" resultType="_int">
+        select count(*) from help where help_type = #{type}
+    </select>
+
     <resultMap id="helpResultSet" type="com.goodday.proj.api.help.model.Help">
         <id property="helpNo" column="HELP_NO"/>
         <result property="helpType" column="HELP_TYPE"/>
@@ -35,5 +39,12 @@
         select help_re_no, help_re_content, help_re_create_date, member_no, nickname, help_no
         from help_reply left join member using(member_no)
         order by HELP_RE_CREATE_DATE desc
+    </select>
+
+    <select id="findHelpListByType" resultMap="helpResultSet">
+        select HELP_NO, HELP_TYPE, HELP_TITLE, HELP_CONTENT, HELP_CREATE_DATE, MEMBER_NO, nickname, UPLOAD_FILE_NAME, STORE_FILE_NAME
+        from help left join filestore on (help_no = board_no) left join member using(member_no)
+        where board_type = 'HELP' AND FILE_LEVEL = 2 and help_type = #{type}
+        order by HELP_CREATE_DATE desc
     </select>
 </mapper>

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.goodday.proj.api.cart.repository.CartMapper">
+    <insert id="saveCart">
+        insert into cart
+        values (cart_seq.NEXTVAL, #{proNo}, #{memberNo})
+    </insert>
+
+    <delete id="deleteCartByCartNo">
+        delete from cart where cart_no = #{cartNo}
+    </delete>
+
+    <select id="findCartByMemberNo" resultMap="cartResultSet">
+        select cart_no, pro_no, pro_name, pro_price, UPLOAD_FILE_NAME, STORE_FILE_NAME, member_no
+        from cart left join product using(pro_no) left join filestore on (cart.pro_no = board_no)
+        where board_type = 'PRODUCT' and member_no = #{memberNo}
+        order by cart_no desc
+    </select>
+
+    <resultMap id="cartResultSet" type="com.goodday.proj.api.cart.model.Cart">
+        <id property="cartNo" column="cart_no"/>
+        <result property="proNo" column="pro_no"/>
+        <result property="proName" column="pro_name"/>
+        <result property="proPrice" column="pro_price"/>
+        <result property="memberNo" column="member_no"/>
+        <association property="thumbnail" javaType="com.goodday.proj.api.file.model.UploadFile">
+            <result property="uploadFileName" column="UPLOAD_FILE_NAME"/>
+            <result property="storeFileName" column="STORE_FILE_NAME"/>
+        </association>
+    </resultMap>
+</mapper>

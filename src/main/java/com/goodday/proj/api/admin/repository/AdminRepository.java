@@ -15,4 +15,7 @@ public interface AdminRepository {
 
     List<HelpReply> findHelpReplyList();
 
+    int countHelpListByType(String type);
+
+    List<Help> findHelpListByType(String type, RowBounds rowBounds);
 }

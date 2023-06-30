@@ -20,4 +20,10 @@ public interface AdminMapper extends AdminRepository {
 
     @Override
     List<HelpReply> findHelpReplyList();
+
+    @Override
+    int countHelpListByType(String type);
+
+    @Override
+    List<Help> findHelpListByType(String type, RowBounds rowBounds);
 }

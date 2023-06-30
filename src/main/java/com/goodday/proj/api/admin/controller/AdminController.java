@@ -24,17 +24,29 @@ public class AdminController {
     private final AdminRepository adminRepository;
 
     /**
-     * 모든문의보기 TODO 필터넣자
+     * 모든문의보기
+     * 답변유 -> 문의유형
+     * 답변무 -> 문의유형
      * @param currentPage
      * @return
      */
     @GetMapping("/help")
-    public Map<String, Object> selectAllHelps(@RequestParam(value = "page", required = false) Integer currentPage) {
+    public Map<String, Object> selectAllHelps(@RequestParam(value = "page", required = false) Integer currentPage,
+                                              @RequestParam(required = false) String reply,
+                                              @RequestParam(value = "type", required = false) String type) {
+//        reply -> Y, N, ALL
+//        type -> 문의유형 or ALL
         if (currentPage == null || currentPage < 1) {
             currentPage = 1;
         }
+        if (reply == null || !reply.equals("Y") && !reply.equals("N")) {
+            reply = "ALL";
+        }
+        if (type == null) {
+            type = "ALL";
+        }
 
-        return adminService.allHelpView(currentPage);
+        return adminService.allHelpView(currentPage, reply, type);
     }
 
     /**
@@ -47,6 +59,9 @@ public class AdminController {
         if (bindingResult.hasErrors()) {
             throw new IllegalArgumentException(ErrorConst.nullError);
         }
-        adminRepository.saveHelpReply(helpReply);
+        int result = adminRepository.saveHelpReply(helpReply);
+        if (result == 0) {
+            throw new RuntimeException(ErrorConst.insertError);
+        }
     }
 }
