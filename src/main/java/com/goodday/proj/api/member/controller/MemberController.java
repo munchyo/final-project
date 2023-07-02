@@ -3,6 +3,7 @@ package com.goodday.proj.api.member.controller;
 import com.goodday.proj.api.constant.ErrorConst;
 import com.goodday.proj.api.member.dto.*;
 import com.goodday.proj.api.member.repository.MemberRepository;
+import com.goodday.proj.api.member.service.GoogleLoginService;
 import com.goodday.proj.api.member.service.KakaoLoginService;
 import com.goodday.proj.api.member.service.MemberService;
 import jakarta.validation.Valid;
@@ -24,6 +25,7 @@ public class MemberController {
     private final MemberService memberService;
     private final MemberRepository memberRepository;
     private final KakaoLoginService kakaoLoginService;
+    private final GoogleLoginService googleLoginService;
 
     @PostMapping("/login")
     public MemberSessionInfo login(@Valid @RequestBody LoginFormDto login, BindingResult bindingResult) {
@@ -96,7 +98,7 @@ public class MemberController {
     }
 
     @GetMapping("/kakao")
-    public MemberSessionInfo  kakaoCallback(@RequestParam("code") String code) throws IOException {
+    public MemberSessionInfo  kakaoCallback(@RequestParam String code) throws IOException {
         String kakaoAccessToken = kakaoLoginService.getKakaoAccessToken(code);
         var kakaoMemberInfo = kakaoLoginService.getKakaoMemberInfo(kakaoAccessToken);
 
@@ -105,6 +107,12 @@ public class MemberController {
         }
 
         return memberRepository.findSessionMemberById(kakaoMemberInfo.get("id").toString()).get();
+    }
+
+    @PostMapping("/google")
+    public void googleCallBack(@RequestParam String code) {
+        log.debug("code : {}", code);
+        googleLoginService.getGoogleAccessToken(code);
     }
 
 }

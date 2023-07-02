@@ -67,12 +67,13 @@ public class ShopController {
 
     /**
      * 상품 상세보기
+     *
      * @param proNo
      * @return Product
      */
     @GetMapping("/{proNo}")
-    public Product viewProduct(@PathVariable Long proNo) {
-        return shopRepository.findByNo(proNo);
+    public Map<String, Object> viewProduct(@PathVariable Long proNo) {
+        return shopService.viewProduct(proNo);
     }
 
     /**

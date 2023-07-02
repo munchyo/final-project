@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.goodday.proj.api.order.repository.OrderMapper">
+    <insert id="saveOrder" parameterType="Map">
+        insert into "ORDER"
+        values (#{orderNo}, #{quantity}, #{price}, default, #{proNo}, #{memberNo}, #{orderMethod}, #{addressNo}, #{orderRequest})
+    </insert>
+
+    <select id="countMyOrderListByMemberNo" resultType="_int">
+        select count(*) from "ORDER" where member_no = #{memberNo}
+    </select>
+
+    <select id="findMyOrderListByMemberNo" resultMap="orderResultSet">
+        SELECT order_no, quantity, price, order_date, pro_no, pro_name,
+               O.member_no, name, phone, order_method, address_no, is_main, address, order_request, upload_file_name, store_file_name
+        FROM "ORDER" O
+                 JOIN product USING (pro_no)
+                 JOIN member ON (O.member_no = member.member_no)
+                 JOIN address USING (address_no)
+                 JOIN filestore ON (board_no = pro_no)
+        WHERE O.member_no = #{memberNo} AND board_type = 'PRODUCT' and FILE_LEVEL = 1
+    </select>
+
+    <resultMap id="orderResultSet" type="com.goodday.proj.api.order.model.Order">
+        <id column="order_no" property="orderNo"/>
+        <result column="quantity" property="quantity"/>
+        <result column="price" property="price"/>
+        <result column="order_date" property="orderDate"/>
+        <result column="pro_no" property="proNo"/>
+        <result column="pro_name" property="proName"/>
+        <result column="member_no" property="memberNo"/>
+        <result column="name" property="name"/>
+        <result column="phone" property="phone"/>
+        <result column="order_method" property="orderMethod"/>
+        <result column="order_request" property="orderRequest"/>
+        <association property="thumbnail" javaType="com.goodday.proj.api.file.model.UploadFile">
+            <result property="uploadFileName" column="UPLOAD_FILE_NAME"/>
+            <result property="storeFileName" column="STORE_FILE_NAME"/>
+        </association>
+        <association property="address" javaType="com.goodday.proj.api.member.model.Address">
+            <result column="address_no" property="addressNo"/>
+            <result column="is_main" property="isMain"/>
+            <result column="address" property="address"/>
+        </association>
+    </resultMap>
+
+    <select id="findOrderByOrderNo" resultMap="orderResultSet">
+        SELECT order_no, quantity, price, order_date, pro_no, pro_name,
+               O.member_no, name, phone, order_method, address_no, is_main, address, order_request, upload_file_name, store_file_name
+        FROM "ORDER" O
+                 JOIN product USING (pro_no)
+                 JOIN member ON (O.member_no = member.member_no)
+                 JOIN address USING (address_no)
+                 JOIN filestore ON (board_no = pro_no)
+        WHERE order_no = #{orderNo} AND board_type = 'PRODUCT' and FILE_LEVEL = 1
+    </select>
+</mapper>

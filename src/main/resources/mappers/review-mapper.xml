@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.goodday.proj.api.review.repository.ReviewMapper">
+    <select id="findByOrderNo" resultMap="reviewResultSet">
+        select order_no, member_no, nickname, review_title, review_content, review_score, review_create_date, UPLOAD_FILE_NAME, STORE_FILE_NAME
+        from review left join "ORDER" using(order_no) left join filestore on(board_no = order_no) left join member using(member_no)
+        where board_type = 'REVIEW' and file_level = 2 and order_no = #{orderNo}
+    </select>
+
+    <select id="findByProNo" resultMap="reviewResultSet">
+        select order_no, member_no, nickname, review_title, review_content, review_score, review_create_date, UPLOAD_FILE_NAME, STORE_FILE_NAME
+        from review left join "ORDER" using(order_no) left join filestore on(board_no = order_no) left join member using(member_no)
+        where board_type = 'REVIEW' and file_level = 2 and pro_no = #{proNo}
+        order by REVIEW_CREATE_DATE DESC
+    </select>
+
+    <resultMap id="reviewResultSet" type="com.goodday.proj.api.review.model.Review">
+        <id column="order_no" property="orderNo"/>
+        <result column="member_no" property="memberNo"/>
+        <result column="nickname" property="nickname"/>
+        <result column="review_title" property="reviewTitle"/>
+        <result column="review_content" property="reviewContent"/>
+        <result column="review_score" property="reviewScore"/>
+        <result column="review_create_date" property="reviewCreateDate"/>
+        <collection property="images" ofType="com.goodday.proj.api.file.model.UploadFile">
+            <result property="uploadFileName" column="UPLOAD_FILE_NAME"/>
+            <result property="storeFileName" column="STORE_FILE_NAME"/>
+        </collection>
+    </resultMap>
+
+    <insert id="saveReviewAndImages">
+        insert all into review
+        values (#{orderNo}, #{reviewTitle}, #{reviewContent}, #{reviewScore}, SYSDATE)
+        <foreach collection="images" item="image">
+            into filestore values (get_next_file_seq, #{image.uploadFileName}, #{image.storeFileName}, #{orderNo}, 2, 'REVIEW')
+        </foreach>
+        select * from dual
+    </insert>
+
+    <delete id="deleteReview">
+        delete FROM review
+        where order_no = #{orderNo}
+    </delete>
+</mapper>

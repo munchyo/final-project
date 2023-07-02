@@ -5,6 +5,8 @@ import com.goodday.proj.api.mypage.dto.TodoListDto;
 import com.goodday.proj.api.mypage.model.TodoList;
 import com.goodday.proj.api.mypage.repository.MyPageRepository;
 import com.goodday.proj.api.mypage.service.MyPageService;
+import com.goodday.proj.api.order.model.Order;
+import com.goodday.proj.api.order.repository.OrderRepository;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -23,6 +25,7 @@ public class MyPageController {
 
     private final MyPageService myPageService;
     private final MyPageRepository myPageRepository;
+    private final OrderRepository orderRepository;
 
     /**
      * 내 게시글 보기
@@ -130,6 +133,7 @@ public class MyPageController {
 
     /**
      * 내 1:1문의 목록
+     *
      * @param memberNo
      * @param currentPage
      * @return Map
@@ -142,5 +146,18 @@ public class MyPageController {
         return myPageService.myHelpListPaging(currentPage, memberNo);
     }
 
-    // TODO 주문내역, 내댓글
+    @PostMapping("/order-list")
+    public Map<String, Object> myOrderList(@RequestParam(value = "page", required = false) Integer currentPage, @RequestParam Long memberNo) {
+        if (currentPage == null || currentPage < 1) {
+            currentPage = 1;
+        }
+        return myPageService.myOrderListPaging(currentPage, memberNo);
+    }
+
+    @GetMapping("/order/{orderNo}")
+    public Order orderView(@PathVariable Long orderNo) {
+        return orderRepository.findOrderByOrderNo(orderNo);
+    }
+
+    // TODO 내댓글
 }

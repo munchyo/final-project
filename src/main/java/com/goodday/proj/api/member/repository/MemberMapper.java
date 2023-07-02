@@ -5,6 +5,7 @@ import com.goodday.proj.api.member.model.Member;
 import com.goodday.proj.api.member.dto.MemberSessionInfo;
 import org.apache.ibatis.annotations.Mapper;
 
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -61,4 +62,7 @@ public interface MemberMapper extends MemberRepository {
 
     @Override
     int saveKakaoMember(Map<String, Object> kakaoMemberInfo);
+
+    @Override
+    List<Address> findAddressListByMemberNo(Long memberNo);
 }

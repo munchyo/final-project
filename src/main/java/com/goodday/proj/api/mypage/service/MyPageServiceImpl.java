@@ -7,6 +7,8 @@ import com.goodday.proj.api.help.repository.HelpRepository;
 import com.goodday.proj.api.meet.model.Meeting;
 import com.goodday.proj.api.meet.repository.MeetingRepository;
 import com.goodday.proj.api.mypage.repository.MyPageRepository;
+import com.goodday.proj.api.order.model.Order;
+import com.goodday.proj.api.order.repository.OrderRepository;
 import com.goodday.proj.api.pagination.Pagination;
 import com.goodday.proj.api.pagination.model.PageInfo;
 import lombok.RequiredArgsConstructor;
@@ -27,6 +29,7 @@ public class MyPageServiceImpl implements MyPageService {
     private final MyPageRepository myPageRepository;
     private final MeetingRepository meetingRepository;
     private final HelpRepository helpRepository;
+    private final OrderRepository orderRepository;
 
     @Override
     public Map<String, Object> myBoardListPaging(Long memberNo, Integer currentPage) {
@@ -82,6 +85,21 @@ public class MyPageServiceImpl implements MyPageService {
         pageAndHelpList.put("helpList", helpList);
 
         return pageAndHelpList;
+    }
+
+    @Override
+    public Map<String, Object> myOrderListPaging(Integer currentPage, Long memberNo) {
+        int listCount = orderRepository.countMyOrderListByMemberNo(memberNo);
+        PageInfo pageInfo = Pagination.getPageInfo(currentPage, listCount, 20);
+
+        int offset = (pageInfo.getCurrentPage() - 1) * pageInfo.getBoardLimit();
+        RowBounds rowBounds = new RowBounds(offset, pageInfo.getBoardLimit());
+        List<Order> orderList = orderRepository.findMyOrderListByMemberNo(memberNo, rowBounds);
+
+        Map<String, Object> pageAndOrderList = new HashMap<>();
+        pageAndOrderList.put("pageInfo", pageInfo);
+        pageAndOrderList.put("orderList", orderList);
+        return pageAndOrderList;
     }
 
 }

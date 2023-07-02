@@ -12,8 +12,8 @@
 
     <select id="findCartByMemberNo" resultMap="cartResultSet">
         select cart_no, pro_no, pro_name, pro_price, UPLOAD_FILE_NAME, STORE_FILE_NAME, member_no
-        from cart left join product using(pro_no) left join filestore on (cart.pro_no = board_no)
-        where board_type = 'PRODUCT' and member_no = #{memberNo}
+        from cart left join product using(pro_no) left join filestore on (pro_no = board_no)
+        where board_type = 'PRODUCT' and FILE_LEVEL = 1 and member_no = #{memberNo}
         order by cart_no desc
     </select>
 

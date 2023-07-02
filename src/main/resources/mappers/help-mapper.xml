@@ -47,7 +47,7 @@
     
     <delete id="deleteFileByHelpNo">
         delete from filestore
-        where board_no = #{helpNo} and board_type = 'HELP'
+        where board_no = #{helpNo} and board_type = 'HELP' and FILE_LEVEL = 2
     </delete>
 
     <delete id="deleteHelpByHelpNo">

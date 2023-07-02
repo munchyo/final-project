@@ -4,6 +4,8 @@ import com.goodday.proj.api.file.FileStore;
 import com.goodday.proj.api.file.model.UploadFile;
 import com.goodday.proj.api.pagination.model.PageInfo;
 import com.goodday.proj.api.pagination.Pagination;
+import com.goodday.proj.api.review.model.Review;
+import com.goodday.proj.api.review.repository.ReviewRepository;
 import com.goodday.proj.api.shop.dto.ProductFormDto;
 import com.goodday.proj.api.shop.model.Product;
 import com.goodday.proj.api.shop.repository.ShopRepository;
@@ -15,10 +17,7 @@ import org.springframework.stereotype.Service;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Slf4j
 @Service
@@ -26,6 +25,7 @@ import java.util.Map;
 public class ShopServiceImpl implements ShopService {
 
     private final ShopRepository shopRepository;
+    private final ReviewRepository reviewRepository;
     private final FileStore fileStore;
 
     private Long createProductNo() {
@@ -97,5 +97,13 @@ public class ShopServiceImpl implements ShopService {
         result += shopRepository.updateProduct(new Product
                 (proNo, form.getProName(), form.getProContent(), form.getProPrice(), form.getProInventory()));
         return result;
+    }
+
+    @Override
+    public Map<String, Object> viewProduct(Long proNo) {
+        Map<String, Object> productMap = new HashMap<>();
+        productMap.put("product", shopRepository.findByNo(proNo));
+        productMap.put("review", reviewRepository.findByProNo(proNo));
+        return productMap;
     }
 }

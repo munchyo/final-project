@@ -4,6 +4,7 @@ import com.goodday.proj.api.member.model.Address;
 import com.goodday.proj.api.member.model.Member;
 import com.goodday.proj.api.member.dto.MemberSessionInfo;
 
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -42,4 +43,6 @@ public interface MemberRepository {
     int deleteMember(String memberNo);
 
     int saveKakaoMember(Map<String, Object> kakaoMemberInfo);
+
+    List<Address> findAddressListByMemberNo(Long memberNo);
 }

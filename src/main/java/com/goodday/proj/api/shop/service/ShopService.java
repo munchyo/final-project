@@ -14,4 +14,6 @@ public interface ShopService {
     int writeProduct(UploadFile thumbnail, List<UploadFile> images, ProductFormDto form);
 
     int editProductAndFile(Long proNo, ProductFormDto form) throws IOException;
+
+    Map<String, Object> viewProduct(Long proNo);
 }

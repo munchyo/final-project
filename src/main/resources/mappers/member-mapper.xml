@@ -127,4 +127,9 @@
         values (mem_seq.NEXTVAL, #{id}, null, null, sysdate, #{nickname}, #{email}, null, default, default)
     </insert>
 
+    <select id="findAddressListByMemberNo" resultType="com.goodday.proj.api.member.model.Address">
+        select ADDRESS_NO, ADDRESS, IS_MAIN
+        from address
+        where member_no = #{memberNo}
+    </select>
 </mapper>

@@ -23,4 +23,6 @@ public abstract class ErrorConst {
 
     public static final String authError = "권한이 없습니다.";
 
+    public static final String orderError = "주문 실패하였습니다.";
+
 }

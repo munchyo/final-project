@@ -34,7 +34,7 @@
                 LEFT JOIN
             member using (member_no)
         WHERE
-            meet_status = 'Y' AND BOARD_TYPE = 'MEETING'
+            meet_status = 'Y' AND BOARD_TYPE = 'MEETING' and FILE_LEVEL = 1
         GROUP BY
             meeting.MEET_NO,
             MEET_TITLE,
@@ -71,7 +71,7 @@
                 LEFT JOIN
             member using (member_no)
         WHERE
-            meet_status = 'Y' AND meeting.MEET_NO = #{meetNo} AND BOARD_TYPE = 'MEETING'
+            meet_status = 'Y' AND meeting.MEET_NO = #{meetNo} AND BOARD_TYPE = 'MEETING' and FILE_LEVEL = 1
         GROUP BY
             meeting.MEET_NO,
             MEET_TITLE,
@@ -149,7 +149,7 @@
                 LEFT JOIN
             member using (member_no)
         WHERE
-            meet_status = 'Y' AND BOARD_TYPE = 'MEETING' and meeting.MEMBER_NO = #{memberNo}
+            meet_status = 'Y' AND BOARD_TYPE = 'MEETING' and meeting.MEMBER_NO = #{memberNo} and FILE_LEVEL = 1
         GROUP BY
             meeting.MEET_NO,
             MEET_TITLE,

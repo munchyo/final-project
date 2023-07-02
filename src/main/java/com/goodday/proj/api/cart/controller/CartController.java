@@ -36,7 +36,7 @@ public class CartController {
      * @param memberNo
      * @param proNo
      */
-    @PostMapping
+    @PostMapping("/add")
     public void addCart(@RequestParam Long memberNo, @RequestParam Long proNo) {
         Map<String, Long> cartMap = new HashMap<>();
         cartMap.put("memberNo", memberNo);
@@ -56,5 +56,4 @@ public class CartController {
     public void deleteCart(@RequestParam Long cartNo) {
         cartRepository.deleteCartByCartNo(cartNo);
     }
-//    TODO 카트테스트
 }
