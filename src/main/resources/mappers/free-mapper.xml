@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.goodday.proj.api.free.repository.FreeBoardMapper">
+    <insert id="saveFreeBoard">
+        insert all
+        into free values (free_seq.NEXTVAL, #{freeTitle}, #{freeContent}, sysdate, sysdate, #{memberNo}, default)
+        <if test="file != null">
+            into filestore values (file_seq.NEXTVAL, #{file.uploadFileName}, #{file.storeFileName}, free_seq.CURRVAL, 3, 'FREE')
+        </if>
+        <foreach collection="images" item="image">
+            into filestore values (get_next_file_seq, #{image.uploadFileName}, #{image.storeFileName}, free_seq.CURRVAL, 2, 'FREE')
+        </foreach>
+        select * from dual
+    </insert>
+
+    <insert id="saveFile">
+        insert into filestore
+        values (file_seq.NEXTVAL, #{file.uploadFileName}, #{file.storeFileName}, #{freeNo}, 3, 'FREE')
+    </insert>
+
+    <insert id="saveImages">
+        insert all
+        <foreach collection="images" item="image">
+            into filestore values (get_next_file_seq, #{image.uploadFileName}, #{image.storeFileName}, #{freeNo}, 2, 'FREE')
+        </foreach>
+        select * from dual
+    </insert>
+
+    <update id="updateFreeBoard">
+        update free set free_title = #{freeTitle}, free_content = #{freeContent}, free_modify_date = sysdate
+        where free_no = #{freeNo}
+    </update>
+
+    <select id="findByFreeNo" resultMap="freeBoardResultSet">
+        SELECT f.FREE_NO, f.FREE_TITLE, f.FREE_CONTENT, f.FREE_CREATE_DATE, f.FREE_MODIFY_DATE,
+               MEMBER_NO, nickname, f.FREE_STATUS, f1.UPLOAD_FILE_NAME AS FILE_UPLOAD_FILE_NAME,
+               f1.STORE_FILE_NAME AS FILE_STORE_FILE_NAME, f2.UPLOAD_FILE_NAME AS IMAGE_UPLOAD_FILE_NAME,
+               f2.STORE_FILE_NAME AS IMAGE_STORE_FILE_NAME
+        FROM free f
+                 LEFT JOIN filestore f1 ON f.FREE_NO = f1.BOARD_NO AND f1.FILE_LEVEL = 3 AND f1.BOARD_TYPE = 'FREE'
+                 LEFT JOIN filestore f2 ON f.FREE_NO = f2.BOARD_NO AND f2.FILE_LEVEL = 2 AND f2.BOARD_TYPE = 'FREE'
+        left join member using(member_no)
+        where free_no = #{freeNo} and free_status = 'Y'
+    </select>
+
+    <resultMap id="freeBoardResultSet" type="com.goodday.proj.api.free.model.FreeBoard">
+        <id property="freeNo" column="FREE_NO"/>
+        <result property="freeTitle" column="FREE_TITLE"/>
+        <result property="freeContent" column="FREE_CONTENT"/>
+        <result property="freeCreateDate" column="FREE_CREATE_DATE"/>
+        <result property="freeModifyDate" column="FREE_MODIFY_DATE"/>
+        <result property="memberNo" column="MEMBER_NO"/>
+        <result property="nickname" column="NICKNAME"/>
+        <result property="freeStatus" column="FREE_STATUS"/>
+        <association property="file" javaType="com.goodday.proj.api.file.model.UploadFile">
+            <result property="uploadFileName" column="FILE_UPLOAD_FILE_NAME"/>
+            <result property="storeFileName" column="FILE_STORE_FILE_NAME"/>
+        </association>
+        <collection property="images" ofType="com.goodday.proj.api.file.model.UploadFile">
+            <result property="uploadFileName" column="IMAGE_UPLOAD_FILE_NAME"/>
+            <result property="storeFileName" column="IMAGE_STORE_FILE_NAME"/>
+        </collection>
+    </resultMap>
+
+    <update id="deleteFreeBoardByFreeNo">
+        update free set free_status = 'N'
+        where free_no = #{freeNo}
+    </update>
+
+    <select id="countFreeBoardList" resultType="_int">
+        select count(*) from free where free_status = 'Y'
+    </select>
+
+    <select id="findFreeBoardList" resultMap="freeBoardResultSet">
+        SELECT f.FREE_NO, f.FREE_TITLE, f.FREE_CONTENT, f.FREE_CREATE_DATE, f.FREE_MODIFY_DATE,
+               MEMBER_NO, nickname, f.FREE_STATUS, f1.UPLOAD_FILE_NAME AS FILE_UPLOAD_FILE_NAME,
+               f1.STORE_FILE_NAME AS FILE_STORE_FILE_NAME, f2.UPLOAD_FILE_NAME AS IMAGE_UPLOAD_FILE_NAME,
+               f2.STORE_FILE_NAME AS IMAGE_STORE_FILE_NAME
+        FROM free f
+                 LEFT JOIN filestore f1 ON f.FREE_NO = f1.BOARD_NO AND f1.FILE_LEVEL = 3 AND f1.BOARD_TYPE = 'FREE'
+                 LEFT JOIN filestore f2 ON f.FREE_NO = f2.BOARD_NO AND f2.FILE_LEVEL = 2 AND f2.BOARD_TYPE = 'FREE'
+                 left join member using(member_no)
+        where free_status = 'Y'
+        order by FREE_CREATE_DATE desc
+    </select>
+
+    <select id="findReplyListByFreeNo" resultType="com.goodday.proj.api.free.model.FreeBoardReply">
+        select FREE_RE_NO, MEMBER_NO, nickname, FREE_RE_CONTENT, FREE_NO, FREE_RE_CREATE_DATE, FREE_RE_MODIFY_DATE, FREE_RE_STATUS
+        from free_reply left join member using(member_no)
+        where free_no = #{freeNo} and free_re_status = 'Y'
+        order by FREE_RE_CREATE_DATE
+    </select>
+
+    <insert id="saveReply">
+        insert into free_reply
+        values (free_re_seq.NEXTVAL, #{memberNo}, #{freeReContent}, #{freeNo}, sysdate, sysdate, default)
+    </insert>
+
+    <update id="updateReply">
+        update free_reply
+        set free_re_content = #{freeReContent},
+            free_re_modify_date = sysdate
+        where free_re_no = #{freeReNo}
+    </update>
+
+    <update id="deleteReplyByFreeReNo">
+        update free_reply
+        set free_re_status = 'N'
+        where free_re_no = #{freeReNo}
+    </update>
+</mapper>
