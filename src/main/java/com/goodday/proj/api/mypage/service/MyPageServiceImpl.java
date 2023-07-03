@@ -1,6 +1,7 @@
 package com.goodday.proj.api.mypage.service;
 
 import com.goodday.proj.api.free.model.FreeBoard;
+import com.goodday.proj.api.free.model.FreeBoardReply;
 import com.goodday.proj.api.help.model.Help;
 import com.goodday.proj.api.help.model.HelpReply;
 import com.goodday.proj.api.help.repository.HelpRepository;
@@ -44,6 +45,21 @@ public class MyPageServiceImpl implements MyPageService {
         pagingAndFreeBoards.put("pageInfo", pageInfo);
         pagingAndFreeBoards.put("freeBoards", freeBoards);
         return pagingAndFreeBoards;
+    }
+
+    @Override
+    public Map<String, Object> myReplyListPaging(Long memberNo, Integer currentPage) {
+        int listCount = myPageRepository.countMyReplyListByMemberNo(memberNo);
+        PageInfo pageInfo = Pagination.getPageInfo(currentPage, listCount, 30);
+
+        int offset = (pageInfo.getCurrentPage() - 1) * pageInfo.getBoardLimit();
+        RowBounds rowBounds = new RowBounds(offset, pageInfo.getBoardLimit());
+        ArrayList<FreeBoardReply> replies = myPageRepository.findMyReplyListByMemberNo(memberNo, rowBounds);
+
+        Map<String, Object> pagingAndReplies = new HashMap<>();
+        pagingAndReplies.put("pageInfo", pageInfo);
+        pagingAndReplies.put("replies", replies);
+        return pagingAndReplies;
     }
 
     @Override

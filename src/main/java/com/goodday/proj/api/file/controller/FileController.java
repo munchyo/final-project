@@ -2,6 +2,7 @@ package com.goodday.proj.api.file.controller;
 
 import com.goodday.proj.api.constant.ErrorConst;
 import com.goodday.proj.api.file.FileStore;
+import com.goodday.proj.api.file.model.UploadFile;
 import com.goodday.proj.api.file.repository.FileRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -51,21 +52,27 @@ public class FileController {
         }
     }
 
-    // TODO filename을 받아와서 나중에 storeFileName = filename 으로 쿼리에서 찾아서 뿌리자
-//    @GetMapping("/download/{filename}")
-//    public ResponseEntity<Resource> downloadAttach(@PathVariable String filename) throws MalformedURLException {
-//        Item item = itemRepository.findById(itemId);
-//        String storeFileName = item.getAttachFile().getStoreFileName();
-//        String uploadFileName = item.getAttachFile().getUploadFileName();
-//        UrlResource resource = new UrlResource("file:" +
-//                fileStore.getFullPath(filename));
-//        log.info("uploadFileName={}", uploadFileName);
-//        String encodedUploadFileName = UriUtils.encode(uploadFileName,
-//                StandardCharsets.UTF_8);
-//        String contentDisposition = "attachment; filename=\"" +
-//                encodedUploadFileName + "\"";
-//        return ResponseEntity.ok()
-//                .header(HttpHeaders.CONTENT_DISPOSITION, contentDisposition)
-//                .body(resource);
-//    }
+    /**
+     * 파일 다운로드
+     * @param filename
+     * @return
+     * @throws MalformedURLException
+     */
+    @GetMapping("/download/{filename}")
+    public ResponseEntity<Resource> downloadAttach(@PathVariable String filename) throws MalformedURLException {
+        UploadFile uploadFile = fileRepository.findByFilename(filename);
+        String storeFileName = uploadFile.getStoreFileName();
+        String uploadFileName = uploadFile.getUploadFileName();
+
+        UrlResource resource = new UrlResource("file:" + fileStore.getFullPath(storeFileName));
+
+        log.info("uploadFileName={}", uploadFileName);
+
+        String encodedUploadFileName = UriUtils.encode(uploadFileName, StandardCharsets.UTF_8);
+        String contentDisposition = "attachment; filename=\"" + encodedUploadFileName + "\"";
+
+        return ResponseEntity.ok()
+                .header(HttpHeaders.CONTENT_DISPOSITION, contentDisposition)
+                .body(resource);
+    }
 }

@@ -1,6 +1,7 @@
 package com.goodday.proj.api.mypage.repository;
 
 import com.goodday.proj.api.free.model.FreeBoard;
+import com.goodday.proj.api.free.model.FreeBoardReply;
 import com.goodday.proj.api.mypage.model.TodoList;
 import org.apache.ibatis.session.RowBounds;
 
@@ -20,4 +21,8 @@ public interface MyPageRepository {
     int updateTodoListStatus(Map<String, Object> editTodoList);
 
     int deleteTodoList(Map<String, Object> deleteTodoList);
+
+    int countMyReplyListByMemberNo(Long memberNo);
+
+    ArrayList<FreeBoardReply> findMyReplyListByMemberNo(Long memberNo, RowBounds rowBounds);
 }

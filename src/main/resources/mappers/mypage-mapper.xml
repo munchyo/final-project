@@ -2,14 +2,50 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.goodday.proj.api.mypage.repository.MyPageMapper">
     <select id="countMyBoardListByMemberNo" resultType="int" parameterType="Long">
-        select count(*) from board where MEMBER_NO = #{memberNo} AND BO_STATUS = 'Y'
+        select count(*) from free where MEMBER_NO = #{memberNo} AND free_STATUS = 'Y'
     </select>
 
-<!--    TODO 내가쓴글 가져오기 쿼리수정, nickname도 같이가져오기-->
-    <select id="findMyBoardListByMemberNo" resultType="com.goodday.proj.api.free.model.FreeBoard" parameterType="Long">
-        select * from BOARD
-        where MEMBER_NO = #{memberNo} AND BO_STATUS = 'Y'
-        order by bo_create_date desc
+    <select id="findMyBoardListByMemberNo" resultMap="freeBoardResultSet">
+        SELECT f.FREE_NO, f.FREE_TITLE, f.FREE_CONTENT, f.FREE_CREATE_DATE, f.FREE_MODIFY_DATE,
+               MEMBER_NO, nickname, f.FREE_STATUS, f1.UPLOAD_FILE_NAME AS FILE_UPLOAD_FILE_NAME,
+               f1.STORE_FILE_NAME AS FILE_STORE_FILE_NAME, f2.UPLOAD_FILE_NAME AS IMAGE_UPLOAD_FILE_NAME,
+               f2.STORE_FILE_NAME AS IMAGE_STORE_FILE_NAME
+        FROM free f
+                 LEFT JOIN filestore f1 ON f.FREE_NO = f1.BOARD_NO AND f1.FILE_LEVEL = 3 AND f1.BOARD_TYPE = 'FREE'
+                 LEFT JOIN filestore f2 ON f.FREE_NO = f2.BOARD_NO AND f2.FILE_LEVEL = 2 AND f2.BOARD_TYPE = 'FREE'
+                 left join member using(member_no)
+        where member_no = #{memberNo} and free_status = 'Y'
+        order by FREE_CREATE_DATE desc
+    </select>
+
+    <resultMap id="freeBoardResultSet" type="com.goodday.proj.api.free.model.FreeBoard">
+        <id property="freeNo" column="FREE_NO"/>
+        <result property="freeTitle" column="FREE_TITLE"/>
+        <result property="freeContent" column="FREE_CONTENT"/>
+        <result property="freeCreateDate" column="FREE_CREATE_DATE"/>
+        <result property="freeModifyDate" column="FREE_MODIFY_DATE"/>
+        <result property="memberNo" column="MEMBER_NO"/>
+        <result property="nickname" column="NICKNAME"/>
+        <result property="freeStatus" column="FREE_STATUS"/>
+        <association property="file" javaType="com.goodday.proj.api.file.model.UploadFile">
+            <result property="uploadFileName" column="FILE_UPLOAD_FILE_NAME"/>
+            <result property="storeFileName" column="FILE_STORE_FILE_NAME"/>
+        </association>
+        <collection property="images" ofType="com.goodday.proj.api.file.model.UploadFile">
+            <result property="uploadFileName" column="IMAGE_UPLOAD_FILE_NAME"/>
+            <result property="storeFileName" column="IMAGE_STORE_FILE_NAME"/>
+        </collection>
+    </resultMap>
+
+    <select id="countMyReplyListByMemberNo" resultType="_int">
+        select count(*) from free_reply where MEMBER_NO = #{memberNo} AND free_re_STATUS = 'Y'
+    </select>
+
+    <select id="findMyReplyListByMemberNo" resultType="com.goodday.proj.api.free.model.FreeBoardReply">
+        select FREE_RE_NO, MEMBER_NO, nickname, FREE_RE_CONTENT, FREE_NO, FREE_RE_CREATE_DATE, FREE_RE_MODIFY_DATE, FREE_RE_STATUS
+        from free_reply left join member using(member_no)
+        where member_no = #{memberNo} and free_re_status = 'Y'
+        order by FREE_RE_CREATE_DATE desc
     </select>
 
     <select id="findMyTodoListByMemberNo" parameterType="Long" resultType="com.goodday.proj.api.mypage.model.TodoList">

@@ -4,4 +4,8 @@
     <delete id="deleteFile">
         delete FROM FILESTORE WHERE store_file_name = #{filename}
     </delete>
+
+    <select id="findByFilename" resultType="com.goodday.proj.api.file.model.UploadFile">
+        select upload_file_name, store_file_name from filestore where store_file_name = #{filename}
+    </select>
 </mapper>

@@ -10,4 +10,6 @@ public interface MyPageService {
     Map<String, Object> myHelpListPaging(Integer currentPage, Long memberNo);
 
     Map<String, Object> myOrderListPaging(Integer currentPage, Long memberNo);
+
+    Map<String, Object> myReplyListPaging(Long memberNo, Integer currentPage);
 }

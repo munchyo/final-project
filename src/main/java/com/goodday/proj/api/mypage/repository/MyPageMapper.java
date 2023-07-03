@@ -1,6 +1,7 @@
 package com.goodday.proj.api.mypage.repository;
 
 import com.goodday.proj.api.free.model.FreeBoard;
+import com.goodday.proj.api.free.model.FreeBoardReply;
 import com.goodday.proj.api.mypage.model.TodoList;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.session.RowBounds;
@@ -28,4 +29,10 @@ public interface MyPageMapper extends MyPageRepository {
 
     @Override
     int deleteTodoList(Map<String, Object> deleteTodoList);
+
+    @Override
+    int countMyReplyListByMemberNo(Long memberNo);
+
+    @Override
+    ArrayList<FreeBoardReply> findMyReplyListByMemberNo(Long memberNo, RowBounds rowBounds);
 }

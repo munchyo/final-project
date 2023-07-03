@@ -35,12 +35,25 @@ public class MyPageController {
      * @return
      */
     @PostMapping("/board/{memberNo}")
-    public Map<String, Object> myBoardList(@PathVariable Long memberNo, @RequestParam(value = "page", required = false) Integer currentPage) {
+    public Map<String, Object> myFreeBoardList(@PathVariable Long memberNo, @RequestParam(value = "page", required = false) Integer currentPage) {
         if (currentPage == null || currentPage < 1) {
             currentPage = 1;
         }
-
         return myPageService.myBoardListPaging(memberNo, currentPage);
+    }
+
+    /**
+     * 내 댓글 보기
+     * @param memberNo
+     * @param currentPage
+     * @return
+     */
+    @PostMapping("/free/reply/{memberNo}")
+    public Map<String, Object> myReplyList(@PathVariable Long memberNo, @RequestParam(value = "page", required = false) Integer currentPage) {
+        if (currentPage == null || currentPage < 1) {
+            currentPage = 1;
+        }
+        return myPageService.myReplyListPaging(memberNo, currentPage);
     }
 
     /**
@@ -146,6 +159,12 @@ public class MyPageController {
         return myPageService.myHelpListPaging(currentPage, memberNo);
     }
 
+    /**
+     * 내 주문 목록
+     * @param currentPage
+     * @param memberNo
+     * @return
+     */
     @PostMapping("/order-list")
     public Map<String, Object> myOrderList(@RequestParam(value = "page", required = false) Integer currentPage, @RequestParam Long memberNo) {
         if (currentPage == null || currentPage < 1) {
@@ -154,10 +173,14 @@ public class MyPageController {
         return myPageService.myOrderListPaging(currentPage, memberNo);
     }
 
+    /**
+     * 주문 상세보가
+     * @param orderNo
+     * @return
+     */
     @GetMapping("/order/{orderNo}")
     public Order orderView(@PathVariable Long orderNo) {
         return orderRepository.findOrderByOrderNo(orderNo);
     }
 
-    // TODO 내댓글
 }
