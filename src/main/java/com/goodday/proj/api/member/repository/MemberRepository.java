@@ -40,7 +40,7 @@ public interface MemberRepository {
 
     Address readAddress(Map edit);
 
-    int deleteMember(String memberNo);
+    int deleteMember(Long memberNo);
 
     int saveKakaoMember(Map<String, Object> kakaoMemberInfo);
 

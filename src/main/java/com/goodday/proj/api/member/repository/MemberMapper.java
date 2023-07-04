@@ -58,7 +58,7 @@ public interface MemberMapper extends MemberRepository {
     Address readAddress(Map edit);
 
     @Override
-    int deleteMember(String memberNo);
+    int deleteMember(Long memberNo);
 
     @Override
     int saveKakaoMember(Map<String, Object> kakaoMemberInfo);

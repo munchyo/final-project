@@ -29,13 +29,6 @@
         where email = #{email} and member_status = 'Y'
     </select>
 
-<!--    <select id="findByEmail" resultMap="memberEmailResultSet">-->
-<!--        SELECT distinct member.MEMBER_NO, MEMBER_ID, PWD, NAME, ENROLL_DATE, NICKNAME, email, PHONE, ADMIN, address-->
-<!--        FROM member-->
-<!--                 LEFT JOIN address ON member.MEMBER_NO = address.MEMBER_NO-->
-<!--        WHERE email = #{email} and member_status = 'Y' and is_main = 'Y'-->
-<!--    </select>-->
-
     <select id="addressList" parameterType="com.goodday.proj.api.member.model.Member" resultType="com.goodday.proj.api.member.model.Address">
         select address_no, address, is_main
         from address join member using(member_no)

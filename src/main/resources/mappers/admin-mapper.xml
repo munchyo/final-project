@@ -47,4 +47,66 @@
         where board_type = 'HELP' AND FILE_LEVEL = 2 and help_type = #{type}
         order by HELP_CREATE_DATE desc
     </select>
+
+    <resultMap id="memberResultSet" type="com.goodday.proj.api.member.model.Member">
+        <id property="memberNo" column="MEMBER_NO"/>
+        <result property="memberId" column="MEMBER_ID"/>
+        <result property="pwd" column="PWD"/>
+        <result property="name" column="NAME"/>
+        <result property="enrollDate" column="ENROLL_DATE"/>
+        <result property="nickname" column="NICKNAME"/>
+        <result property="email" column="EMAIL"/>
+        <result property="phone" column="PHONE"/>
+        <result property="admin" column="ADMIN"/>
+        <result property="memberStatus" column="MEMBER_STATUS"/>
+        <collection column="email" property="address" ofType="com.goodday.proj.api.member.model.Address" javaType="List" select="addressList"/>
+    </resultMap>
+
+    <select id="countMemberList" resultType="_int">
+        select count(*) from member
+    </select>
+
+    <select id="findMemberList" resultMap="memberResultSet">
+        SELECT distinct member.MEMBER_NO, MEMBER_ID, PWD, NAME, ENROLL_DATE, NICKNAME, email, PHONE, ADMIN, address
+        FROM member
+                 LEFT JOIN address ON member.MEMBER_NO = address.MEMBER_NO
+        WHERE is_main = 'Y'
+        order by ENROLL_DATE desc
+    </select>
+
+    <select id="countMemberListById" resultType="_int">
+        select count(*) from member where member_id LIKE '%' + #{memberId} + '%'
+    </select>
+
+    <select id="findMemberListById" resultMap="memberResultSet">
+        SELECT distinct member.MEMBER_NO, MEMBER_ID, PWD, NAME, ENROLL_DATE, NICKNAME, email, PHONE, ADMIN, address
+        FROM member
+                 LEFT JOIN address ON member.MEMBER_NO = address.MEMBER_NO
+        WHERE is_main = 'Y' and member_id LIKE '%' + #{memberId} + '%'
+        order by ENROLL_DATE desc
+    </select>
+    
+    <select id="countMemberListByNickname" resultType="_int">
+        select count(*) from member where nickname LIKE '%' + #{nickname} + '%'
+    </select>
+
+    <select id="findMemberListByNickname" resultMap="memberResultSet">
+        SELECT distinct member.MEMBER_NO, MEMBER_ID, PWD, NAME, ENROLL_DATE, NICKNAME, email, PHONE, ADMIN, address
+        FROM member
+                 LEFT JOIN address ON member.MEMBER_NO = address.MEMBER_NO
+        WHERE is_main = 'Y' and nickname LIKE '%' + #{nickname} + '%'
+        order by ENROLL_DATE desc
+    </select>
+
+    <update id="updateMemberStatus">
+        update member
+        set member_status = #{memberStatus}
+        where member_no = #{memberNo}
+    </update>
+
+    <update id="updateMemberRole">
+        update member
+        set admin = #{admin}
+        where member_no = #{memberNo}
+    </update>
 </mapper>

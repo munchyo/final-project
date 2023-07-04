@@ -3,14 +3,17 @@ package com.goodday.proj.api.admin.service;
 import com.goodday.proj.api.admin.repository.AdminRepository;
 import com.goodday.proj.api.help.model.Help;
 import com.goodday.proj.api.help.model.HelpReply;
+import com.goodday.proj.api.member.model.Member;
 import com.goodday.proj.api.pagination.Pagination;
 import com.goodday.proj.api.pagination.model.PageInfo;
+import com.goodday.proj.api.shop.model.Product;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.session.RowBounds;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -43,7 +46,8 @@ public class AdminServiceImpl implements AdminService {
         int listCount = adminRepository.countHelpList();
         PageInfo pageInfo = Pagination.getPageInfo(currentPage, listCount, 10);
 
-        RowBounds rowBounds = new RowBounds((pageInfo.getCurrentPage() - 1) * pageInfo.getBoardLimit(), pageInfo.getBoardLimit());
+        RowBounds rowBounds = new RowBounds((pageInfo.getCurrentPage() - 1) * pageInfo.getBoardLimit(),
+                pageInfo.getBoardLimit());
 
         helpList = adminRepository.findHelpList(rowBounds);
         helpReplyList = adminRepository.findHelpReplyList();
@@ -80,6 +84,50 @@ public class AdminServiceImpl implements AdminService {
 
         helpListAndPaging.put("pageInfo", pageInfo);
         return helpListAndPaging;
+    }
+
+    @Override
+    public Map<String, Object> pagingAndMemberList(Integer currentPage, String searchId, String searchNickname) {
+        Map<String, Object> membersAndPageInfo = new HashMap<>();
+        PageInfo pageInfo = null;
+        if (searchId.equals("ALL") && searchNickname.equals("ALL")) {
+            int listCount = adminRepository.countMemberList();
+            pageInfo = Pagination.getPageInfo(currentPage, listCount, 30);
+
+            RowBounds rowBounds = new RowBounds((pageInfo.getCurrentPage() - 1) * pageInfo.getBoardLimit(),
+                    pageInfo.getBoardLimit());
+            List<Member> members = adminRepository.findMemberList(rowBounds);
+
+            membersAndPageInfo.put("pageInfo", pageInfo);
+            membersAndPageInfo.put("members", members);
+        }
+        if (!searchId.equals("ALL") && searchNickname.equals("ALL")) {
+            int listCount = adminRepository.countMemberListById(searchId);
+            pageInfo = Pagination.getPageInfo(currentPage, listCount, 30);
+
+            RowBounds rowBounds = new RowBounds((pageInfo.getCurrentPage() - 1) * pageInfo.getBoardLimit(),
+                    pageInfo.getBoardLimit());
+            List<Member> members = adminRepository.findMemberListById(searchId, rowBounds);
+
+            membersAndPageInfo.put("pageInfo", pageInfo);
+            membersAndPageInfo.put("members", members);
+        }
+        if (searchId.equals("ALL") && !searchNickname.equals("ALL")) {
+            int listCount = adminRepository.countMemberListByNickname(searchNickname);
+            pageInfo = Pagination.getPageInfo(currentPage, listCount, 30);
+
+            RowBounds rowBounds = new RowBounds((pageInfo.getCurrentPage() - 1) * pageInfo.getBoardLimit(),
+                    pageInfo.getBoardLimit());
+            List<Member> members = adminRepository.findMemberListByNickname(searchNickname, rowBounds);
+
+            membersAndPageInfo.put("pageInfo", pageInfo);
+            membersAndPageInfo.put("members", members);
+        }
+        if (!searchId.equals("ALL") && !searchNickname.equals("ALL")) {
+            throw new IllegalArgumentException("한 번에 두개의 조건으로 검색이 불가합니다.");
+        }
+
+        return membersAndPageInfo;
     }
 
 }
