@@ -53,7 +53,6 @@ public class MemberController {
     public String register(@Valid @RequestBody RegisterFormDto registerUser, BindingResult bindingResult) {
 
         if (bindingResult.hasErrors() || !registerUser.getEmail().contains("@")) {
-            log.debug("bindingResult [{}], {}", bindingResult.getFieldError().getField(), bindingResult.getFieldError().getDefaultMessage());
             throw new IllegalArgumentException(ErrorConst.registerError);
         }
 
