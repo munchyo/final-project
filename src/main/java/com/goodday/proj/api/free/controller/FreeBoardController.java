@@ -1,5 +1,6 @@
 package com.goodday.proj.api.free.controller;
 
+import com.goodday.proj.api.member.repository.MemberRepository;
 import com.goodday.proj.constant.ErrorConst;
 import com.goodday.proj.api.file.FileStore;
 import com.goodday.proj.api.file.repository.FileRepository;
@@ -8,11 +9,14 @@ import com.goodday.proj.api.free.dto.FreeBoardReplyForm;
 import com.goodday.proj.api.free.model.FreeBoard;
 import com.goodday.proj.api.free.repository.FreeBoardRepository;
 import com.goodday.proj.api.free.service.FreeBoardService;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
 import java.io.IOException;
 import java.util.Map;
@@ -27,6 +31,7 @@ public class FreeBoardController {
     private final FreeBoardRepository freeBoardRepository;
     private final FileStore fileStore;
     private final FileRepository fileRepository;
+    private final MemberRepository memberRepository;
 
     /**
      * 게시글 목록 보기
@@ -95,6 +100,16 @@ public class FreeBoardController {
      */
     @DeleteMapping("/{freeNo}")
     public void deleteFreeBoard(@PathVariable Long freeNo) {
+        ServletRequestAttributes requestAttributes =
+                (ServletRequestAttributes) RequestContextHolder.currentRequestAttributes();
+        HttpServletRequest request = requestAttributes.getRequest();
+        long sessionMemberNo = Long.parseLong(request.getHeader("memberNo"));
+
+        if (sessionMemberNo != freeBoardRepository.findByFreeNo(freeNo).getMemberNo()
+                && memberRepository.findSessionMemberByNo(sessionMemberNo).get().getAdmin().equals("N")) {
+            throw new RuntimeException(ErrorConst.authError);
+        }
+
         FreeBoard freeBoard = freeBoardRepository.findByFreeNo(freeNo);
         if (freeBoard.getFile() != null) {
             fileStore.deleteFile(freeBoard.getFile().getStoreFileName());
@@ -151,11 +166,22 @@ public class FreeBoardController {
 
     /**
      * 댓글 삭제
+     *
      * @param freeNo
      * @param freeReNo
      */
     @DeleteMapping("/{freeNo}/reply/{freeReNo}")
     public void deleteReply(@PathVariable Long freeNo, @PathVariable Long freeReNo) {
+        ServletRequestAttributes requestAttributes =
+                (ServletRequestAttributes) RequestContextHolder.currentRequestAttributes();
+        HttpServletRequest request = requestAttributes.getRequest();
+        long sessionMemberNo = Long.parseLong(request.getHeader("memberNo"));
+
+        if (sessionMemberNo != freeBoardRepository.findReplyByFreeReNo(freeReNo).getMemberNo()
+                && memberRepository.findSessionMemberByNo(sessionMemberNo).get().getAdmin().equals("N")) {
+            throw new RuntimeException(ErrorConst.authError);
+        }
+
         freeBoardRepository.deleteReplyByFreeReNo(freeReNo);
     }
 }

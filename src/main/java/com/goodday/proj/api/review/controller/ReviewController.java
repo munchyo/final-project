@@ -26,6 +26,12 @@ public class ReviewController {
     private final FileStore fileStore;
     private final FileRepository fileRepository;
 
+    /**
+     * 리뷰 작성
+     * @param form
+     * @param bindingResult
+     * @throws IOException
+     */
     @PostMapping
     public void writeReview(@Valid @ModelAttribute ReviewForm form, BindingResult bindingResult) throws IOException {
         if (bindingResult.hasErrors()) {
@@ -43,6 +49,10 @@ public class ReviewController {
         }
     }
 
+    /**
+     * 리뷰 삭제
+     * @param orderNo
+     */
     @DeleteMapping
     public void deleteReview(@RequestParam Long orderNo) {
         Review review = reviewRepository.findByOrderNo(orderNo).get();

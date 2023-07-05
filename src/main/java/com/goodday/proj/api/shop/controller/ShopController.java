@@ -1,5 +1,6 @@
 package com.goodday.proj.api.shop.controller;
 
+import com.goodday.proj.annotation.AuthChecker;
 import com.goodday.proj.constant.ErrorConst;
 import com.goodday.proj.api.file.FileStore;
 import com.goodday.proj.api.file.model.UploadFile;
@@ -48,6 +49,7 @@ public class ShopController {
      * @param form
      * @throws IOException
      */
+    @AuthChecker
     @PostMapping("/write")
     public void writeProduct(@Valid @ModelAttribute ProductFormDto form, BindingResult bindingResult) throws IOException {
         if (memberRepository.findSessionMemberByNo(form.getMemberNo()).get().getAdmin().equals("N")) {
@@ -81,6 +83,7 @@ public class ShopController {
      * @param proNo
      * @return Product
      */
+    @AuthChecker
     @PostMapping("/{proNo}")
     public Product editProduct(@PathVariable Long proNo) {
         return shopRepository.findByNo(proNo);
@@ -93,12 +96,10 @@ public class ShopController {
      * @param form
      * @throws IOException
      */
+    @AuthChecker
     @PostMapping("/{proNo}/edit")
     public void editProduct(@PathVariable Long proNo, @Valid @ModelAttribute ProductFormDto form,
                               BindingResult bindingResult) throws IOException {
-        if (memberRepository.findSessionMemberByNo(form.getMemberNo()).get().getAdmin().equals("N")) {
-            throw new RuntimeException(ErrorConst.authError);
-        }
         if (bindingResult.hasErrors()) {
             throw new IllegalArgumentException(ErrorConst.bindingError);
         }
@@ -114,11 +115,9 @@ public class ShopController {
      *
      * @param proNo
      */
+    @AuthChecker
     @DeleteMapping("/{proNo}")
     public void deleteProduct(@PathVariable Long proNo, @RequestParam Long memberNo) {
-        if (memberRepository.findSessionMemberByNo(memberNo).get().getAdmin().equals("N")) {
-            throw new RuntimeException(ErrorConst.authError);
-        }
         Product product = shopRepository.findByNo(proNo);
         fileStore.deleteFile(product.getThumbnail().getStoreFileName());
         product.getImages().stream().forEach(uploadFile -> fileStore.deleteFile(uploadFile.getStoreFileName()));

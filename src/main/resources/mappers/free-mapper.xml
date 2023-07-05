@@ -108,4 +108,10 @@
         set free_re_status = 'N'
         where free_re_no = #{freeReNo}
     </update>
+
+    <select id="findReplyByFreeReNo" resultType="com.goodday.proj.api.free.model.FreeBoardReply">
+        select FREE_RE_NO, MEMBER_NO, nickname, FREE_RE_CONTENT, FREE_NO, FREE_RE_CREATE_DATE, FREE_RE_MODIFY_DATE, FREE_RE_STATUS
+        from free_reply left join member using(member_no)
+        where free_re_no = #{freeReNo} and free_re_status = 'Y'
+    </select>
 </mapper>

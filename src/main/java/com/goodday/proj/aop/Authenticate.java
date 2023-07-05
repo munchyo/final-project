@@ -23,6 +23,9 @@ public class Authenticate {
 
     private final MemberRepository memberRepository;
 
+    /**
+     * 로그인 체크 AOP
+     */
     @Before("execution(* com.goodday.proj.api.*.controller..*(..)) " +
             "&& !execution(* com.goodday.proj.api.member..*(..)) " +
             "&& !execution(* com.goodday.proj.api.mail..*(..)) " +
@@ -37,7 +40,11 @@ public class Authenticate {
         if (optionalMemberNo.isEmpty()) throw new LoginException(ErrorConst.authError2);
     }
 
-    @Before("execution(* com.goodday.proj.api.admin..*(..))")
+    /**
+     * ADMIN 체크 AOP
+     */
+    @Before("execution(* com.goodday.proj.api.admin..*(..)) " +
+            "&& @annotation(com.goodday.proj.annotation.AuthChecker)")
     public void adminAuthAOP() {
         ServletRequestAttributes requestAttributes =
                 (ServletRequestAttributes) RequestContextHolder.currentRequestAttributes();
@@ -49,4 +56,5 @@ public class Authenticate {
             throw new NotFoundException();
         }
     }
+
 }

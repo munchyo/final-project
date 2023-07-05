@@ -7,6 +7,8 @@ import com.goodday.proj.api.free.dto.FreeBoardReplyForm;
 import com.goodday.proj.api.free.model.FreeBoard;
 import com.goodday.proj.api.free.model.FreeBoardReply;
 import com.goodday.proj.api.free.repository.FreeBoardRepository;
+import com.goodday.proj.api.member.repository.MemberRepository;
+import com.goodday.proj.constant.ErrorConst;
 import com.goodday.proj.pagination.Pagination;
 import com.goodday.proj.pagination.model.PageInfo;
 import jakarta.servlet.http.HttpServletRequest;
@@ -27,6 +29,7 @@ public class FreeBoardServiceImpl implements FreeBoardService {
 
     private final FreeBoardRepository freeBoardRepository;
     private final FileStore fileStore;
+    private final MemberRepository memberRepository;
 
     @Override
     public int writeFreeBoard(FreeBoardForm form) throws IOException {
@@ -47,6 +50,16 @@ public class FreeBoardServiceImpl implements FreeBoardService {
 
     @Override
     public int editFreeBoard(Long freeNo, FreeBoardForm form) throws IOException {
+        ServletRequestAttributes requestAttributes =
+                (ServletRequestAttributes) RequestContextHolder.currentRequestAttributes();
+        HttpServletRequest request = requestAttributes.getRequest();
+        long sessionMemberNo = Long.parseLong(request.getHeader("memberNo"));
+
+        if (sessionMemberNo != freeBoardRepository.findByFreeNo(freeNo).getMemberNo()
+                && memberRepository.findSessionMemberByNo(sessionMemberNo).get().getAdmin().equals("N")) {
+            throw new RuntimeException(ErrorConst.authError);
+        }
+
         int result = 0;
         if (!form.getFile().getOriginalFilename().equals("")) {
             UploadFile uploadFile = fileStore.storeFile(form.getFile());
@@ -99,6 +112,16 @@ public class FreeBoardServiceImpl implements FreeBoardService {
 
     @Override
     public int editReply(Long freeNo, Long freeReNo, FreeBoardReplyForm form) {
+        ServletRequestAttributes requestAttributes =
+                (ServletRequestAttributes) RequestContextHolder.currentRequestAttributes();
+        HttpServletRequest request = requestAttributes.getRequest();
+        long sessionMemberNo = Long.parseLong(request.getHeader("memberNo"));
+
+        if (sessionMemberNo != freeBoardRepository.findReplyByFreeReNo(freeReNo).getMemberNo()
+                && memberRepository.findSessionMemberByNo(sessionMemberNo).get().getAdmin().equals("N")) {
+            throw new RuntimeException(ErrorConst.authError);
+        }
+
         Map<String, Object> edit = new HashMap<>();
         edit.put("freeReNo", freeReNo);
         edit.put("freeReContent", form.getFreeReContent());

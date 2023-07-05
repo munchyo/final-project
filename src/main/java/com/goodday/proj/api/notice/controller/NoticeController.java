@@ -1,5 +1,6 @@
 package com.goodday.proj.api.notice.controller;
 
+import com.goodday.proj.annotation.AuthChecker;
 import com.goodday.proj.constant.ErrorConst;
 import com.goodday.proj.api.file.FileStore;
 import com.goodday.proj.api.member.repository.MemberRepository;
@@ -48,11 +49,9 @@ public class NoticeController {
      * @param bindingResult
      * @throws IOException
      */
+    @AuthChecker
     @PostMapping("/write")
     public void writeNotice(@Valid @ModelAttribute NoticeForm form, BindingResult bindingResult) throws IOException {
-        if (memberRepository.findSessionMemberByNo(form.getMemberNo()).get().getAdmin().equals("N")) {
-            throw new RuntimeException(ErrorConst.authError);
-        }
         if (bindingResult.hasErrors()) {
             throw new IllegalArgumentException(ErrorConst.nullError);
         }
@@ -80,6 +79,7 @@ public class NoticeController {
      * @param noticeNo
      * @return
      */
+    @AuthChecker
     @GetMapping("/{noticeNo}/edit")
     public Notice editNoticeView(@PathVariable Long noticeNo) {
         return noticeRepository.findByNoticeNo(noticeNo);
@@ -92,11 +92,9 @@ public class NoticeController {
      * @param form
      * @param bindingResult
      */
+    @AuthChecker
     @PostMapping("/{noticeNo}/edit")
     public void editNotice(@PathVariable Long noticeNo, @Valid @ModelAttribute NoticeForm form, BindingResult bindingResult) throws IOException {
-        if (memberRepository.findSessionMemberByNo(form.getMemberNo()).get().getAdmin().equals("N")) {
-            throw new RuntimeException(ErrorConst.authError);
-        }
         if (bindingResult.hasErrors()) {
             throw new IllegalArgumentException(ErrorConst.bindingError);
         }
@@ -110,13 +108,10 @@ public class NoticeController {
     /**
      * 공지사항 삭제
      * @param noticeNo
-     * @param memberNo
      */
+    @AuthChecker
     @DeleteMapping("/{noticeNo}")
-    public void deleteNotice(@PathVariable Long noticeNo, @RequestParam Long memberNo) {
-        if (memberRepository.findSessionMemberByNo(memberNo).get().getAdmin().equals("N")) {
-            throw new RuntimeException(ErrorConst.authError);
-        }
+    public void deleteNotice(@PathVariable Long noticeNo) {
         Notice notice = noticeRepository.findByNoticeNo(noticeNo);
         notice.getImages().stream().forEach(uploadFile -> fileStore.deleteFile(uploadFile.getStoreFileName()));
 

@@ -46,4 +46,7 @@ public interface FreeBoardMapper extends FreeBoardRepository {
 
     @Override
     int updateReply(Map<String, Object> edit);
+
+    @Override
+    FreeBoardReply findReplyByFreeReNo(Long freeReNo);
 }

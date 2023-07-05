@@ -32,4 +32,6 @@ public interface FreeBoardRepository {
     ArrayList<FreeBoard> findFreeBoardList(RowBounds rowBounds);
 
     List<FreeBoardReply> findReplyListByFreeNo(Long freeNo);
+
+    FreeBoardReply findReplyByFreeReNo(Long freeReNo);
 }
