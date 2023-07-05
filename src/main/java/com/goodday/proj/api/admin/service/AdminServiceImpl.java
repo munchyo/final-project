@@ -4,16 +4,14 @@ import com.goodday.proj.api.admin.repository.AdminRepository;
 import com.goodday.proj.api.help.model.Help;
 import com.goodday.proj.api.help.model.HelpReply;
 import com.goodday.proj.api.member.model.Member;
-import com.goodday.proj.api.pagination.Pagination;
-import com.goodday.proj.api.pagination.model.PageInfo;
-import com.goodday.proj.api.shop.model.Product;
+import com.goodday.proj.pagination.Pagination;
+import com.goodday.proj.pagination.model.PageInfo;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.session.RowBounds;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;

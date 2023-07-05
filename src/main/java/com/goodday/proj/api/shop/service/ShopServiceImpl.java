@@ -2,9 +2,8 @@ package com.goodday.proj.api.shop.service;
 
 import com.goodday.proj.api.file.FileStore;
 import com.goodday.proj.api.file.model.UploadFile;
-import com.goodday.proj.api.pagination.model.PageInfo;
-import com.goodday.proj.api.pagination.Pagination;
-import com.goodday.proj.api.review.model.Review;
+import com.goodday.proj.pagination.model.PageInfo;
+import com.goodday.proj.pagination.Pagination;
 import com.goodday.proj.api.review.repository.ReviewRepository;
 import com.goodday.proj.api.shop.dto.ProductFormDto;
 import com.goodday.proj.api.shop.model.Product;

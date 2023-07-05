@@ -1,6 +1,5 @@
 package com.goodday.proj.api.order.service;
 
-import com.goodday.proj.api.constant.ErrorConst;
 import com.goodday.proj.api.member.model.Address;
 import com.goodday.proj.api.member.model.Member;
 import com.goodday.proj.api.member.repository.MemberRepository;

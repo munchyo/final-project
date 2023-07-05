@@ -1,6 +1,6 @@
 package com.goodday.proj.api.mail.controller;
 
-import com.goodday.proj.api.constant.ErrorConst;
+import com.goodday.proj.constant.ErrorConst;
 import com.goodday.proj.api.mail.service.MailService;
 import com.goodday.proj.api.member.repository.MemberRepository;
 import jakarta.mail.MessagingException;

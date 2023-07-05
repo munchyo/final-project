@@ -1,12 +1,11 @@
 package com.goodday.proj.api.free.controller;
 
-import com.goodday.proj.api.constant.ErrorConst;
+import com.goodday.proj.constant.ErrorConst;
 import com.goodday.proj.api.file.FileStore;
 import com.goodday.proj.api.file.repository.FileRepository;
 import com.goodday.proj.api.free.dto.FreeBoardForm;
 import com.goodday.proj.api.free.dto.FreeBoardReplyForm;
 import com.goodday.proj.api.free.model.FreeBoard;
-import com.goodday.proj.api.free.model.FreeBoardReply;
 import com.goodday.proj.api.free.repository.FreeBoardRepository;
 import com.goodday.proj.api.free.service.FreeBoardService;
 import jakarta.validation.Valid;

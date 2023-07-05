@@ -1,6 +1,6 @@
 package com.goodday.proj.api.member.service;
 
-import com.goodday.proj.api.constant.ErrorConst;
+import com.goodday.proj.constant.ErrorConst;
 import com.goodday.proj.api.member.dto.*;
 import com.goodday.proj.api.member.model.Address;
 import com.goodday.proj.api.member.model.Member;

@@ -1,6 +1,6 @@
 package com.goodday.proj.api.notice.controller;
 
-import com.goodday.proj.api.constant.ErrorConst;
+import com.goodday.proj.constant.ErrorConst;
 import com.goodday.proj.api.file.FileStore;
 import com.goodday.proj.api.member.repository.MemberRepository;
 import com.goodday.proj.api.notice.dto.NoticeForm;

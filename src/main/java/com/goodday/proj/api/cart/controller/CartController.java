@@ -3,7 +3,7 @@ package com.goodday.proj.api.cart.controller;
 import com.goodday.proj.api.cart.model.Cart;
 import com.goodday.proj.api.cart.repository.CartRepository;
 import com.goodday.proj.api.cart.service.CartService;
-import com.goodday.proj.api.constant.ErrorConst;
+import com.goodday.proj.constant.ErrorConst;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;

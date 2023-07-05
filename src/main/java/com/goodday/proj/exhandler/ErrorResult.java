@@ -1,4 +1,4 @@
-package com.goodday.proj.api.exhandler;
+package com.goodday.proj.exhandler;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

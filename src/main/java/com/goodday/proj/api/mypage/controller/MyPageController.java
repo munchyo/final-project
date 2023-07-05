@@ -1,6 +1,6 @@
 package com.goodday.proj.api.mypage.controller;
 
-import com.goodday.proj.api.constant.ErrorConst;
+import com.goodday.proj.constant.ErrorConst;
 import com.goodday.proj.api.mypage.dto.TodoListDto;
 import com.goodday.proj.api.mypage.model.TodoList;
 import com.goodday.proj.api.mypage.repository.MyPageRepository;

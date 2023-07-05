@@ -1,10 +1,9 @@
 package com.goodday.proj.api.help.controller;
 
-import com.goodday.proj.api.constant.ErrorConst;
+import com.goodday.proj.constant.ErrorConst;
 import com.goodday.proj.api.file.FileStore;
 import com.goodday.proj.api.help.dto.HelpForm;
 import com.goodday.proj.api.help.model.Help;
-import com.goodday.proj.api.help.model.HelpReply;
 import com.goodday.proj.api.help.repository.HelpRepository;
 import com.goodday.proj.api.help.service.HelpService;
 import jakarta.validation.Valid;

@@ -1,4 +1,4 @@
-package com.goodday.proj.api.pagination.model;
+package com.goodday.proj.pagination.model;
 
 import lombok.*;
 import lombok.experimental.FieldDefaults;

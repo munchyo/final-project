@@ -1,6 +1,6 @@
 package com.goodday.proj.api.order.controller;
 
-import com.goodday.proj.api.constant.ErrorConst;
+import com.goodday.proj.constant.ErrorConst;
 import com.goodday.proj.api.member.repository.MemberRepository;
 import com.goodday.proj.api.order.dto.OrderDto;
 import com.goodday.proj.api.order.dto.OrderForm;

@@ -1,6 +1,6 @@
-package com.goodday.proj.api.pagination;
+package com.goodday.proj.pagination;
 
-import com.goodday.proj.api.pagination.model.PageInfo;
+import com.goodday.proj.pagination.model.PageInfo;
 
 public class Pagination {
     public static PageInfo getPageInfo(int currentPage, int listCount, int boardLimit) {

@@ -1,4 +1,4 @@
-package com.goodday.proj.api.constant;
+package com.goodday.proj.constant;
 
 public abstract class ErrorConst {
     public static final String loginError = "아이디 혹은 비밀번호가 일치하지 않습니다.";
@@ -24,5 +24,7 @@ public abstract class ErrorConst {
     public static final String authError = "권한이 없습니다.";
 
     public static final String orderError = "주문 실패하였습니다.";
+
+    public static final String authError2 = "로그인이 필요합니다.";
 
 }

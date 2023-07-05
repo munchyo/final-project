@@ -2,7 +2,7 @@ package com.goodday.proj.api.admin.controller;
 
 import com.goodday.proj.api.admin.repository.AdminRepository;
 import com.goodday.proj.api.admin.service.AdminService;
-import com.goodday.proj.api.constant.ErrorConst;
+import com.goodday.proj.constant.ErrorConst;
 import com.goodday.proj.api.help.model.HelpReply;
 import com.goodday.proj.api.help.repository.HelpRepository;
 import jakarta.validation.Valid;

@@ -1,6 +1,6 @@
 package com.goodday.proj.api.file.controller;
 
-import com.goodday.proj.api.constant.ErrorConst;
+import com.goodday.proj.constant.ErrorConst;
 import com.goodday.proj.api.file.FileStore;
 import com.goodday.proj.api.file.model.UploadFile;
 import com.goodday.proj.api.file.repository.FileRepository;
