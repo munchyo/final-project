@@ -22,9 +22,7 @@ public class MemberServiceImpl implements MemberService {
 
     @Override
     public MemberSessionInfo login(LoginFormDto login) {
-        log.debug("login [{}]", login);
         Optional<MemberSessionInfo> member = memberRepository.findSessionMemberById(login.getId());
-        log.debug("session [{}]", member);
         if(member.isEmpty()){
             throw new RuntimeException(ErrorConst.loginError);
         }
@@ -38,6 +36,12 @@ public class MemberServiceImpl implements MemberService {
 
     @Override
     public int register(RegisterFormDto registerUser) {
+        if (memberRepository.findSessionMemberById(registerUser.getId()).isPresent()) {
+            throw new IllegalArgumentException("아이디가 중복입니다.");
+        } else if (memberRepository.findSessionMemberByEmail(registerUser.getEmail()).isPresent()) {
+            throw new IllegalArgumentException("이메일이 중복입니다.");
+        }
+
         Member member = new Member();
 
         if (!(registerUser.getAddr1()+registerUser.getAddr2()).isEmpty()) {
@@ -82,22 +86,5 @@ public class MemberServiceImpl implements MemberService {
         saveAddress.put("address", address);
         memberRepository.saveAddress(saveAddress);
     }
-
-//    private void insertAddress(RegisterFormDto registerUser, Member member, boolean isMain) {
-//        String newAddress = registerUser.getAddr1() + "/" + registerUser.getAddr2();
-//
-//        Address address = new Address();
-//        address.setAddress(newAddress);
-//        address.setIsMain("Y");
-//        if (!isMain) {
-//            address.setIsMain("N");
-//        }
-//
-//        List<Address> addressList = new ArrayList<>();
-//        addressList.add(address);
-//        member.setAddress(addressList);
-//
-//    }
-
 
 }
