@@ -1,6 +1,5 @@
 package com.goodday.proj.api.meet.controller;
 
-import com.goodday.proj.annotation.AuthChecker;
 import com.goodday.proj.constant.ErrorConst;
 import com.goodday.proj.api.meet.dto.MeetingWriteForm;
 import com.goodday.proj.api.meet.model.Meeting;
@@ -157,15 +156,12 @@ public class MeetingController {
     /**
      * 모임 참가자 리스트
      * @param meetNo
-     * @param memberNo
      * @return
      */
-    @PostMapping("/{meetNo}/application/{memberNo}")
-    public List<MemberSessionInfo> meetingApplicationList(@PathVariable Long meetNo, @PathVariable Long memberNo) {
-        if (meetingRepository.findByMeetNo(meetNo).getMemberNo() != memberNo) {
-            throw new RuntimeException(ErrorConst.authError);
-        }
-        return meetingRepository.findApplicationListByMeetNo(meetNo);
+    @PostMapping("/{meetNo}/application")
+    public List<MemberSessionInfo> meetingApplicationList(@PathVariable Long meetNo) {
+
+        return meetingService.meetingApplicationListView(meetNo);
     }
 
     /**
@@ -173,15 +169,12 @@ public class MeetingController {
      * @param meetNo
      * @param memberNo
      */
-    @DeleteMapping("/{meetNo}/application/{memberNo}")
-    public void removeMeetingApplication(@PathVariable Long meetNo, @PathVariable Long memberNo) {
-        if (meetingRepository.findByMeetNo(meetNo).getMemberNo() != memberNo) {
-            throw new RuntimeException(ErrorConst.authError);
-        }
+    @DeleteMapping("/{meetNo}/application")
+    public void removeMeetingApplication(@PathVariable Long meetNo, @RequestParam Long memberNo) {
         Map<String, Long> cancel = new HashMap<>();
         cancel.put("meetNo", meetNo);
         cancel.put("memberNo", memberNo);
-        int result = meetingRepository.deleteMeetingJoin(cancel);
+        int result = meetingService.removeApplication(cancel);
         if (result == 0) {
             throw new RuntimeException(ErrorConst.deleteError);
         }

@@ -5,6 +5,7 @@ import com.goodday.proj.api.file.model.UploadFile;
 import com.goodday.proj.api.meet.dto.MeetingWriteForm;
 import com.goodday.proj.api.meet.model.Meeting;
 import com.goodday.proj.api.meet.repository.MeetingRepository;
+import com.goodday.proj.api.member.dto.MemberSessionInfo;
 import com.goodday.proj.api.member.repository.MemberRepository;
 import com.goodday.proj.constant.ErrorConst;
 import com.goodday.proj.pagination.model.PageInfo;
@@ -20,6 +21,7 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Slf4j
@@ -64,8 +66,19 @@ public class MeetingServiceImpl implements MeetingService {
     @Override
     public Meeting editMeetingView(Long meetNo) {
         postAuthorCheckByMeetNo(meetNo);
-
         return meetingRepository.findByMeetNo(meetNo);
+    }
+
+    @Override
+    public List<MemberSessionInfo> meetingApplicationListView(Long meetNo) {
+        postAuthorCheckByMeetNo(meetNo);
+        return meetingRepository.findApplicationListByMeetNo(meetNo);
+    }
+
+    @Override
+    public int removeApplication(Map<String, Long> cancel) {
+        postAuthorCheckByMeetNo(cancel.get("meetNo"));
+        return meetingRepository.deleteMeetingJoin(cancel);
     }
 
     @Override
