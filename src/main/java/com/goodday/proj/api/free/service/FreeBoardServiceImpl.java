@@ -50,15 +50,7 @@ public class FreeBoardServiceImpl implements FreeBoardService {
 
     @Override
     public int editFreeBoard(Long freeNo, FreeBoardForm form) throws IOException {
-        ServletRequestAttributes requestAttributes =
-                (ServletRequestAttributes) RequestContextHolder.currentRequestAttributes();
-        HttpServletRequest request = requestAttributes.getRequest();
-        long sessionMemberNo = Long.parseLong(request.getHeader("memberNo"));
-
-        if (sessionMemberNo != freeBoardRepository.findByFreeNo(freeNo).getMemberNo()
-                && memberRepository.findSessionMemberByNo(sessionMemberNo).get().getAdmin().equals("N")) {
-            throw new RuntimeException(ErrorConst.authError);
-        }
+        postAuthorCheckByFreeNo(freeNo);
 
         int result = 0;
         if (!form.getFile().getOriginalFilename().equals("")) {
@@ -79,6 +71,18 @@ public class FreeBoardServiceImpl implements FreeBoardService {
         FreeBoard freeBoard = new FreeBoard(freeNo, form.getFreeTitle(), form.getFreeContent());
         result += freeBoardRepository.updateFreeBoard(freeBoard);
         return result;
+    }
+
+    private void postAuthorCheckByFreeNo(Long freeNo) {
+        ServletRequestAttributes requestAttributes =
+                (ServletRequestAttributes) RequestContextHolder.currentRequestAttributes();
+        HttpServletRequest request = requestAttributes.getRequest();
+        long sessionMemberNo = Long.parseLong(request.getHeader("memberNo"));
+
+        if (sessionMemberNo != freeBoardRepository.findByFreeNo(freeNo).getMemberNo()
+                && memberRepository.findSessionMemberByNo(sessionMemberNo).get().getAdmin().equals("N")) {
+            throw new RuntimeException(ErrorConst.authError);
+        }
     }
 
     @Override

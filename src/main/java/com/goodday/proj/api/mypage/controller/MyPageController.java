@@ -34,7 +34,7 @@ public class MyPageController {
      * @param currentPage
      * @return
      */
-    @PostMapping("/board/{memberNo}")
+    @GetMapping("/board/{memberNo}")
     public Map<String, Object> myFreeBoardList(@PathVariable Long memberNo, @RequestParam(value = "page", required = false) Integer currentPage) {
         if (currentPage == null || currentPage < 1) {
             currentPage = 1;
@@ -48,7 +48,7 @@ public class MyPageController {
      * @param currentPage
      * @return
      */
-    @PostMapping("/free/reply/{memberNo}")
+    @GetMapping("/free/reply/{memberNo}")
     public Map<String, Object> myReplyList(@PathVariable Long memberNo, @RequestParam(value = "page", required = false) Integer currentPage) {
         if (currentPage == null || currentPage < 1) {
             currentPage = 1;
@@ -64,7 +64,7 @@ public class MyPageController {
      */
     @GetMapping("/todo/{memberNo}")
     public List<TodoList> myTodoList(@PathVariable Long memberNo) {
-        return myPageRepository.findMyTodoListByMemberNo(memberNo);
+        return myPageService.myTodoList(memberNo);
     }
 
     /**
@@ -80,10 +80,9 @@ public class MyPageController {
             throw new RuntimeException(ErrorConst.nullError);
         }
 
-        for (TodoListDto todoListDto : todoListDtoList) {
-            TodoList todoList =
-                    new TodoList(todoListDto.getCalDate(), todoListDto.getPeriod(), todoListDto.getGoal(), memberNo);
-            myPageRepository.addTodoList(todoList);
+        int result = myPageService.addTodoList(memberNo, todoListDtoList);
+        if (result == 0) {
+            throw new RuntimeException(ErrorConst.insertError);
         }
     }
 
@@ -102,12 +101,10 @@ public class MyPageController {
             throw new IllegalArgumentException(ErrorConst.bindingError);
         }
 
-        Map<String, Object> editTodoList = new HashMap<>();
-        editTodoList.put("memberNo", memberNo);
-        editTodoList.put("calNo", calNo);
-        editTodoList.put("calStatus", calStatus);
-
-        myPageRepository.updateTodoListStatus(editTodoList);
+        int result = myPageService.editTodoListStatus(memberNo, calNo, calStatus);
+        if (result == 0) {
+            throw new RuntimeException(ErrorConst.updateError);
+        }
     }
 
     /**
@@ -122,11 +119,10 @@ public class MyPageController {
             throw new RuntimeException(ErrorConst.nullError);
         }
 
-        Map<String, Object> deleteTodoList = new HashMap<>();
-        deleteTodoList.put("memberNo", memberNo);
-        deleteTodoList.put("calNo", calNo);
-
-        myPageRepository.deleteTodoList(deleteTodoList);
+        int result = myPageService.deleteTodoList(memberNo, calNo);
+        if (result == 0) {
+            throw new RuntimeException(ErrorConst.updateError);
+        }
     }
 
     /**
@@ -174,7 +170,7 @@ public class MyPageController {
     }
 
     /**
-     * 주문 상세보가
+     * 주문 상세보기
      * @param orderNo
      * @return
      */

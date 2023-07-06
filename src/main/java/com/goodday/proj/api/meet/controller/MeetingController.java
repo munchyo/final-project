@@ -1,5 +1,6 @@
 package com.goodday.proj.api.meet.controller;
 
+import com.goodday.proj.annotation.AuthChecker;
 import com.goodday.proj.constant.ErrorConst;
 import com.goodday.proj.api.meet.dto.MeetingWriteForm;
 import com.goodday.proj.api.meet.model.Meeting;
@@ -76,7 +77,7 @@ public class MeetingController {
      */
     @GetMapping("/{meetNo}/edit")
     public Meeting meetingEditView(@PathVariable Long meetNo) {
-        return meetingRepository.findByMeetNo(meetNo);
+        return meetingService.editMeetingView(meetNo);
     }
 
     /**
@@ -91,13 +92,6 @@ public class MeetingController {
         if (bindingResult.hasErrors()) {
             throw new IllegalArgumentException(ErrorConst.bindingError);
         }
-        Meeting originalMeeting = meetingRepository.findByMeetNo(meetNo);
-        if (originalMeeting.getApplication() > form.getMeetTotal()) {
-            throw new IllegalArgumentException(ErrorConst.bindingError);
-        }
-        if (originalMeeting.getMemberNo() != form.getMemberNo()) {
-            throw new IllegalArgumentException(ErrorConst.authError);
-        }
 
         int result = meetingService.meetingEdit(meetNo, form);
         if (result == 0) {
@@ -106,7 +100,7 @@ public class MeetingController {
     }
 
     /**
-     * 모임, 모임신청, 썸네일 삭제
+     * (모임, 모임신청, 썸네일) 삭제
      *
      * @param meetNo
      */
