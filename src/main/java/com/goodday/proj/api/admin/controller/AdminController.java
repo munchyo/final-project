@@ -12,6 +12,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Slf4j
@@ -116,6 +117,7 @@ public class AdminController {
 
     /**
      * 회원 권한수정
+     *
      * @param memberNo
      * @param role
      */
@@ -137,11 +139,22 @@ public class AdminController {
 
     /**
      * 전체 회원수
+     *
      * @return int
      */
-    @PostMapping("/member-count")
+    @GetMapping("/member-count")
     public Integer countMember() {
         return adminRepository.countMemberList();
+    }
+
+    @GetMapping("/enroll-count")
+    public Map<String, List> countEnrollMember() {
+        List countMemberList = adminRepository.countEnrollMember30Days();
+        List enrollDateList = adminRepository.enrollDate30Days();
+        Map<String, List> countMemberAnd30Days = new HashMap<>();
+        countMemberAnd30Days.put("enrollDate", enrollDateList);
+        countMemberAnd30Days.put("count", countMemberList);
+        return countMemberAnd30Days;
     }
 
     // TODO 통계

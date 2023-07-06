@@ -109,4 +109,22 @@
         set admin = #{admin}
         where member_no = #{memberNo}
     </update>
+
+    <select id="countEnrollMember30Days" resultType="java.lang.Integer">
+        SELECT COUNT(*) AS count
+        FROM MEMBER
+        WHERE ENROLL_DATE >= TRUNC(SYSDATE) - 29
+        AND ENROLL_DATE &lt;= TRUNC(SYSDATE)
+        GROUP BY ENROLL_DATE
+        ORDER BY ENROLL_DATE
+    </select>
+
+    <select id="enrollDate30Days" resultType="java.lang.String">
+        SELECT ENROLL_DATE AS enrollDate
+        FROM MEMBER
+        WHERE ENROLL_DATE >= TRUNC(SYSDATE) - 29
+          AND ENROLL_DATE &lt;= TRUNC(SYSDATE)
+        GROUP BY ENROLL_DATE
+        ORDER BY ENROLL_DATE
+    </select>
 </mapper>

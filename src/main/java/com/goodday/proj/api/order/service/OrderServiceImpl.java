@@ -59,7 +59,6 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public int order(OrderForm form) {
-        // 주문
         if (shopRepository.findByNo(form.getProNo()).getProInventory() == 0) {
             throw new RuntimeException("재고가 없습니다.");
         }

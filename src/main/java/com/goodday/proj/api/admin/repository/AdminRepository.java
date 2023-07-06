@@ -36,4 +36,8 @@ public interface AdminRepository {
     int updateMemberStatus(Map<String, Object> update);
 
     int updateMemberRole(Map<String, Object> update);
+
+    List<Integer> countEnrollMember30Days();
+
+    List<String> enrollDate30Days();
 }

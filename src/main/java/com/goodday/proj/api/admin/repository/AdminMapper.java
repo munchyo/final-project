@@ -52,4 +52,10 @@ public interface AdminMapper extends AdminRepository {
 
     @Override
     int updateMemberRole(Map<String, Object> update);
+
+    @Override
+    List<Integer> countEnrollMember30Days();
+
+    @Override
+    List<String> enrollDate30Days();
 }
