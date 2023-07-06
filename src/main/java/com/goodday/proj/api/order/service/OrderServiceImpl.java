@@ -26,8 +26,6 @@ public class OrderServiceImpl implements OrderService {
     private final MemberRepository memberRepository;
     private final ShopRepository shopRepository;
 
-    private Map<String, Object> addOrder = new ConcurrentHashMap<>();
-
     @Override
     public Map<String, Object> orderView(OrderDto orderDto) {
         Map<String, Object> view = new HashMap<>();
@@ -66,7 +64,8 @@ public class OrderServiceImpl implements OrderService {
             throw new RuntimeException("재고가 없습니다.");
         }
 
-        createOrderNo();
+        Map<String, Object> addOrder = new HashMap<>();
+        addOrder.put("orderNo", createOrderNo());
         addOrder.put("quantity", form.getQuantity());
         addOrder.put("price", form.getPrice() * form.getQuantity());
         addOrder.put("proNo", form.getProNo());
@@ -78,7 +77,7 @@ public class OrderServiceImpl implements OrderService {
         return orderRepository.saveOrder(addOrder);
     }
 
-    private void createOrderNo() {
+    private long createOrderNo() {
         LocalDateTime currentDateTime = LocalDateTime.now();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyMMddHHmmssSSS");
         String formattedDateTime = currentDateTime.format(formatter);
@@ -86,8 +85,6 @@ public class OrderServiceImpl implements OrderService {
         Random random = new Random();
         int randomNumber = random.nextInt(900) + 100;
 
-        String finalValue = formattedDateTime + randomNumber;
-        long orderNo = Long.parseLong(finalValue);
-        addOrder.put("orderNo", orderNo);
+        return Long.parseLong(formattedDateTime + randomNumber);
     }
 }
