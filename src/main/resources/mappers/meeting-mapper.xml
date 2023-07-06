@@ -70,42 +70,10 @@
             (SELECT COUNT(meet_no) FROM en_meeting WHERE en_meeting.meet_no = meeting.MEET_NO) AS APPLICATION
         FROM
             meeting
-                LEFT JOIN
-            filestore ON (meeting.meet_no = filestore.board_no)
-                LEFT JOIN
-            en_meeting ON (meeting.meet_no = en_meeting.meet_no)
-                LEFT JOIN
-            member using (member_no)
+                LEFT JOIN filestore ON (meeting.meet_no = filestore.board_no)
+                LEFT JOIN member USING (member_no)
         WHERE
-            meet_status = 'Y' AND meeting.MEET_NO = #{meetNo} AND BOARD_TYPE = 'MEETING' and FILE_LEVEL = 1
-        ORDER BY
-            MEET_CREATE_DATE DESC
-        SELECT meeting.MEET_NO, MEET_TITLE, MEET_CONTENT, MEET_ADDRESS, MEET_TOTAL, OPENKAKAO, MEET_CREATE_DATE, en_meeting.MEMBER_NO, nickname, UPLOAD_FILE_NAME,
-            STORE_FILE_NAME, COUNT(en_meeting.meet_no)
-        FROM
-            meeting
-                LEFT JOIN
-            filestore ON (meeting.meet_no = filestore.board_no)
-                LEFT JOIN
-            en_meeting ON (meeting.meet_no = en_meeting.meet_no)
-                LEFT JOIN
-            member using (member_no)
-        WHERE
-            meet_status = 'Y' AND meeting.MEET_NO = #{meetNo} AND BOARD_TYPE = 'MEETING' and FILE_LEVEL = 1
-        GROUP BY
-            meeting.MEET_NO,
-            MEET_TITLE,
-            MEET_CONTENT,
-            MEET_ADDRESS,
-            MEET_TOTAL,
-            OPENKAKAO,
-            MEET_CREATE_DATE,
-            en_meeting.MEMBER_NO,
-            nickname,
-            UPLOAD_FILE_NAME,
-            STORE_FILE_NAME
-        ORDER BY
-            MEET_CREATE_DATE DESC
+            meet_status = 'Y' AND BOARD_TYPE = 'MEETING' AND FILE_LEVEL = 1 and meet_no = #{meetNo}
     </select>
 
     <delete id="deleteFileByStoreFileName">
@@ -158,19 +126,7 @@
     </select>
 
     <select id="findMeetingListByMemberNo" resultMap="meetingResultSet">
-        SELECT meeting.MEET_NO, MEET_TITLE, MEET_CONTENT, MEET_ADDRESS, MEET_TOTAL, OPENKAKAO, MEET_CREATE_DATE, en_meeting.MEMBER_NO, nickname, UPLOAD_FILE_NAME,
-               STORE_FILE_NAME, COUNT(en_meeting.meet_no)
-        FROM
-            meeting
-                LEFT JOIN
-            filestore ON (meeting.meet_no = filestore.board_no)
-                LEFT JOIN
-            en_meeting ON (meeting.meet_no = en_meeting.meet_no)
-                LEFT JOIN
-            member using (member_no)
-        WHERE
-            meet_status = 'Y' AND BOARD_TYPE = 'MEETING' and meeting.MEMBER_NO = #{memberNo} and FILE_LEVEL = 1
-        GROUP BY
+        SELECT
             meeting.MEET_NO,
             MEET_TITLE,
             MEET_CONTENT,
@@ -178,10 +134,17 @@
             MEET_TOTAL,
             OPENKAKAO,
             MEET_CREATE_DATE,
-            en_meeting.MEMBER_NO,
+            MEMBER_NO,
             nickname,
             UPLOAD_FILE_NAME,
-            STORE_FILE_NAME
+            STORE_FILE_NAME,
+            (SELECT COUNT(meet_no) FROM en_meeting WHERE en_meeting.meet_no = meeting.MEET_NO) AS APPLICATION
+        FROM
+            meeting
+                LEFT JOIN filestore ON (meeting.meet_no = filestore.board_no)
+                LEFT JOIN member USING (member_no)
+        WHERE
+            meet_status = 'Y' AND BOARD_TYPE = 'MEETING' AND FILE_LEVEL = 1 and MEMBER_NO = #{memberNo}
         ORDER BY
             MEET_CREATE_DATE DESC
     </select>
