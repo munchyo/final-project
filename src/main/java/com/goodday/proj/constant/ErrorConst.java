@@ -27,4 +27,6 @@ public abstract class ErrorConst {
 
     public static final String authError2 = "로그인이 필요합니다.";
 
+    public static final String duplicateError = "중복입니다.";
+
 }

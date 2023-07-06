@@ -124,7 +124,7 @@ public class MemberController {
     public String checkId(@RequestParam String id) {
         Optional<MemberSessionInfo> checkId = memberRepository.findSessionMemberById(id);
         if (checkId.isPresent()) {
-            return "fail";
+            throw new RuntimeException(ErrorConst.duplicateError);
         }
         return "ok";
     }
