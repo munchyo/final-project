@@ -8,6 +8,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Arrays;
+import java.util.Base64;
+
 @Slf4j
 @RestController
 @RequiredArgsConstructor
@@ -16,9 +19,12 @@ public class MailController {
 
     private final MailService mailService;
     private final MemberRepository memberRepository;
+    private Base64.Decoder decode = Base64.getDecoder();
 
     @GetMapping("/register")
     public String registerAuthentication(@RequestParam String email) throws MessagingException {
+        byte[] decoded = decode.decode(email);
+        email = Arrays.toString(decoded);
         if (!email.contains("@")) {
             throw new IllegalArgumentException(ErrorConst.mailError);
         }
