@@ -121,8 +121,8 @@ public class MemberController {
      * @return
      */
     @GetMapping("/check/id")
-    public String checkId(@RequestBody Map<String, String> id) {
-        Optional<MemberSessionInfo> checkId = memberRepository.findSessionMemberById(id.get("id"));
+    public String checkId(@RequestParam String id) {
+        Optional<MemberSessionInfo> checkId = memberRepository.findSessionMemberById(id);
         if (checkId.isPresent()) {
             return "fail";
         }
