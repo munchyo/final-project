@@ -181,10 +181,4 @@ public class MemberController {
         return memberRepository.findSessionMemberById(naverMemberInfo.get("id")).get();
     }
 
-//    @PostMapping("/google")
-//    public void googleCallBack(@RequestParam String code) {
-//        log.debug("code : {}", code);
-//        googleLoginService.getGoogleAccessToken(code);
-//    }
-
 }
