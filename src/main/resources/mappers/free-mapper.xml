@@ -7,9 +7,11 @@
         <if test="file != null">
             into filestore values (file_seq.NEXTVAL, #{file.uploadFileName}, #{file.storeFileName}, free_seq.CURRVAL, 3, 'FREE')
         </if>
-        <foreach collection="images" item="image">
-            into filestore values (get_next_file_seq, #{image.uploadFileName}, #{image.storeFileName}, free_seq.CURRVAL, 2, 'FREE')
-        </foreach>
+        <if test="images != null">
+            <foreach collection="images" item="image">
+                into filestore values (get_next_file_seq, #{image.uploadFileName}, #{image.storeFileName}, free_seq.CURRVAL, 2, 'FREE')
+            </foreach>
+        </if>
         select * from dual
     </insert>
 
