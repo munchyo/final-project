@@ -125,4 +125,9 @@
         from address
         where member_no = #{memberNo}
     </select>
+
+    <insert id="saveNaverMember" parameterType="map">
+        insert into member
+        values (mem_seq.NEXTVAL, #{id}, null, #{name}, sysdate, #{nickname}, #{email}, #{phone}, default, default)
+    </insert>
 </mapper>

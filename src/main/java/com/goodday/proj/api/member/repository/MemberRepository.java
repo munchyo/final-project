@@ -45,4 +45,6 @@ public interface MemberRepository {
     int saveKakaoMember(Map<String, Object> kakaoMemberInfo);
 
     List<Address> findAddressListByMemberNo(Long memberNo);
+
+    int saveNaverMember(Map<String, String> naverMemberInfo);
 }

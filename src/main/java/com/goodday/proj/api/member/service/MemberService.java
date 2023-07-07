@@ -1,7 +1,9 @@
 package com.goodday.proj.api.member.service;
 
 import com.goodday.proj.api.member.dto.*;
-import com.goodday.proj.api.member.model.Member;
+
+import java.util.Map;
+import java.util.Optional;
 
 public interface MemberService {
 
@@ -12,4 +14,6 @@ public interface MemberService {
     int editPwd(Long memberNo, EditPwdDto pwdDto);
 
     void addAddress(String memberNo, AddressDto addressDto);
+
+    int naverRegister(Optional<MemberSessionInfo> optionalMember, Map<String, String> naverMemberInfo);
 }

@@ -1,5 +1,6 @@
 package com.goodday.proj.api.member.controller;
 
+import com.goodday.proj.api.member.service.NaverLoginService;
 import com.goodday.proj.constant.ErrorConst;
 import com.goodday.proj.api.member.dto.*;
 import com.goodday.proj.api.member.repository.MemberRepository;
@@ -25,10 +26,12 @@ public class MemberController {
     private final MemberService memberService;
     private final MemberRepository memberRepository;
     private final KakaoLoginService kakaoLoginService;
+    private final NaverLoginService naverLoginService;
 //    private final GoogleLoginService googleLoginService;
 
     /**
      * 로그인
+     *
      * @param login
      * @param bindingResult
      * @return
@@ -45,6 +48,7 @@ public class MemberController {
 
     /**
      * 회원가입
+     *
      * @param registerUser
      * @param bindingResult
      * @return
@@ -68,6 +72,7 @@ public class MemberController {
 
     /**
      * 아이디찾기
+     *
      * @param email
      * @return
      */
@@ -87,6 +92,7 @@ public class MemberController {
 
     /**
      * 비밀번호찾기
+     *
      * @param email
      * @return
      */
@@ -106,6 +112,7 @@ public class MemberController {
 
     /**
      * 회원탈퇴
+     *
      * @param memberNo
      */
     @DeleteMapping("/{memberNo}")
@@ -117,6 +124,7 @@ public class MemberController {
 
     /**
      * 아이디중복체크
+     *
      * @param id
      * @return
      */
@@ -131,12 +139,13 @@ public class MemberController {
 
     /**
      * 카카오로그인
+     *
      * @param code
      * @return
      * @throws IOException
      */
     @GetMapping("/kakao")
-    public MemberSessionInfo  kakaoCallback(@RequestParam String code) throws IOException {
+    public MemberSessionInfo kakaoCallback(@RequestParam String code) throws IOException {
         String kakaoAccessToken = kakaoLoginService.getKakaoAccessToken(code);
         var kakaoMemberInfo = kakaoLoginService.getKakaoMemberInfo(kakaoAccessToken);
 
@@ -147,6 +156,29 @@ public class MemberController {
         }
 
         return memberRepository.findSessionMemberById(kakaoMemberInfo.get("id").toString()).get();
+    }
+
+    @GetMapping("/naver")
+    public MemberSessionInfo naverCallback(@RequestParam String code, @RequestParam String state,
+                                           @RequestParam(required = false) String error,
+                                           @RequestParam(required = false) String error_description) throws IOException {
+        if (!state.equals("qwer")) {
+            throw new IllegalArgumentException(ErrorConst.loginErrorV2);
+        } else if (error != null || error_description != null) {
+            throw new IllegalArgumentException(error_description);
+        }
+
+        Map<String, String> naverMemberInfo = naverLoginService.naverAccessTokenAndGetNaverMemberInfo(code, state);
+        if (naverMemberInfo == null) {
+            throw new RuntimeException(ErrorConst.loginErrorV2);
+        }
+
+        Optional<MemberSessionInfo> optionalMember = memberRepository.findSessionMemberById(naverMemberInfo.get("id"));
+        if (optionalMember.isEmpty()) {
+            memberService.naverRegister(optionalMember, naverMemberInfo);
+        }
+
+        return memberRepository.findSessionMemberById(naverMemberInfo.get("id")).get();
     }
 
 //    @PostMapping("/google")

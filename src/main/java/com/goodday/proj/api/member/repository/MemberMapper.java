@@ -65,4 +65,7 @@ public interface MemberMapper extends MemberRepository {
 
     @Override
     List<Address> findAddressListByMemberNo(Long memberNo);
+
+    @Override
+    int saveNaverMember(Map<String, String> naverMemberInfo);
 }

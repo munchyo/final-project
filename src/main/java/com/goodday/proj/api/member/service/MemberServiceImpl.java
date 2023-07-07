@@ -87,4 +87,14 @@ public class MemberServiceImpl implements MemberService {
         memberRepository.saveAddress(saveAddress);
     }
 
+    @Override
+    public int naverRegister(Optional<MemberSessionInfo> optionalMember, Map<String, String> naverMemberInfo) {
+        if (memberRepository.findSessionMemberByEmail(naverMemberInfo.get("email")).isPresent()) {
+            throw new IllegalArgumentException("이메일 ".concat(ErrorConst.duplicateError));
+        }
+        log.info("[{}({})]님이 회원가입 하셨습니다.", naverMemberInfo.get("nickname"),
+                naverMemberInfo.get("id"));
+        return memberRepository.saveNaverMember(naverMemberInfo);
+    }
+
 }
