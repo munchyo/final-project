@@ -29,7 +29,8 @@ public class Authenticate {
     @Before("execution(* com.goodday.proj.api.*.controller..*(..)) " +
             "&& !execution(* com.goodday.proj.api.member..*(..)) " +
             "&& !execution(* com.goodday.proj.api.mail..*(..)) " +
-            "&& !execution(* com.goodday.proj.api.calorie..*(..)) ")
+            "&& !execution(* com.goodday.proj.api.calorie..*(..)) " +
+            "&& !execution(* com.goodday.proj.api.file..*(..)) ")
     public void loginAuthAOP() {
         ServletRequestAttributes requestAttributes =
                 (ServletRequestAttributes) RequestContextHolder.currentRequestAttributes();
