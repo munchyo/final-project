@@ -19,8 +19,6 @@ import java.util.Map;
 public class KakaoLoginService {
 
     public String getKakaoAccessToken(String code) throws IOException {
-        String access_Token="";
-        String refresh_Token ="";
         String reqURL = "https://kauth.kakao.com/oauth/token";
 
         URL url = new URL(reqURL);
@@ -58,11 +56,8 @@ public class KakaoLoginService {
         ObjectMapper objectMapper = new ObjectMapper();
         JsonNode element = objectMapper.readTree(result);
 
-        access_Token = element.get("access_token").asText();
-        refresh_Token = element.get("refresh_token").asText();
-
-        System.out.println("access_token : " + access_Token);
-        System.out.println("refresh_token : " + refresh_Token);
+        String access_Token = element.get("access_token").asText();
+        String refresh_Token = element.get("refresh_token").asText();
 
         br.close();
         bw.close();
