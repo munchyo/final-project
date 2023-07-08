@@ -8,8 +8,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Arrays;
-import java.util.Base64;
+import java.util.concurrent.CompletableFuture;
 
 @Slf4j
 @RestController
@@ -21,7 +20,7 @@ public class MailController {
     private final MemberRepository memberRepository;
 
     @GetMapping("/register")
-    public String registerAuthentication(@RequestParam String email) throws MessagingException {
+    public CompletableFuture<String> registerAuthentication(@RequestParam String email) throws MessagingException {
         if (!email.contains("@")) {
             throw new IllegalArgumentException(ErrorConst.mailError);
         }
@@ -34,7 +33,7 @@ public class MailController {
     }
 
     @GetMapping("/find/id")
-    public String findIdAuthentication(@RequestParam String email) throws MessagingException {
+    public CompletableFuture<String> findIdAuthentication(@RequestParam String email) throws MessagingException {
         if (!email.contains("@")) {
             throw new IllegalArgumentException(ErrorConst.mailError);
         }
@@ -42,7 +41,7 @@ public class MailController {
     }
 
     @GetMapping("/find/password")
-    public String findPwdAuthentication(@RequestParam String email) throws MessagingException {
+    public CompletableFuture<String> findPwdAuthentication(@RequestParam String email) throws MessagingException {
         if (!email.contains("@")) {
             throw new IllegalArgumentException(ErrorConst.mailError);
         }

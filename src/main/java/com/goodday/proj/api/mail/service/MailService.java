@@ -7,10 +7,11 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.mail.javamail.MimeMessageHelper;
-import org.springframework.stereotype.Component;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import java.util.Random;
+import java.util.concurrent.CompletableFuture;
 
 @Slf4j
 @Service
@@ -27,6 +28,7 @@ public class MailService {
         return r.nextInt(888888) + 111111;
     }
 
+    @Async("threadPoolTaskExecutor")
     public void sendMail(String setFrom, String setTo, String title, String content) throws MessagingException {
         MimeMessage message = mailSender.createMimeMessage();
 
@@ -39,28 +41,24 @@ public class MailService {
         mailSender.send(message);
     }
 
-    public String registerAuthentication(String email) throws MessagingException {
+    @Async("threadPoolTaskExecutor")
+    public CompletableFuture<String> registerAuthentication(String email) throws MessagingException {
         int authNumber = makeRandomNumber();
         String setTo = email;
         String title = "GoodDay에 오신것을 환영합니다!";
-        String content =
-                        "인증 번호는 " + authNumber + "입니다." +
-                        "<br>" +
-                        "인증번호를 확인란에 기입해주세요.";
+        String content = "인증 번호는 " + authNumber + "입니다.<br>인증번호를 확인란에 기입해주세요.";
         sendMail(setFrom, setTo, title, content);
-        return Integer.toString(authNumber);
+        return CompletableFuture.completedFuture(Integer.toString(authNumber));
     }
 
-    public String findAuthentication(String email, String find) throws MessagingException {
+    @Async("threadPoolTaskExecutor")
+    public CompletableFuture<String> findAuthentication(String email, String find) throws MessagingException {
         int authNumber = makeRandomNumber();
         String setTo = email;
         String title = "GoodDay " + find + " 찾기 인증메일 입니다.";
-        String content =
-                "인증 번호는 " + authNumber + "입니다." +
-                        "<br>" +
-                        "인증번호를 확인란에 기입해주세요.";
+        String content = "인증 번호는 " + authNumber + "입니다.<br>인증번호를 확인란에 기입해주세요.";
         sendMail(setFrom, setTo, title, content);
-        return Integer.toString(authNumber);
+        return CompletableFuture.completedFuture(Integer.toString(authNumber));
     }
 
 }
