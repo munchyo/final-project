@@ -103,7 +103,7 @@ public class FreeBoardController {
         ServletRequestAttributes requestAttributes =
                 (ServletRequestAttributes) RequestContextHolder.currentRequestAttributes();
         HttpServletRequest request = requestAttributes.getRequest();
-        long sessionMemberNo = Long.parseLong(request.getHeader("memberNo"));
+        Long sessionMemberNo = Long.parseLong(request.getHeader("memberNo"));
 
         if (sessionMemberNo != freeBoardRepository.findByFreeNo(freeNo).getMemberNo()
                 && memberRepository.findSessionMemberByNo(sessionMemberNo).get().getAdmin().equals("N")) {
