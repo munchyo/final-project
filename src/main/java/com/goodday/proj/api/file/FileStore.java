@@ -21,8 +21,10 @@ public class FileStore {
 
     private final String wallpaperDir = System.getProperty("user.home");
 
+    private final String getDirPath = wallpaperDir + fileDir;
+
     public String getFullPath(String filename) {
-        return wallpaperDir + fileDir + filename;
+        return getDirPath + filename;
     }
 
     public List<UploadFile> storeFiles(List<MultipartFile> multipartFiles) throws IOException {
@@ -41,6 +43,8 @@ public class FileStore {
         }
         String originalFilename = multipartFile.getOriginalFilename();
         String storeFilename = createStoreFilename(originalFilename);
+        File folder = new File(getDirPath);
+        if (!folder.exists()) folder.mkdirs();
         multipartFile.transferTo(new File(getFullPath(storeFilename)));
         return new UploadFile(originalFilename, storeFilename);
     }
