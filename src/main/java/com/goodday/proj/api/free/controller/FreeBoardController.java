@@ -105,7 +105,7 @@ public class FreeBoardController {
         HttpServletRequest request = requestAttributes.getRequest();
         Long sessionMemberNo = Long.parseLong(request.getHeader("memberNo"));
 
-        if (sessionMemberNo != freeBoardRepository.findByFreeNo(freeNo).getMemberNo()
+        if (!sessionMemberNo.equals(freeBoardRepository.findByFreeNo(freeNo).getMemberNo())
                 && memberRepository.findSessionMemberByNo(sessionMemberNo).get().getAdmin().equals("N")) {
             throw new RuntimeException(ErrorConst.authError);
         }
