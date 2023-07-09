@@ -127,4 +127,24 @@
         GROUP BY ENROLL_DATE
         ORDER BY ENROLL_DATE
     </select>
+
+    <select id="findSumDaySales" resultType="java.lang.Integer">
+        select sum(price) from "ORDER" where trunc(order_date) = trunc(sysdate)
+    </select>
+
+    <select id="findSumWeekSales" resultType="java.lang.Integer">
+        select sum(price) from "ORDER" where trunc(order_date) >= TRUNC(SYSDATE) - 7
+    </select>
+
+    <select id="findSumMonthSales" resultType="java.lang.Integer">
+        select sum(price) from "ORDER" where trunc(order_date) >= TRUNC(SYSDATE) - 30
+    </select>
+
+    <select id="findSumYearSales" resultType="java.lang.Integer">
+        select sum(price) from "ORDER" where trunc(order_date) >= TRUNC(SYSDATE) - 365
+    </select>
+
+    <select id="findSumAllSales" resultType="java.lang.Integer">
+        select sum(price) from "ORDER"
+    </select>
 </mapper>

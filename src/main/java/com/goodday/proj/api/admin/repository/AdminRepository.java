@@ -40,4 +40,14 @@ public interface AdminRepository {
     List<Integer> countEnrollMember30Days();
 
     List<String> enrollDate30Days();
+
+    Integer findSumDaySales();
+
+    Integer findSumWeekSales();
+
+    Integer findSumMonthSales();
+
+    Integer findSumYearSales();
+
+    Integer findSumAllSales();
 }

@@ -157,5 +157,22 @@ public class AdminController {
         return countMemberAnd30Days;
     }
 
+    @GetMapping("/product")
+    public Map<String, Object> adminProductView(@RequestParam(value = "page", required = false) Integer currentPage,
+                                                @RequestParam(required = false) String product) {
+        if (currentPage == null || currentPage < 1) {
+            currentPage = 1;
+        }
+        if (product == null) {
+            product = "ALL";
+        }
+        return adminService.pageAndProductList(currentPage, product);
+    }
+
+    @GetMapping("/shop/total")
+    public Map<String, Integer> totalSales() {
+        return adminService.totalSaleList();
+    }
+
     // TODO 통계
 }

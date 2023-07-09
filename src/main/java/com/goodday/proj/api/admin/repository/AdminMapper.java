@@ -58,4 +58,19 @@ public interface AdminMapper extends AdminRepository {
 
     @Override
     List<String> enrollDate30Days();
+
+    @Override
+    Integer findSumDaySales();
+
+    @Override
+    Integer findSumWeekSales();
+
+    @Override
+    Integer findSumMonthSales();
+
+    @Override
+    Integer findSumYearSales();
+
+    @Override
+    Integer findSumAllSales();
 }

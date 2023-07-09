@@ -4,6 +4,8 @@ import com.goodday.proj.api.admin.repository.AdminRepository;
 import com.goodday.proj.api.help.model.Help;
 import com.goodday.proj.api.help.model.HelpReply;
 import com.goodday.proj.api.member.model.Member;
+import com.goodday.proj.api.shop.model.Product;
+import com.goodday.proj.api.shop.repository.ShopRepository;
 import com.goodday.proj.pagination.Pagination;
 import com.goodday.proj.pagination.model.PageInfo;
 import lombok.RequiredArgsConstructor;
@@ -12,6 +14,7 @@ import org.apache.ibatis.session.RowBounds;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -22,6 +25,7 @@ import java.util.Map;
 public class AdminServiceImpl implements AdminService {
 
     private final AdminRepository adminRepository;
+    private final ShopRepository shopRepository;
 
     @Override
     public Map<String, Object> allHelpView(Integer currentPage, String reply, String type) {
@@ -126,6 +130,54 @@ public class AdminServiceImpl implements AdminService {
         }
 
         return membersAndPageInfo;
+    }
+
+    @Override
+    public Map<String, Object> pageAndProductList(Integer currentPage, String product) {
+        if (!product.equals("ALL")) {
+            int listCount = shopRepository.countProductListByProduct(product);
+            PageInfo pageInfo = Pagination.getPageInfo(currentPage, listCount, 20);
+
+            int offset = (pageInfo.getCurrentPage() - 1) * pageInfo.getBoardLimit();
+            RowBounds rowBounds = new RowBounds(offset, pageInfo.getBoardLimit());
+            ArrayList<Product> products = shopRepository.selectProductListByProduct(product, rowBounds);
+
+            Map<String, Object> pageAndProductList = new HashMap<>();
+            pageAndProductList.put("pageInfo", pageInfo);
+            pageAndProductList.put("products", products);
+
+            return pageAndProductList;
+        }
+        int listCount = shopRepository.countProductList();
+        PageInfo pageInfo = Pagination.getPageInfo(currentPage, listCount, 20);
+
+        int offset = (pageInfo.getCurrentPage() - 1) * pageInfo.getBoardLimit();
+        RowBounds rowBounds = new RowBounds(offset, pageInfo.getBoardLimit());
+        ArrayList<Product> products = shopRepository.selectProductList(rowBounds);
+
+        Map<String, Object> pageAndProductList = new HashMap<>();
+        pageAndProductList.put("pageInfo", pageInfo);
+        pageAndProductList.put("products", products);
+
+        return pageAndProductList;
+    }
+
+    @Override
+    public Map<String, Integer> totalSaleList() {
+        Integer day = adminRepository.findSumDaySales();
+        Integer week = adminRepository.findSumWeekSales();
+        Integer month = adminRepository.findSumMonthSales();
+        Integer year = adminRepository.findSumYearSales();
+        Integer all = adminRepository.findSumAllSales();
+
+        Map<String, Integer> salesMap = new HashMap<>();
+        salesMap.put("day", day);
+        salesMap.put("week", week);
+        salesMap.put("month", month);
+        salesMap.put("year", year);
+        salesMap.put("all", all);
+
+        return salesMap;
     }
 
 }
