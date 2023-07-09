@@ -37,4 +37,10 @@ public interface ShopMapper extends ShopRepository {
 
     @Override
     int updateProduct(Product editProduct);
+
+    @Override
+    int countProductListByProduct(String product);
+
+    @Override
+    ArrayList<Product> selectProductListByProduct(String product, RowBounds rowBounds);
 }

@@ -36,11 +36,15 @@ public class ShopController {
      * @return
      */
     @GetMapping
-    public Map<String, Object> product(@RequestParam(value = "page",required = false) Integer currentPage) {
+    public Map<String, Object> product(@RequestParam(value = "page", required = false) Integer currentPage,
+                                       @RequestParam(required = false) String product){
         if (currentPage == null || currentPage < 1) {
             currentPage = 1;
         }
-        return shopService.pageAndProductList(currentPage);
+        if (product == null) {
+            product = "ALL";
+        }
+        return shopService.pageAndProductList(currentPage, product);
     }
 
     /**

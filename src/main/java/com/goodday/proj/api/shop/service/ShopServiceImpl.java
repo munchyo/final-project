@@ -34,7 +34,21 @@ public class ShopServiceImpl implements ShopService {
     }
 
     @Override
-    public Map<String, Object> pageAndProductList(Integer currentPage) {
+    public Map<String, Object> pageAndProductList(Integer currentPage, String product) {
+        if (!product.equals("ALL")) {
+            int listCount = shopRepository.countProductListByProduct(product);
+            PageInfo pageInfo = Pagination.getPageInfo(currentPage, listCount, 20);
+
+            int offset = (pageInfo.getCurrentPage() - 1) * pageInfo.getBoardLimit();
+            RowBounds rowBounds = new RowBounds(offset, pageInfo.getBoardLimit());
+            ArrayList<Product> products = shopRepository.selectProductListByProduct(product, rowBounds);
+
+            Map<String, Object> pageAndProductList = new HashMap<>();
+            pageAndProductList.put("pageInfo", pageInfo);
+            pageAndProductList.put("products", products);
+
+            return pageAndProductList;
+        }
         int listCount = shopRepository.countProductList();
         PageInfo pageInfo = Pagination.getPageInfo(currentPage, listCount, 20);
 

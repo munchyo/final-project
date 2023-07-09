@@ -25,4 +25,8 @@ public interface ShopRepository {
     int updateFileByStoreFileName(Map<String, String> updateFile);
 
     int updateProduct(Product editProduct);
+
+    int countProductListByProduct(String product);
+
+    ArrayList<Product> selectProductListByProduct(String product, RowBounds rowBounds);
 }

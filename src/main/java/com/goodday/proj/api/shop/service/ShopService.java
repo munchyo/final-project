@@ -9,7 +9,7 @@ import java.util.Map;
 
 public interface ShopService {
 
-    Map<String, Object> pageAndProductList(Integer currentPage);
+    Map<String, Object> pageAndProductList(Integer currentPage, String product);
 
     int writeProduct(UploadFile thumbnail, List<UploadFile> images, ProductFormDto form);
 
