@@ -54,4 +54,8 @@
                  JOIN filestore ON (board_no = pro_no)
         WHERE order_no = #{orderNo} AND board_type = 'PRODUCT' and FILE_LEVEL = 1
     </select>
+
+    <update id="updateInventory">
+        update product set pro_inventory = #{proInventory} where pro_no = #{proNo}
+    </update>
 </mapper>

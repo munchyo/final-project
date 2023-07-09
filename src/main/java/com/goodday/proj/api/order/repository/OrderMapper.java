@@ -20,4 +20,7 @@ public interface OrderMapper extends OrderRepository {
 
     @Override
     Order findOrderByOrderNo(Long orderNo);
+
+    @Override
+    int updateInventory(Map<String, Object> updateInventoryMap);
 }

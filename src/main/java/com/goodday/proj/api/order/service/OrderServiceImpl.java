@@ -59,9 +59,15 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public int order(OrderForm form) {
-        if (shopRepository.findByNo(form.getProNo()).getProInventory() == 0) {
+        int inventory = shopRepository.findByNo(form.getProNo()).getProInventory();
+        if (inventory - form.getQuantity() < 0) {
             throw new RuntimeException("재고가 없습니다.");
         }
+
+        Map<String, Object> updateInventoryMap = new HashMap<>();
+        updateInventoryMap.put("proInventory", inventory - form.getQuantity());
+        updateInventoryMap.put("proNo", form.getProNo());
+        orderRepository.updateInventory(updateInventoryMap);
 
         Map<String, Object> addOrder = new HashMap<>();
         addOrder.put("orderNo", createOrderNo());

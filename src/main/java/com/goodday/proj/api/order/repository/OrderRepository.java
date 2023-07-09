@@ -14,4 +14,6 @@ public interface OrderRepository {
     List<Order> findMyOrderListByMemberNo(Long memberNo, RowBounds rowBounds);
 
     Order findOrderByOrderNo(Long orderNo);
+
+    int updateInventory(Map<String, Object> updateInventoryMap);
 }
