@@ -38,7 +38,7 @@ public class Authenticate {
 
         Optional<String> optionalMemberNo = Optional.ofNullable(request.getHeader("memberNo"));
 
-//        if (optionalMemberNo.isEmpty()) throw new LoginException(ErrorConst.authError2);
+        if (optionalMemberNo.isEmpty()) throw new LoginException(ErrorConst.authError2);
     }
 
     /**
@@ -53,9 +53,9 @@ public class Authenticate {
 
         Optional<String> optionalMemberNo = Optional.ofNullable(request.getHeader("memberNo"));
 
-//        if (memberRepository.findSessionMemberByNo(Long.valueOf(optionalMemberNo.get())).get().getAdmin().equals("N")) {
-//            throw new NotFoundException();
-//        }
+        if (memberRepository.findSessionMemberByNo(Long.valueOf(optionalMemberNo.get())).get().getAdmin().equals("N")) {
+            throw new NotFoundException();
+        }
     }
 
 }
