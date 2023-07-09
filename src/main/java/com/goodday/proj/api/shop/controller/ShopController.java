@@ -36,7 +36,7 @@ public class ShopController {
      * @return
      */
     @GetMapping
-    public Map<String, Object> product(@RequestParam(required = false) Integer currentPage) {
+    public Map<String, Object> product(@RequestParam(value = "page",required = false) Integer currentPage) {
         if (currentPage == null || currentPage < 1) {
             currentPage = 1;
         }
