@@ -6,7 +6,7 @@
     </select>
 
     <select id="countProductListByProduct" resultType="int">
-        select count(*) from product where pro_name = #{product}
+        select count(*) from product LIKE '%' + #{product} + '%'
     </select>
 
     <select id="selectProductListByProduct" resultMap="productResultSet">
@@ -17,7 +17,7 @@
         FROM product p
                  LEFT JOIN filestore f1 ON p.PRO_NO = f1.BOARD_NO AND f1.FILE_LEVEL = 1 AND f1.BOARD_TYPE = 'PRODUCT'
                  LEFT JOIN filestore f2 ON p.PRO_NO = f2.BOARD_NO AND f2.FILE_LEVEL = 2 AND f2.BOARD_TYPE = 'PRODUCT'
-        where p.pro_name = #{product}
+        where p.pro_name LIKE '%' + #{product} + '%'
         order by pro_create_date desc
     </select>
 
