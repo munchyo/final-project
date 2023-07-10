@@ -46,7 +46,11 @@
         <result property="phone" column="PHONE"/>
         <result property="admin" column="ADMIN"/>
         <result property="memberStatus" column="MEMBER_STATUS"/>
-        <collection column="email" property="address" ofType="com.goodday.proj.api.member.model.Address" javaType="List" select="addressList"/>
+        <collection property="address" ofType="com.goodday.proj.api.member.model.Address">
+            <result property="addressNo" column="ADDRESS_NO"/>
+            <result property="isMain" column="IS_MAIN"/>
+            <result property="address" column="ADDRESS"/>
+        </collection>
     </resultMap>
 
     <select id="findSessionMemberByNo" resultType="com.goodday.proj.api.member.dto.MemberSessionInfo">
@@ -56,7 +60,7 @@
     </select>
 
     <select id="findMemberAndAddressByNo" resultMap="memberResultSet">
-        SELECT distinct member.MEMBER_NO, MEMBER_ID, PWD, NAME, ENROLL_DATE, NICKNAME, email, PHONE, ADMIN, address
+        SELECT distinct member.MEMBER_NO, MEMBER_ID, PWD, NAME, ENROLL_DATE, NICKNAME, email, PHONE, ADMIN, member_status, address_no, address, is_main
         FROM member
                  LEFT JOIN address ON member.MEMBER_NO = address.MEMBER_NO
         WHERE member.member_no = #{memberNo} and member_status = 'Y' and is_main = 'Y'

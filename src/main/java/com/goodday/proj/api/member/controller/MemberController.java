@@ -65,9 +65,9 @@ public class MemberController {
         if (register > 0) {
             log.info("[{}({})]님이 회원가입 하셨습니다.", registerUser.getNickname(), registerUser.getId());
             return "ok";
+        } else {
+            throw new RuntimeException(ErrorConst.registerError);
         }
-
-        return "fail";
     }
 
     /**
