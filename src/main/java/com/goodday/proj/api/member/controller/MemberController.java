@@ -27,7 +27,6 @@ public class MemberController {
     private final MemberRepository memberRepository;
     private final KakaoLoginService kakaoLoginService;
     private final NaverLoginService naverLoginService;
-//    private final GoogleLoginService googleLoginService;
 
     /**
      * 로그인
@@ -158,6 +157,15 @@ public class MemberController {
         return memberRepository.findSessionMemberById(kakaoMemberInfo.get("id").toString()).get();
     }
 
+    /**
+     * 네이버 로그인
+     * @param code
+     * @param state
+     * @param error
+     * @param error_description
+     * @return
+     * @throws IOException
+     */
     @GetMapping("/naver")
     public MemberSessionInfo naverCallback(@RequestParam String code, @RequestParam String state,
                                            @RequestParam(required = false) String error,
@@ -168,7 +176,7 @@ public class MemberController {
             throw new IllegalArgumentException(error_description);
         }
 
-        Map<String, String> naverMemberInfo = naverLoginService.naverAccessTokenAndGetNaverMemberInfo(code, state);
+        var naverMemberInfo = naverLoginService.naverAccessTokenAndGetNaverMemberInfo(code, state);
         if (naverMemberInfo == null) {
             throw new RuntimeException(ErrorConst.loginErrorV2);
         }
