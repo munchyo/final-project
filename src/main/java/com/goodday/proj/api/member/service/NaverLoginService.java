@@ -15,7 +15,6 @@ import java.util.Map;
 
 @Slf4j
 @Service
-@RequiredArgsConstructor
 public class NaverLoginService {
 
     public Map<String, String> naverAccessTokenAndGetNaverMemberInfo(String code, String state) throws IOException {
