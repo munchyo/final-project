@@ -56,9 +56,6 @@ public class ShopController {
     @AuthChecker
     @PostMapping("/write")
     public void writeProduct(@Valid @ModelAttribute ProductFormDto form, BindingResult bindingResult) throws IOException {
-        if (memberRepository.findSessionMemberByNo(form.getMemberNo()).get().getAdmin().equals("N")) {
-            throw new RuntimeException(ErrorConst.authError);
-        }
         if (bindingResult.hasErrors()) {
             throw new IllegalArgumentException(ErrorConst.bindingError);
         }
