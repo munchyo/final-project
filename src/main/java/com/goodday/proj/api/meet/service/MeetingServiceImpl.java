@@ -71,7 +71,6 @@ public class MeetingServiceImpl implements MeetingService {
 
     @Override
     public List<MemberSessionInfo> meetingApplicationListView(Long meetNo) {
-        postAuthorCheckByMeetNo(meetNo);
         return meetingRepository.findApplicationListByMeetNo(meetNo);
     }
 
