@@ -32,7 +32,8 @@ public class AdminAuthenticate {
 
         Optional<String> optionalMemberNo = Optional.ofNullable(request.getHeader("memberNo"));
 
-        if (optionalMemberNo.get().equals("null") || memberRepository.findSessionMemberByNo(Long.valueOf(optionalMemberNo.get())).get().getAdmin().equals("N")) {
+        if (optionalMemberNo.get().equals("null") ||
+                memberRepository.findSessionMemberByNo(Long.valueOf(optionalMemberNo.get())).get().getAdmin().equals("N")) {
             throw new NotFoundException();
         }
     }
