@@ -30,7 +30,9 @@ public class Authenticate {
             "&& !execution(* com.goodday.proj.api.member..*(..)) " +
             "&& !execution(* com.goodday.proj.api.mail..*(..)) " +
             "&& !execution(* com.goodday.proj.api.calorie..*(..)) " +
-            "&& !execution(* com.goodday.proj.api.file..*(..)) ")
+            "&& !execution(* com.goodday.proj.api.file..*(..)) " +
+            "&& !execution(* com.goodday.proj.api.admin..*(..)) " +
+            "&& !@annotation(com.goodday.proj.annotation.AuthChecker)")
     public void loginAuthAOP() {
         ServletRequestAttributes requestAttributes =
                 (ServletRequestAttributes) RequestContextHolder.currentRequestAttributes();
@@ -52,8 +54,9 @@ public class Authenticate {
         HttpServletRequest request = requestAttributes.getRequest();
 
         Optional<String> optionalMemberNo = Optional.ofNullable(request.getHeader("memberNo"));
-
-        if (memberRepository.findSessionMemberByNo(Long.valueOf(optionalMemberNo.get())).get().getAdmin().equals("N")) {
+        log.info("{}", optionalMemberNo.get());
+        if (memberRepository.findSessionMemberByNo(Long.valueOf(optionalMemberNo.get())).get().getAdmin().equals("N") ||
+                optionalMemberNo.get().equals("null")) {
             throw new NotFoundException();
         }
     }
