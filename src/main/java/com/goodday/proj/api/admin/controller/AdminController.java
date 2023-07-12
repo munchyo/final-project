@@ -101,7 +101,7 @@ public class AdminController {
      */
     @PostMapping("/member/{memberNo}/status")
     public void changeMemberStatus(@PathVariable Long memberNo, @RequestParam String status) {
-        if (!status.equals("Y") || !status.equals("N")) {
+        if (!status.equals("Y") && !status.equals("N")) {
             throw new IllegalArgumentException(ErrorConst.bindingError);
         }
 
@@ -123,7 +123,7 @@ public class AdminController {
      */
     @PostMapping("/member/{memberNo}/role")
     public void changeMemberRole(@PathVariable Long memberNo, @RequestParam String role) {
-        if (!role.equals("Y") || !role.equals("N")) {
+        if (!role.equals("Y") && !role.equals("N")) {
             throw new IllegalArgumentException(ErrorConst.bindingError);
         }
 
