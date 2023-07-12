@@ -20,8 +20,6 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class LoginAuthenticate {
 
-    private final MemberRepository memberRepository;
-
     /**
      * 로그인 체크 AOP
      */
