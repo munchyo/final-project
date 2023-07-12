@@ -24,8 +24,7 @@ public class AdminAuthenticate {
     /**
      * ADMIN 체크 AOP
      */
-    @Before("execution(* com.goodday.proj.api.admin..*(..)) " +
-            "&& @annotation(com.goodday.proj.annotation.AuthChecker)")
+    @Before("execution(* com.goodday.proj.api.admin..*(..)) ")
     public void adminAuthAOP() {
         ServletRequestAttributes requestAttributes =
                 (ServletRequestAttributes) RequestContextHolder.currentRequestAttributes();
