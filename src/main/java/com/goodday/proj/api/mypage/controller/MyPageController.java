@@ -34,7 +34,7 @@ public class MyPageController {
      * @param currentPage
      * @return
      */
-    @GetMapping("/board/{memberNo}")
+    @GetMapping("/free/{memberNo}")
     public Map<String, Object> myFreeBoardList(@PathVariable Long memberNo, @RequestParam(value = "page", required = false) Integer currentPage) {
         if (currentPage == null || currentPage < 1) {
             currentPage = 1;
