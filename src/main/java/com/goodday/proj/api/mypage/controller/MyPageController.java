@@ -1,19 +1,18 @@
 package com.goodday.proj.api.mypage.controller;
 
-import com.goodday.proj.constant.ErrorConst;
 import com.goodday.proj.api.mypage.dto.TodoListDto;
 import com.goodday.proj.api.mypage.model.TodoList;
 import com.goodday.proj.api.mypage.repository.MyPageRepository;
 import com.goodday.proj.api.mypage.service.MyPageService;
 import com.goodday.proj.api.order.model.Order;
 import com.goodday.proj.api.order.repository.OrderRepository;
+import com.goodday.proj.constant.ErrorConst;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -24,7 +23,6 @@ import java.util.Map;
 public class MyPageController {
 
     private final MyPageService myPageService;
-    private final MyPageRepository myPageRepository;
     private final OrderRepository orderRepository;
 
     /**
