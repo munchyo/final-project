@@ -55,7 +55,7 @@ public class MemberEditController {
         }
         Map edit = new HashMap();
         edit.put("memberNo", memberNo);
-        edit.put("nickname", phoneDto.getPhone());
+        edit.put("phone", phoneDto.getPhone());
         memberRepository.updatePhone(edit);
     }
 
