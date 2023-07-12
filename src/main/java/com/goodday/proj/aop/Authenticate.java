@@ -38,7 +38,7 @@ public class Authenticate {
 
         Optional<String> optionalMemberNo = Optional.ofNullable(request.getHeader("memberNo"));
 
-        if (optionalMemberNo.isEmpty()) throw new LoginException(ErrorConst.authError2);
+        if (optionalMemberNo.get().equals("null")) throw new LoginException(ErrorConst.authError2);
     }
 
     /**
