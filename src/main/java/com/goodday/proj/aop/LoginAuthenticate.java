@@ -2,7 +2,6 @@ package com.goodday.proj.aop;
 
 import com.goodday.proj.constant.ErrorConst;
 import com.goodday.proj.exhandler.customex.LoginException;
-import com.goodday.proj.api.member.repository.MemberRepository;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
