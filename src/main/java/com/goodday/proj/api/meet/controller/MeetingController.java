@@ -64,8 +64,13 @@ public class MeetingController {
      * @return Meeting
      */
     @GetMapping("/{meetNo}")
-    public Meeting meetingView(@PathVariable Long meetNo) {
-        return meetingRepository.findByMeetNo(meetNo);
+    public Map<String, Object> meetingView(@PathVariable Long meetNo) {
+        List<MemberSessionInfo> applicationList = meetingService.meetingApplicationListView(meetNo);
+        Meeting meeting = meetingRepository.findByMeetNo(meetNo);
+        Map<String, Object> meetingViewMap = new HashMap<>();
+        meetingViewMap.put("meeting", meeting);
+        meetingViewMap.put("applicationList", applicationList);
+        return meetingViewMap;
     }
 
     /**
