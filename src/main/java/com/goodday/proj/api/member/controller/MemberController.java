@@ -1,12 +1,13 @@
 package com.goodday.proj.api.member.controller;
 
-import com.goodday.proj.api.member.service.NaverLoginService;
-import com.goodday.proj.constant.ErrorConst;
-import com.goodday.proj.api.member.dto.*;
+import com.goodday.proj.api.member.dto.LoginFormDto;
+import com.goodday.proj.api.member.dto.MemberSessionInfo;
+import com.goodday.proj.api.member.dto.RegisterFormDto;
 import com.goodday.proj.api.member.repository.MemberRepository;
-//import com.goodday.proj.api.member.service.GoogleLoginService;
 import com.goodday.proj.api.member.service.KakaoLoginService;
 import com.goodday.proj.api.member.service.MemberService;
+import com.goodday.proj.api.member.service.NaverLoginService;
+import com.goodday.proj.constant.ErrorConst;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -14,7 +15,6 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
-import java.util.Map;
 import java.util.Optional;
 
 @Slf4j
@@ -33,7 +33,7 @@ public class MemberController {
      *
      * @param login
      * @param bindingResult
-     * @return
+     * @return MemberSessionInfo
      */
     @PostMapping("/login")
     public MemberSessionInfo login(@Valid @RequestBody LoginFormDto login, BindingResult bindingResult) {
