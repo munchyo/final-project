@@ -32,7 +32,7 @@ public class NaverLoginService {
         sb.append("&client_id=JapyfHeRinhgQikh6zZV");
         sb.append("&client_secret=YVpruKPir6");
         sb.append("&state=" + state);
-        sb.append("&redirect_uri=http://localhost:8080/api/member/kakao");
+        sb.append("&redirect_uri=http://192.168.20.217:8080/api/member/naver");
         sb.append("&code=" + code);
         bw.write(sb.toString());
         bw.flush();
