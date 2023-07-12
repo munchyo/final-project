@@ -1,5 +1,6 @@
 package com.goodday.proj.api.member.controller;
 
+import com.goodday.proj.api.member.dto.FindPwdForm;
 import com.goodday.proj.api.member.dto.LoginFormDto;
 import com.goodday.proj.api.member.dto.MemberSessionInfo;
 import com.goodday.proj.api.member.dto.RegisterFormDto;
@@ -90,23 +91,20 @@ public class MemberController {
     }
 
     /**
-     * 비밀번호찾기
-     *
-     * @param email
+     * 비밀번호 찾기
+     * @param form
      * @return
      */
     @PostMapping("/find/password")
-    public String findPwd(@RequestParam String email) {
-        if (!email.contains("@")) {
-            throw new IllegalArgumentException(ErrorConst.mailError);
+    public void findPwd(@Valid @ModelAttribute FindPwdForm form, BindingResult bindingResult) {
+        if (bindingResult.hasErrors() || !form.getEmail().contains("@")) {
+            throw new IllegalArgumentException(ErrorConst.bindingError);
         }
 
-        Optional<MemberSessionInfo> member = memberRepository.findSessionMemberByEmail(email);
-
-        MemberSessionInfo m = member.filter(presentMember -> member.isPresent())
-                .orElseThrow(() -> new IllegalArgumentException(ErrorConst.findError));
-
-        return memberRepository.findPwdById(m.getMemberId());
+        int result = memberService.findPwd(form);
+        if (result == 0) {
+            throw new RuntimeException(ErrorConst.updateError);
+        }
     }
 
     /**

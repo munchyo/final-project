@@ -97,4 +97,17 @@ public class MemberServiceImpl implements MemberService {
         return memberRepository.saveNaverMember(naverMemberInfo);
     }
 
+    @Override
+    public int findPwd(FindPwdForm form) {
+        Optional<MemberSessionInfo> member = memberRepository.findSessionMemberByEmail(form.getEmail());
+
+        MemberSessionInfo m = member.filter(presentMember -> member.isPresent())
+                .orElseThrow(() -> new IllegalArgumentException(ErrorConst.findError));
+
+        Map edit = new HashMap();
+        edit.put("memberNo", m.getMemberNo());
+        edit.put("pwd", bcrypt.encode(form.getPwd()));
+        return memberRepository.updatePwd(edit);
+    }
+
 }

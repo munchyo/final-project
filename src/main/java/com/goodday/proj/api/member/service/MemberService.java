@@ -16,4 +16,6 @@ public interface MemberService {
     void addAddress(String memberNo, AddressDto addressDto);
 
     int naverRegister(Optional<MemberSessionInfo> optionalMember, Map<String, String> naverMemberInfo);
+
+    int findPwd(FindPwdForm form);
 }
